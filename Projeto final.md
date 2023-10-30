@@ -8,7 +8,7 @@
 	4. (Bonus) Encontrar a combinação otima de quantidades de cada ação no portifolio que minimiza o risco ou maximiza o ganho
 2. Inetrface grafica com o usuario que permita:
 	1. criar, salvar e carregar portifolios
-	2. selecionar ações do mercado brasileiro e mostrar o historico de tranzaçoes dos ultimos 3 messes
+	2. Selecionar ações do mercado brasileiro e mostrar o histórico de transações dos últimos 3 meses
 	3. exibir o resultado da biblioteca do item 1
 
 ### Exemplo de portifolio:
