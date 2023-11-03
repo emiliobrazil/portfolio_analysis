@@ -7,36 +7,76 @@ BoxLayout:
         height: '20dp'
 
         Button:
-            id: 'archive_dropdown'
+            id: archive_dropdown
+            markup: True
+            font_size: 15
+            color: 0, 0, 0, 1
             text: 'Arquivo'
+
+            background_normal:''
+            background_color: 1.0, 1.0, 1.0, 1.0
+
             size_hint: (None, None)
             size:(150,20)
             on_release: app.file_dropdown.open()
 
         Button:
-            id: 'help_dropdown'
+            id: help_dropdown
             text: 'Ajuda'
+            markup: True
+            font_size: 15
+            color: 0, 0, 0, 1
             size_hint: (None, None)
+            background_normal:''
+            background_color: 1.0, 1.0, 1.0, 1.0
             size:(150,20)
             on_release: app.help_dropdown.open()
 
         Button:
-            id: 'setup 'Configurações'
-            text:'configurações'
+            id: setupbtn
+            text: 'configurações'
+            markup: True
+            font_size: 15
+            color: 0, 0, 0, 1
+            background_normal:''
+            background_color: 1.0, 1.0, 1.0, 1.0
             size_hint: (None, None)
             size:(150,20)
-            on_release: app.settings_dropdown.open()
+            on_release: app.portifolio_scroll_update(["PETR3","VAL3","WEG9","1","2","3","4","5"])
         Widget:
             size_hint_x: None
+            background_normal:''
+            background_color: 1.0, 1.0, 1.0, 1.0
             width: 20
 
     BoxLayout:
         orientation: 'vertical'
+        size_hint_x:None
+        Widget:
+            size_hint_y: None
+            height: 50
 
-        # Conteúdo principal do aplicativo
-        Button:
-            text: 'Botão 1'
+        ScrollView:
+            id: stocks_scroll
+            do_scroll_x: False
+            do_scroll_y: True
+            pos_hint: {'x': -0.25, 'y': 0.25}
+
+
+    BoxLayout:
+        orientation: 'horizontal'
 
         Button:
-            text: 'Botão 2'
+            id: portfolio-edit_btn
+            text: "editar portifolio"
+            size_hint: (None, None)
+            size:(150,50)
+        Button:
+            id: portfolio-load_alt_btn
+            text: "carregar portifolio"
+            size_hint: (None, None)
+            size:(150,50)
+
+
+
 
