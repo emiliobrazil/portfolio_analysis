@@ -105,6 +105,17 @@ brazilian_stocks = [
     'VULC3', 'VULC4', 'VULC4B', 'VVAR11', 'WEGE3', 'WHRL3',
     'WHRL4', 'WHRL4B', 'WIZS3', 'WIZS3B', 'WSON33', 'WUNI11',
     'WUNI3', 'WUNI5', 'WUNI6', 'YBRA3', 'YBRA4']
+
+print(len(brazilian_stocks))
+brazilian_stocks=list(set(brazilian_stocks))
+brazilian_stocks.sort()
+print(len(brazilian_stocks))
+for i in brazilian_stocks:
+    brazilian_stocks[brazilian_stocks.index(i)]=[i,brazilian_stocks.index(i)]
+brazilian_stocks_dict={}
+for i in brazilian_stocks:
+    brazilian_stocks_dict[i[0]]=i[1]
+print(brazilian_stocks_dict)
 scrollslabelslist=[]
 varnotfill="???"
 
@@ -120,7 +131,7 @@ def riskcalc_window():
     return []
 def on_mouse_wheel(event):
 
-    canvas.yview_scroll(-1 * (event.delta // 120), "units")
+    canvas.yview_scroll(-1 * int(event.delta*0.01), "units")
 def portfoloioedit_window():
 
     def adicionar_elemento():
@@ -153,19 +164,23 @@ def portfoloioedit_window():
             label.pack(side="left")
 
             entry = tk.Entry(frame)
+            if label.cget("text") in brazilian_stocks_dict:
+                entry.insert(0,brazilian_stocks_dict[label.cget('text')])
+
 
             entry.pack(side="left")
 
             checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
-            checkbox.pack(side="right")
+            checkbox.place(relx=0.7)
 
     lista = []
 
     root = tk.Tk()
     root.title("Editar portifolio")
+    root.geometry("400x500")
 
     entry = tk.Entry(root)
-    entry.pack(side="top", padx=10)
+    entry.pack(side="top", padx=100)
 
 
 
@@ -180,7 +195,7 @@ def portfoloioedit_window():
     canvas_frame = canvas.create_window((0, 0), window=None, anchor='nw')
 
     scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
-    scrollbar.pack(side="right", fill="y")
+    scrollbar.place(relx=0.95, rely=+0.15, relheight=0.85)
 
     canvas.configure(yscrollcommand=scrollbar.set)
 
@@ -189,7 +204,7 @@ def portfoloioedit_window():
     canvas.bind("<Configure>", on_canvas_configure)
     canvas.itemconfig(canvas_frame, window=lista_frame)
     for j in brazilian_stocks:
-        lista.append({"nome": j, "selecionado": tk.BooleanVar()})
+        lista.append({"nome": j[0], "selecionado": tk.BooleanVar()})
 
     update_lista()
 
@@ -221,6 +236,8 @@ def open_file():
     return file_name
 
 def period_selector():
+
+
     j=tk.Tk()
     j.geometry("270x380")
     j.title("selecionar periodo")
@@ -229,18 +246,25 @@ def period_selector():
     tk.Label(j, text="Inicio:").place(x=0, y=50)
     tk.Label(j, text="Fim:").place(x=0, y=130)
 
-    inical = DateEntry(j, width=16, background="blue", foreground="white", bd=2)
+    inical = DateEntry(j, width=16, background="blue", foreground="white", bd=2,date_pattern='dd/mm/yyyy')
     inical.place(x=10,y=90)
 
-    endcal = DateEntry(j, width=16, background="blue", foreground="white", bd=2)
+    endcal = DateEntry(j, width=16, background="blue", foreground="white", bd=2,date_pattern='dd/mm/yyyy')
     endcal.place(x=10, y=170)
-
-    period_fselbt=tk.Button(j,text="Selecionar")
+    def periodselctorbtn_command():
+        inicalg=inical.get_date()
+        endcalg=endcal.get_date()
+        inicaldatalist=[inicalg.day,inicalg.month,inicalg.year]
+        endcaldatalist=[endcalg.day,endcalg.month,endcalg.year]
+        upareaperiod_label.config(text=f"periodo analisado:\nde: {inicaldatalist[0]}/{inicaldatalist[1]}/{inicaldatalist[2]} \nate: {endcaldatalist[0]}/{endcaldatalist[1]}/{endcaldatalist[2]}")
+    period_fselbt=tk.Button(j,text="Selecionar",command=periodselctorbtn_command)
     period_fselbt.place(x=110,y=320)
 
 
 
     j.mainloop()
+
+
 def save_file():
     # Lógica para salvar um arquivo
     file_name=tk.filedialog.asksaveasfilename()
@@ -250,6 +274,9 @@ def change_label_color(event, label):
     label.config(bg="blue")
     stockname_label.config(text=label.cget("text"))
     stockarea_title.config(text=f'Analise da empresa {label.cget("text")}')
+    stocknametext=stockname_label.cget("text").replace(" ","")
+    stocknumber_label.configure(text=f'Você possui {brazilian_stocks_dict[stocknametext]} ações nessa empresa')
+
 
 def cut_text():
     # Lógica para recortar texto
@@ -325,8 +352,9 @@ canvas.create_window((0, 0), window=content_frame, anchor="nw")
 # Adicione conteúdo ao frame (substitua isto pelo seu conteúdo real)
 for i in brazilian_stocks:
 
-    label = tk.Label(content_frame, text=f" {i}")
+    label = tk.Label(content_frame, text=f" {i[0]}")
     label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
+    label.bind("<MouseWheel>", on_mouse_wheel)
     label.pack()
     scrollslabelslist.append(label)
 
