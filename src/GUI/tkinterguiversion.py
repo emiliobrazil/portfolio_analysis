@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image,ImageTk
 from pathlib import Path
+
 from tkcalendar import Calendar, DateEntry
 import webbrowser
 from tkinter import filedialog
@@ -117,12 +118,89 @@ def riskcalc_window():
     j.mainloop()
     print("chegou aqui")
     return []
+def on_mouse_wheel(event):
 
+    canvas.yview_scroll(-1 * (event.delta // 120), "units")
+def portfoloioedit_window():
+
+    def adicionar_elemento():
+        elemento = entry.get()
+        lista.append({"nome": elemento, "selecionado": tk.BooleanVar()})
+        update_lista()
+
+
+    def remover_elemento():
+        selecionados = [i for i, item in enumerate(lista) if item["selecionado"].get()]
+        for idx in selecionados:
+            del lista[idx]
+        update_lista()
+
+    def on_canvas_configure(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+    def on_frame_configure(event):
+        canvas.itemconfig(canvas_frame, width=canvas.winfo_width())
+
+    def update_lista():
+        for widget in lista_frame.winfo_children():
+            widget.destroy()
+
+        for idx, elemento in enumerate(lista):
+            frame = tk.Frame(lista_frame)
+            frame.pack(fill="x")
+
+            label = tk.Label(frame, text=elemento["nome"])
+            label.pack(side="left")
+
+            entry = tk.Entry(frame)
+
+            entry.pack(side="left")
+
+            checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
+            checkbox.pack(side="right")
+
+    lista = []
+
+    root = tk.Tk()
+    root.title("Editar portifolio")
+
+    entry = tk.Entry(root)
+    entry.pack(side="top", padx=10)
+
+
+
+    adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
+    adicionar_button.pack(side="top")
+
+    remover_button = tk.Button(root, text="Remover Selecionados", command=remover_elemento)
+    remover_button.pack(side="top")
+
+    canvas = tk.Canvas(root)
+    canvas.pack(side="top", fill="both", expand=True)
+    canvas_frame = canvas.create_window((0, 0), window=None, anchor='nw')
+
+    scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side="right", fill="y")
+
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    lista_frame = tk.Frame(canvas)
+    lista_frame.bind("<Configure>", on_frame_configure)
+    canvas.bind("<Configure>", on_canvas_configure)
+    canvas.itemconfig(canvas_frame, window=lista_frame)
+    for j in brazilian_stocks:
+        lista.append({"nome": j, "selecionado": tk.BooleanVar()})
+
+    update_lista()
+
+
+    root.mainloop()
 def creditwindow():
 
     j=tk.Tk()
     j.geometry("300x300")
     j.title("creditos")
+
     credits_text=tk.Label(j,text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
     credits_text.place(x=-90,y=20)
     gitcredittext=tk.Label(j,text="Github:")
@@ -193,6 +271,7 @@ root.geometry("800x600")
 root.title("analise de portifolio")
 
 
+
 menu_bar = tk.Menu(root)
 
 file_menu = tk.Menu(menu_bar, tearoff=0)
@@ -237,6 +316,7 @@ canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 # Configure a barra de rolagem
 scrollbar.config(command=canvas.yview)
+canvas.bind("<MouseWheel>", on_mouse_wheel)
 
 # Crie um frame dentro do canvas para adicionar conteúdo
 content_frame = tk.Frame(canvas)
@@ -255,10 +335,7 @@ for i in brazilian_stocks:
 def on_configure(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
 
-vertical_separator=ttk.Separator(
-    master=root,
-    orient="vertical"
-)
+vertical_separator=ttk.Separator(master=root,orient="vertical")
 vertical_separator.pack(fill="y", pady=10, expand=True)
 
 vertical_separator.place(x=150,relheight=1,relwidth=1)
@@ -333,7 +410,7 @@ canvas.bind("<Configure>", on_configure)
 alt_load_btn=tk.Button(root,text="carregar portifolio",command=open_file)
 alt_load_btn.place(x=15,y=545)
 
-portfolioedit_btn=tk.Button(root,text="editar portifolio")
+portfolioedit_btn=tk.Button(root,text="editar portifolio",command=portfoloioedit_window)
 portfolioedit_btn.place(x=20,y=515)
 
 
