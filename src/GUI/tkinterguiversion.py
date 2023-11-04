@@ -104,7 +104,7 @@ brazilian_stocks = [
     'VULC3', 'VULC4', 'VULC4B', 'VVAR11', 'WEGE3', 'WHRL3',
     'WHRL4', 'WHRL4B', 'WIZS3', 'WIZS3B', 'WSON33', 'WUNI11',
     'WUNI3', 'WUNI5', 'WUNI6', 'YBRA3', 'YBRA4']
-
+scrollslabelslist=[]
 varnotfill="???"
 
 def riskcalc_window():
@@ -166,6 +166,12 @@ def period_selector():
 def save_file():
     # Lógica para salvar um arquivo
     file_name=tk.filedialog.asksaveasfilename()
+def change_label_color(event, label):
+    for i in scrollslabelslist:
+        i.config(bg="lightgray")
+    label.config(bg="blue")
+    stockname_label.config(text=label.cget("text"))
+    stockarea_title.config(text=f'Analise da empresa {label.cget("text")}')
 
 def cut_text():
     # Lógica para recortar texto
@@ -238,8 +244,12 @@ canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
 # Adicione conteúdo ao frame (substitua isto pelo seu conteúdo real)
 for i in brazilian_stocks:
+
     label = tk.Label(content_frame, text=f" {i}")
+    label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
     label.pack()
+    scrollslabelslist.append(label)
+
 
 # Atualize o canvas quando o conteúdo for modificado
 def on_configure(event):
