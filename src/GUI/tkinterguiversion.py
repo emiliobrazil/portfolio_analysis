@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image,ImageTk
+from pathlib import Path
+from tkcalendar import Calendar, DateEntry
+import webbrowser
+from tkinter import filedialog
 brazilian_stocks = [
     'PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'ABEV3',
     'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3',   'ALPA4', 'ALUP11',
@@ -113,13 +117,55 @@ def riskcalc_window():
     j.mainloop()
     print("chegou aqui")
     return []
+
+def creditwindow():
+
+    j=tk.Tk()
+    j.geometry("300x300")
+    j.title("creditos")
+    credits_text=tk.Label(j,text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
+    credits_text.place(x=-90,y=20)
+    gitcredittext=tk.Label(j,text="Github:")
+    gitcredittext.place(x=0,y=135)
+    gitcreditlink=tk.Label(j,text="https://github.com/emiliobrazil/portfolio_analysis",fg="blue")
+    gitcreditlink.place(x=0,y=150)
+    gitcreditlink.bind("<Button-1>",lambda e:webbrowser.open_new_tab("https://github.com/emiliobrazil/portfolio_analysis"))
+    tk.Label(j,text="Disponibilizado em Apache-2.0").place(x=0,y=175)
+    tk.Label(j,text="Desenvolvido em: 2023").place(x=100,y=225)
+
+    creditbtn=tk.Button(j,text="fechar",command=j.destroy)
+    creditbtn.place(x=135,y=250)
+
 def open_file():
     # Lógica para abrir um arquivo
-    pass
+    file_name=tk.filedialog.askopenfilenames()
+    print(file_name)
+    return file_name
 
+def period_selector():
+    j=tk.Tk()
+    j.geometry("270x380")
+    j.title("selecionar periodo")
+
+    tk.Label(j,text="Selecione o periodo",font=25).place(x=50,y=10)
+    tk.Label(j, text="Inicio:").place(x=0, y=50)
+    tk.Label(j, text="Fim:").place(x=0, y=130)
+
+    inical = DateEntry(j, width=16, background="blue", foreground="white", bd=2)
+    inical.place(x=10,y=90)
+
+    endcal = DateEntry(j, width=16, background="blue", foreground="white", bd=2)
+    endcal.place(x=10, y=170)
+
+    period_fselbt=tk.Button(j,text="Selecionar")
+    period_fselbt.place(x=110,y=320)
+
+
+
+    j.mainloop()
 def save_file():
     # Lógica para salvar um arquivo
-    pass
+    file_name=tk.filedialog.asksaveasfilename()
 
 def cut_text():
     # Lógica para recortar texto
@@ -156,7 +202,7 @@ setup_menu.add_command(label="Colar", command=paste_text)
 
 help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Guia de uso", command=cut_text)
-help_menu.add_command(label="Creditos", command=copy_text)
+help_menu.add_command(label="Creditos", command=creditwindow)
 
 
 menu_bar.add_cascade(label="Arquivo", menu=file_menu)
@@ -221,10 +267,10 @@ stocknumber_label.place(x=300,y=330)
 upareaperiod_label=tk.Label(root,text=f"periodo analisado:\nde: {varnotfill}/{varnotfill}/{varnotfill} \nate: {varnotfill}/{varnotfill}/{varnotfill}")
 upareaperiod_label.place(x=650,y=200)
 
-upperiodbtn=tk.Button(root,text="selecionar periodo")
+upperiodbtn=tk.Button(root,text="selecionar periodo",command=period_selector)
 upperiodbtn.place(x=650,y=250)
 
-stock_graphimg=Image.open("u2clm4ND_mid.png")
+stock_graphimg=Image.open("gcache/u2clm4ND_mid.png")
 stock_graphimg.thumbnail((400,225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
@@ -274,7 +320,7 @@ canvas.bind("<Configure>", on_configure)
 
 
 
-alt_load_btn=tk.Button(root,text="carregar portifolio")
+alt_load_btn=tk.Button(root,text="carregar portifolio",command=open_file)
 alt_load_btn.place(x=15,y=545)
 
 portfolioedit_btn=tk.Button(root,text="editar portifolio")
