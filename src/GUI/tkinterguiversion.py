@@ -415,7 +415,7 @@ upareaperiod_label.place(x=650,y=200)
 upperiodbtn=tk.Button(root,text="selecionar periodo",command=period_selector)
 upperiodbtn.place(x=650,y=250)
 
-stock_graphimg=Image.open("gcache/u2clm4ND_mid.png")
+stock_graphimg=Image.open("f"{os.getcwd()}/src/GUI/gcache/u2clm4ND_mid.png")
 stock_graphimg.thumbnail((400,225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
