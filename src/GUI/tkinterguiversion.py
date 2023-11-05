@@ -3,7 +3,7 @@ from tkinter import ttk
 from PIL import Image,ImageTk
 import importlib
 import inspect
-
+import os
 
 from r1092 import Portfolio
 
@@ -415,7 +415,7 @@ upareaperiod_label.place(x=650,y=200)
 upperiodbtn=tk.Button(root,text="selecionar periodo",command=period_selector)
 upperiodbtn.place(x=650,y=250)
 
-stock_graphimg=Image.open("f"{os.getcwd()}/src/GUI/gcache/u2clm4ND_mid.png")
+stock_graphimg=Image.open(os.sep.join([os.getcwd(),"gcache","u2clm4ND_mid.png"]))
 stock_graphimg.thumbnail((400,225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
