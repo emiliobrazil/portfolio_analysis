@@ -1,7 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image,ImageTk
-from pathlib import Path
+import importlib
+import inspect
+
+
+from r1092 import Portfolio
+
 
 from tkcalendar import Calendar, DateEntry
 import webbrowser
@@ -111,10 +116,13 @@ brazilian_stocks=list(set(brazilian_stocks))
 brazilian_stocks.sort()
 print(len(brazilian_stocks))
 for i in brazilian_stocks:
-    brazilian_stocks[brazilian_stocks.index(i)]=[i,brazilian_stocks.index(i)]
+    brazilian_stocks[brazilian_stocks.index(i)]=[i,10]
 brazilian_stocks_dict={}
 for i in brazilian_stocks:
     brazilian_stocks_dict[i[0]]=i[1]
+
+usr_portfolio=Portfolio(brazilian_stocks,"Meu portifolio")
+
 print(brazilian_stocks_dict)
 scrollslabelslist=[]
 varnotfill="???"
@@ -176,8 +184,9 @@ def portfoloioedit_window():
             label.pack(side="left")
 
             entry = tk.Entry(frame)
-            if label.cget("text") in brazilian_stocks_dict:
-                entry.insert(0, brazilian_stocks_dict[label.cget('text')])
+            if label.cget("text") in usr_portfolio.portfolio:
+                print(label.cget("text"))
+                entry.insert(0, usr_portfolio.portfolio[label.cget('text')])
             entry.pack(side="left")
 
             checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
@@ -219,8 +228,8 @@ def portfoloioedit_window():
     lista_frame.bind("<Configure>", on_frame_configure)
     canvas.bind("<Configure>", on_canvas_configure)
     canvas.itemconfig(canvas_frame, window=lista_frame)
-    for j in brazilian_stocks:
-        lista.append({"nome": j[0], "selecionado": tk.BooleanVar()})
+    for key in usr_portfolio.portfolio:
+        lista.append({"nome": key, "selecionado": tk.BooleanVar()})
 
     update_lista()
 
@@ -247,9 +256,10 @@ def creditwindow():
 
 def open_file():
     # Lógica para abrir um arquivo
-    file_name=tk.filedialog.askopenfilenames()
-    print(file_name)
-    return file_name
+    global usr_portfolio
+    file_name=tk.filedialog.askopenfilename()
+    file_name=file_name.replace("/","\\")
+    usr_portfolio=usr_portfolio.load(file_name)
 
 def period_selector():
 
@@ -283,7 +293,11 @@ def period_selector():
 
 def save_file():
     # Lógica para salvar um arquivo
+
     file_name=tk.filedialog.asksaveasfilename()
+    file_name=file_name.replace("/","\\")
+    print(file_name)
+    usr_portfolio.save(file_name)
 def change_label_color(event, label):
     for i in scrollslabelslist:
         i.config(bg="lightgray")
@@ -291,7 +305,7 @@ def change_label_color(event, label):
     stockname_label.config(text=label.cget("text"))
     stockarea_title.config(text=f'Analise da empresa {label.cget("text")}')
     stocknametext=stockname_label.cget("text").replace(" ","")
-    stocknumber_label.configure(text=f'Você possui {brazilian_stocks_dict[stocknametext]} ações nessa empresa')
+    stocknumber_label.configure(text=f'Você possui {usr_portfolio[stocknametext]} ações nessa empresa')
 
 
 def cut_text():
