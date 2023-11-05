@@ -118,7 +118,8 @@ for i in brazilian_stocks:
 print(brazilian_stocks_dict)
 scrollslabelslist=[]
 varnotfill="???"
-
+def argumentedfunction():
+    no_web_err(root=root)
 def riskcalc_window():
     j=tk.Tk()
     j.geometry("400x400")
@@ -132,6 +133,17 @@ def riskcalc_window():
 def on_mouse_wheel(event):
 
     canvas.yview_scroll(-1 * int(event.delta*0.01), "units")
+
+def no_web_err(root):
+    root.destroy()
+    root=tk.Tk()
+    root.geometry("300x300")
+    root.title("Sem acesso a internet")
+
+    tk.Label(root,text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2,rely=0.5)
+    tk.Button(root,text="OK", command=root.destroy).place(relx=0.45,rely=0.7)
+
+
 def portfoloioedit_window():
 
     def adicionar_elemento():
@@ -165,13 +177,17 @@ def portfoloioedit_window():
 
             entry = tk.Entry(frame)
             if label.cget("text") in brazilian_stocks_dict:
-                entry.insert(0,brazilian_stocks_dict[label.cget('text')])
-
-
+                entry.insert(0, brazilian_stocks_dict[label.cget('text')])
             entry.pack(side="left")
 
             checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
             checkbox.place(relx=0.7)
+
+        # Atualize o scrollregion do canvas para incluir todo o conteúdo
+        canvas.update_idletasks()  # Garante que os widgets estejam totalmente atualizados
+        canvas.configure(scrollregion=canvas.bbox("all"))
+
+
 
     lista = []
 
@@ -310,7 +326,7 @@ file_menu.add_command(label="Sair", command=root.quit)
 setup_menu = tk.Menu(menu_bar, tearoff=0)
 setup_menu.add_command(label="Recortar", command=cut_text)
 setup_menu.add_command(label="Copiar", command=copy_text)
-setup_menu.add_command(label="Colar", command=paste_text)
+setup_menu.add_command(label="sem net",command=argumentedfunction)
 
 help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Guia de uso", command=cut_text)
