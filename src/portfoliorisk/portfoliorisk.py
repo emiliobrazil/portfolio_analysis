@@ -36,6 +36,10 @@ def portfolio_expected_return (portfolio, period, num_trials=10000):
     return np.mean(portfolio_returns)
 
     def portfolio_expected_risk (portfolio):
+        """
+        Receives a portfolio.
+        Returns an approximation of the risk.
+        """
         
         df = pd.DataFrame(data)
         returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
