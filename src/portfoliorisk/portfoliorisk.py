@@ -5,7 +5,7 @@ import yfinance as yf
 
 # May need adaptations according to the format received by finance and management portfolios libs
 
-def portfolio_expected_return (portfolio, period, num_trials=10000):
+def portfolio_expected_return (portfolio, period, num_trials=100000):
     """
     Receives a portfolio and a period of time in days.
     Returns an approximation of the expected value using a Monte Carlo simulation.
@@ -18,7 +18,6 @@ def portfolio_expected_return (portfolio, period, num_trials=10000):
 
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
     asset_weights = np.array([asset[1] for asset in portfolio])
-    asset_weights = asset_weights / asset_weights.sum()
     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
 
     portfolio_returns = np.zeros(num_trials)
