@@ -5,16 +5,27 @@ import yfinance as yf
 
 # May need adaptations according to the format received by finance and management portfolios libs
 
-def portfolio_expected_return (portfolio, period, num_trials=100000):
+def compute_covariances_and_means (portfolio):
     """
-    Receives a portfolio and a period of time in days.
-    Returns an approximation of the expected value using a Monte Carlo simulation.
+    Receives a portfolio.
+    Returns an approximate covariance matrix of the portfolio
+    and an array of the approximate expected value of each asset.
     """
     # data = something something from finance lib
     df = pd.DataFrame(data)
     returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
     returns_covariance_matrix = returns.cov()
     returns_means = returns.mean()
+    return returns_covariance_matrix, returns_means
+
+def portfolio_expected_return (portfolio, period, num_trials=100000):
+    """
+    Receives a portfolio and a period of time in days.
+    Returns an approximation of the expected value using a Monte Carlo simulation.
+    """
+    # data = blah blah blah
+    df = pd.DataFrame(data)
+    returns_covariance_matrix, return_means = compute_covariances_and_means(portfolio)
 
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
     asset_weights = np.array([asset[1] for asset in portfolio])
@@ -42,8 +53,7 @@ def portfolio_expected_risk (portfolio):
 
     # data = something something again
     df = pd.DataFrame(data)
-    returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
-    returns_covariance_matrix = returns.cov()
+    returns_covariance_matrix, _ = compute_covariances_and_means(portfolio)
 
     asset_weights = np.array([asset[1] for asset in portfolio])
     asset_weights = asset_weights / asset_weights.sum()
