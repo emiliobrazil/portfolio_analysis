@@ -22,7 +22,14 @@ def portfolio_expected_return (portfolio, period, num_trials=10000):
     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
 
     portfolio_returns = np.zeros(num_trials)
+    num_assets = len(portfolio)
+
     for idx in range(num_trials):
-        random_values = np.random.multivariate_normal(returns_means, returns_covariance_matrix)
-        random_return = (random_values * portfolio_value_at_last_date).sum()
-        portfolio_returns[idx] = random_return
+        simulated_portfolio_values = portfolio_value_at_last_date
+        for day in range(period):
+            simulated_variations = np.random.multivariate_normal(returns_means, returns_covariance_matrix)
+            simulated_portfolio_values *= simulated_variations
+        simulated_return = simulated_portfolio_values.sum()
+        portfolio_returns[idx] = simulated_return
+    
+    return np.mean(portfolio_returns)
