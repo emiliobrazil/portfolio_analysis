@@ -40,7 +40,8 @@ def portfolio_expected_risk (portfolio):
     Receives a portfolio.
     Returns an approximation of the risk.
     """
-        
+
+    # data = something something again
     df = pd.DataFrame(data)
     returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
     returns_covariance_matrix = returns.cov()
