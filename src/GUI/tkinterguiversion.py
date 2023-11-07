@@ -192,8 +192,6 @@ def portfoloioedit_window():
 
     def save_changes():
         pass
-        global usr_portfolio
-        usr_portfolio.portfolio.clear()
 
 
 
