@@ -287,9 +287,9 @@ def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
     file_name = tk.filedialog.askopenfilename()
-    file_name = file_name.replace("/", os.sep)
-    file_name=file_name.replace("\\",os.sep)
     if file_name !="":
+        file_name = file_name.replace("/", os.sep)
+        file_name=file_name.replace("\\",os.sep)
         usr_portfolio = usr_portfolio.load(file_name)
 
 
@@ -329,10 +329,11 @@ def save_file():
         'defaultextension': ".jprt",
         'filetypes': [("Arquivo de portifolio", "*.jprt"),("Arquivos de Texto", "*.txt") ,("Todos os Arquivos", "*.*")]
     })
-    file_name = file_name.replace("/", os.sep)
-    file_name=file_name.replace("\\",os.sep)
-    print(file_name)
-    if file_name !="":
+    if file_name != "" and file_name!=():
+        file_name = file_name.replace("/", os.sep)
+        print(file_name)
+        file_name=file_name.replace("\\",os.sep)
+        print(file_name)
         usr_portfolio.save(file_name)
 
 
@@ -489,16 +490,16 @@ moneyreturnlabel = tk.Label(root, text=f"Retorno: R${varnotfill}")
 moneyreturnlabel.place(x=450, y=470)
 
 lastsimbutton=tk.Button(root, text="Ultima simulação", )
-lastsimbutton.place(x=330, y=540)
+lastsimbutton.place(x=350, y=540)
 riskbutton = tk.Button(root, text="calcular risco", command=riskcalc_window)
-riskbutton.place(x=450, y=540)
+riskbutton.place(x=500, y=540)
 
 canvas.bind("<Configure>", on_configure)
 
 alt_load_btn = tk.Button(root, text="carregar portifolio", command=open_file)
-alt_load_btn.place(x=15, y=545)
+alt_load_btn.place(x=5, y=545)
 
 portfolioedit_btn = tk.Button(root, text="editar portifolio", command=portfoloioedit_window)
-portfolioedit_btn.place(x=20, y=515)
+portfolioedit_btn.place(x=10, y=515)
 
 root.mainloop()
