@@ -1,22 +1,21 @@
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image,ImageTk
-import importlib
-import inspect
+from PIL import Image, ImageTk
+
 import os
 
 from r1092 import Portfolio
 
-
-from tkcalendar import Calendar, DateEntry
+from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
+
 brazilian_stocks = [
     'PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'ABEV3',
-    'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3',   'ALPA4', 'ALUP11',
-    'ALUP3', 'ALUP4', 'ANIM3', 'ARZZ3','ATMP3', 'ATOM3',
+    'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3', 'ALPA4', 'ALUP11',
+    'ALUP3', 'ALUP4', 'ANIM3', 'ARZZ3', 'ATMP3', 'ATOM3',
     'AZEV3', 'BIDI11', 'BIDI3', 'BIDI4', 'BOBR3', 'BOBR4',
-    'BOVA11', 'BPAC3', 'BPAN4', 'BRAP4',  'BEEF3', 'BPAC11',
+    'BOVA11', 'BPAC3', 'BPAN4', 'BRAP4', 'BEEF3', 'BPAC11',
     'BRAP3', 'BRKM3', 'CCRO3', 'CGRA3',
     'COGN3', 'CPLE6', 'CSAN3', 'CVCB3', 'CYRE3', 'ECOR3',
     'EGIE3', 'ELET3', 'ELET6', 'EMBR3', 'ENBR3', 'EQTL3',
@@ -112,59 +111,91 @@ brazilian_stocks = [
     'WUNI3', 'WUNI5', 'WUNI6', 'YBRA3', 'YBRA4']
 
 print(len(brazilian_stocks))
-brazilian_stocks=list(set(brazilian_stocks))
+brazilian_stocks = list(set(brazilian_stocks))
 brazilian_stocks.sort()
 print(len(brazilian_stocks))
 for i in brazilian_stocks:
-    brazilian_stocks[brazilian_stocks.index(i)]=[i,10]
-brazilian_stocks_dict={}
+    brazilian_stocks[brazilian_stocks.index(i)] = [i, 10]
+brazilian_stocks_dict = {}
 for i in brazilian_stocks:
-    brazilian_stocks_dict[i[0]]=i[1]
+    brazilian_stocks_dict[i[0]] = i[1]
 
-usr_portfolio=Portfolio(brazilian_stocks,"Meu portifolio")
+usr_portfolio = Portfolio(brazilian_stocks, "Meu portifolio")
 
 print(brazilian_stocks_dict)
-scrollslabelslist=[]
-varnotfill="???"
+scrollslabelslist = []
+editstocklabelslist=[]
+varnotfill = "???"
+
+
 def argumentedfunction():
     no_web_err(root=root)
-def riskcalc_window():
-    j=tk.Tk()
-    j.geometry("400x400")
-    exitbtn=tk.Button(j,text="iniciar simulação",command=j.destroy)
-    exitbtn.place(x=200,y=200)
 
+
+def riskcalc_window():
+    j = tk.Tk()
+
+    def riskrun_btn():
+        print("entrou na riskrun_btn")
+        sel_var = risk_var.get()
+        if sel_var == 1:
+            pass
+            #  chamar a risco aqui(dia)
+
+        if sel_var == 2:
+            pass
+            #  chamar a risco aqui(mes)
+        if sel_var == 3:
+            pass
+            #  chamar a risco aqui(ano)
+        # pegar o resultado e pllottar
+        j.destroy()
+
+    j.geometry("300x200")
+    j.title("Calcular risco")
+    riskcalc_label = tk.Label(j, text="Selecione o periodo do risco:")
+    riskcalc_label.place(x=50, y=20)
+    risk_var = tk.IntVar()
+    r1 = tk.Radiobutton(j, text="Dia", variable=risk_var, value=1)
+    r1.place(x=50, y=50)
+    r2 = tk.Radiobutton(j, text="Mes", variable=risk_var, value=2)
+    r2.place(x=50, y=80)
+    r3 = tk.Radiobutton(j, text="Ano", variable=risk_var, value=3)
+    r3.place(x=50, y=110)
+    r1.select()
+
+    exitbtn = tk.Button(j, text="iniciar simulação", command=riskrun_btn)
+    exitbtn.place(x=100, y=150)
 
     j.mainloop()
-    print("chegou aqui")
-    return []
-def on_mouse_wheel(event):
 
-    canvas.yview_scroll(-1 * int(event.delta*0.01), "units")
+
+def on_mouse_wheel(event):
+    canvas.yview_scroll(-1 * int(event.delta * 0.01), "units")
+
 
 def no_web_err(root):
     root.destroy()
-    root=tk.Tk()
+    root = tk.Tk()
     root.geometry("300x300")
     root.title("Sem acesso a internet")
 
-    tk.Label(root,text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2,rely=0.5)
-    tk.Button(root,text="OK", command=root.destroy).place(relx=0.45,rely=0.7)
+    tk.Label(root, text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2, rely=0.5)
+    tk.Button(root, text="OK", command=root.destroy).place(relx=0.45, rely=0.7)
 
 
 def portfoloioedit_window():
-
     def adicionar_elemento():
         elemento = entry.get()
         lista.append({"nome": elemento, "selecionado": tk.BooleanVar()})
         update_lista()
 
+    def save_changes():
+        pass
+        global usr_portfolio
+        usr_portfolio.portfolio.clear()
 
-    def remover_elemento():
-        selecionados = [i for i, item in enumerate(lista) if item["selecionado"].get()]
-        for idx in selecionados:
-            del lista[idx]
-        update_lista()
+
 
     def on_canvas_configure(event):
         canvas.configure(scrollregion=canvas.bbox("all"))
@@ -196,8 +227,6 @@ def portfoloioedit_window():
         canvas.update_idletasks()  # Garante que os widgets estejam totalmente atualizados
         canvas.configure(scrollregion=canvas.bbox("all"))
 
-
-
     lista = []
 
     root = tk.Tk()
@@ -207,12 +236,10 @@ def portfoloioedit_window():
     entry = tk.Entry(root)
     entry.pack(side="top", padx=100)
 
-
-
     adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
     adicionar_button.pack(side="top")
 
-    remover_button = tk.Button(root, text="Remover Selecionados", command=remover_elemento)
+    remover_button = tk.Button(root, text="Salvar alterações")
     remover_button.pack(side="top")
 
     canvas = tk.Canvas(root)
@@ -233,60 +260,66 @@ def portfoloioedit_window():
 
     update_lista()
 
-
     root.mainloop()
-def creditwindow():
 
-    j=tk.Tk()
+def update_scrollbar_elements(selected_items):
+    pass
+def creditwindow():
+    j = tk.Tk()
     j.geometry("300x300")
     j.title("creditos")
 
-    credits_text=tk.Label(j,text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
-    credits_text.place(x=-90,y=20)
-    gitcredittext=tk.Label(j,text="Github:")
-    gitcredittext.place(x=0,y=135)
-    gitcreditlink=tk.Label(j,text="https://github.com/emiliobrazil/portfolio_analysis",fg="blue")
-    gitcreditlink.place(x=0,y=150)
-    gitcreditlink.bind("<Button-1>",lambda e:webbrowser.open_new_tab("https://github.com/emiliobrazil/portfolio_analysis"))
-    tk.Label(j,text="Disponibilizado em Apache-2.0").place(x=0,y=175)
-    tk.Label(j,text="Desenvolvido em: 2023").place(x=100,y=225)
+    credits_text = tk.Label(j,
+                            text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
+    credits_text.place(x=-90, y=20)
+    gitcredittext = tk.Label(j, text="Github:")
+    gitcredittext.place(x=0, y=135)
+    gitcreditlink = tk.Label(j, text="https://github.com/emiliobrazil/portfolio_analysis", fg="blue")
+    gitcreditlink.place(x=0, y=150)
+    gitcreditlink.bind("<Button-1>",
+                       lambda e: webbrowser.open_new_tab("https://github.com/emiliobrazil/portfolio_analysis"))
+    tk.Label(j, text="Disponibilizado em Apache-2.0").place(x=0, y=175)
+    tk.Label(j, text="Desenvolvido em: 2023").place(x=100, y=225)
 
-    creditbtn=tk.Button(j,text="fechar",command=j.destroy)
-    creditbtn.place(x=135,y=250)
+    creditbtn = tk.Button(j, text="fechar", command=j.destroy)
+    creditbtn.place(x=135, y=250)
+
 
 def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
-    file_name=tk.filedialog.askopenfilename()
-    file_name=file_name.replace("/","\\")
-    usr_portfolio=usr_portfolio.load(file_name)
+    file_name = tk.filedialog.askopenfilename()
+    file_name = file_name.replace("/", os.sep)
+    file_name=file_name.replace("\\",os.sep)
+    if file_name !="":
+        usr_portfolio = usr_portfolio.load(file_name)
+
 
 def period_selector():
-
-
-    j=tk.Tk()
+    j = tk.Tk()
     j.geometry("270x380")
     j.title("selecionar periodo")
 
-    tk.Label(j,text="Selecione o periodo",font=25).place(x=50,y=10)
+    tk.Label(j, text="Selecione o periodo", font=25).place(x=50, y=10)
     tk.Label(j, text="Inicio:").place(x=0, y=50)
     tk.Label(j, text="Fim:").place(x=0, y=130)
 
-    inical = DateEntry(j, width=16, background="blue", foreground="white", bd=2,date_pattern='dd/mm/yyyy')
-    inical.place(x=10,y=90)
+    inical = DateEntry(j, width=16, background="blue", foreground="white", bd=2, date_pattern='dd/mm/yyyy')
+    inical.place(x=10, y=90)
 
-    endcal = DateEntry(j, width=16, background="blue", foreground="white", bd=2,date_pattern='dd/mm/yyyy')
+    endcal = DateEntry(j, width=16, background="blue", foreground="white", bd=2, date_pattern='dd/mm/yyyy')
     endcal.place(x=10, y=170)
+
     def periodselctorbtn_command():
-        inicalg=inical.get_date()
-        endcalg=endcal.get_date()
-        inicaldatalist=[inicalg.day,inicalg.month,inicalg.year]
-        endcaldatalist=[endcalg.day,endcalg.month,endcalg.year]
-        upareaperiod_label.config(text=f"periodo analisado:\nde: {inicaldatalist[0]}/{inicaldatalist[1]}/{inicaldatalist[2]} \nate: {endcaldatalist[0]}/{endcaldatalist[1]}/{endcaldatalist[2]}")
-    period_fselbt=tk.Button(j,text="Selecionar",command=periodselctorbtn_command)
-    period_fselbt.place(x=110,y=320)
+        inicalg = inical.get_date()
+        endcalg = endcal.get_date()
+        inicaldatalist = [inicalg.day, inicalg.month, inicalg.year]
+        endcaldatalist = [endcalg.day, endcalg.month, endcalg.year]
+        upareaperiod_label.config(
+            text=f"periodo analisado:\nde: {inicaldatalist[0]}/{inicaldatalist[1]}/{inicaldatalist[2]} \nate: {endcaldatalist[0]}/{endcaldatalist[1]}/{endcaldatalist[2]}")
 
-
+    period_fselbt = tk.Button(j, text="Selecionar", command=periodselctorbtn_command)
+    period_fselbt.place(x=110, y=320)
 
     j.mainloop()
 
@@ -294,17 +327,24 @@ def period_selector():
 def save_file():
     # Lógica para salvar um arquivo
 
-    file_name=tk.filedialog.asksaveasfilename()
-    file_name=file_name.replace("/","\\")
+    file_name = tk.filedialog.asksaveasfilename( **{
+        'defaultextension': ".jprt",
+        'filetypes': [("Arquivo de portifolio", "*.jprt"),("Arquivos de Texto", "*.txt") ,("Todos os Arquivos", "*.*")]
+    })
+    file_name = file_name.replace("/", os.sep)
+    file_name=file_name.replace("\\",os.sep)
     print(file_name)
-    usr_portfolio.save(file_name)
+    if file_name !="":
+        usr_portfolio.save(file_name)
+
+
 def change_label_color(event, label):
     for i in scrollslabelslist:
         i.config(bg="lightgray")
     label.config(bg="blue")
     stockname_label.config(text=label.cget("text"))
     stockarea_title.config(text=f'Analise da empresa {label.cget("text")}')
-    stocknametext=stockname_label.cget("text").replace(" ","")
+    stocknametext = stockname_label.cget("text").replace(" ", "")
     stocknumber_label.configure(text=f'Você possui {usr_portfolio[stocknametext]} ações nessa empresa')
 
 
@@ -312,22 +352,24 @@ def cut_text():
     # Lógica para recortar texto
     pass
 
+
 def copy_text():
     # Lógica para copiar texto
     pass
+
 
 def paste_text():
     # Lógica para colar texto
     pass
 
-def update_tocks_scroll(p_window,scroll,stock_list):
+
+def update_tocks_scroll(p_window, scroll, stock_list):
     pass
 
-root=tk.Tk()
+
+root = tk.Tk()
 root.geometry("800x600")
 root.title("analise de portifolio")
-
-
 
 menu_bar = tk.Menu(root)
 
@@ -340,25 +382,21 @@ file_menu.add_command(label="Sair", command=root.quit)
 setup_menu = tk.Menu(menu_bar, tearoff=0)
 setup_menu.add_command(label="Recortar", command=cut_text)
 setup_menu.add_command(label="Copiar", command=copy_text)
-setup_menu.add_command(label="sem net",command=argumentedfunction)
+setup_menu.add_command(label="sem net", command=argumentedfunction)
 
 help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Guia de uso", command=cut_text)
 help_menu.add_command(label="Creditos", command=creditwindow)
 
-
 menu_bar.add_cascade(label="Arquivo", menu=file_menu)
 menu_bar.add_cascade(label="Confiurações", menu=setup_menu)
 menu_bar.add_cascade(label="Ajuda", menu=help_menu)
 
-
 root.config(menu=menu_bar)
-
-
 
 main_frame = tk.Frame(root, width=800, height=600)
 main_frame.pack(fill=tk.BOTH, expand=True)
-main_frame.place(x=20,y=0)
+main_frame.place(x=20, y=0)
 # Crie um frame secundário dentro do frame principal com tamanho menor
 sub_frame = tk.Frame(main_frame, width=300, height=500)
 sub_frame.pack()
@@ -381,7 +419,6 @@ canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
 # Adicione conteúdo ao frame (substitua isto pelo seu conteúdo real)
 for i in brazilian_stocks:
-
     label = tk.Label(content_frame, text=f" {i[0]}")
     label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
     label.bind("<MouseWheel>", on_mouse_wheel)
@@ -393,91 +430,77 @@ for i in brazilian_stocks:
 def on_configure(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
 
-vertical_separator=ttk.Separator(master=root,orient="vertical")
+
+vertical_separator = ttk.Separator(master=root, orient="vertical")
 vertical_separator.pack(fill="y", pady=10, expand=True)
 
-vertical_separator.place(x=150,relheight=1,relwidth=1)
-stockarea_title=tk.Label(root,text=f"Analise da empresa {varnotfill}",font=25)
-stockarea_title.place(x=350,y=10)
+vertical_separator.place(x=150, relheight=1, relwidth=1)
+stockarea_title = tk.Label(root, text=f"Analise da empresa {varnotfill}", font=25)
+stockarea_title.place(x=350, y=10)
 
-stockname_label=tk.Label(root,text=f"{varnotfill}")
-stockname_label.place(x=220,y=70)
+stockname_label = tk.Label(root, text=f"{varnotfill}")
+stockname_label.place(x=220, y=70)
 
-stockvalue_label=tk.Label(root,text=f"R$:{varnotfill}")
-stockvalue_label.place(x=550,y=70)
+stockvalue_label = tk.Label(root, text=f"R$:{varnotfill}")
+stockvalue_label.place(x=550, y=70)
 
-stocknumber_label=tk.Label(root,text=f"voce possui: {varnotfill} ações nesse empresa")
-stocknumber_label.place(x=300,y=330)
+stocknumber_label = tk.Label(root, text=f"voce possui: {varnotfill} ações nesse empresa")
+stocknumber_label.place(x=300, y=330)
 
-upareaperiod_label=tk.Label(root,text=f"periodo analisado:\nde: {varnotfill}/{varnotfill}/{varnotfill} \nate: {varnotfill}/{varnotfill}/{varnotfill}")
-upareaperiod_label.place(x=650,y=200)
+upareaperiod_label = tk.Label(root,
+                              text=f"periodo analisado:\nde: {varnotfill}/{varnotfill}/{varnotfill} \nate: {varnotfill}/{varnotfill}/{varnotfill}")
+upareaperiod_label.place(x=650, y=200)
 
-upperiodbtn=tk.Button(root,text="selecionar periodo",command=period_selector)
-upperiodbtn.place(x=650,y=250)
+upperiodbtn = tk.Button(root, text="selecionar periodo", command=period_selector)
+upperiodbtn.place(x=650, y=250)
 
-stock_graphimg=Image.open(os.sep.join([os.getcwd(),"gcache","u2clm4ND_mid.png"]))
-stock_graphimg.thumbnail((400,225))
+stock_graphimg = Image.open(os.sep.join([os.getcwd(), "gcache", "u2clm4ND_mid.png"]))
+stock_graphimg.thumbnail((400, 225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
 # Crie um widget Label para exibir a imagem
 stock_graph_label = tk.Label(root, image=photo)
 stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
 stock_graph_label.pack()
-stock_graph_label.place(x=220,y=100)
-horizontal_separator=ttk.Separator(
+stock_graph_label.place(x=220, y=100)
+horizontal_separator = ttk.Separator(
     master=root,
     orient="horizontal"
 )
 horizontal_separator.pack(fill="x", padx=10, expand=True)
 
-horizontal_separator.place(relx=0.19, rely=0.67, relwidth=1, relheight=1)
+horizontal_separator.place(x=152, rely=0.67, relwidth=1, relheight=1)
 
-risktitlelabel=tk.Label(root,text="Gerenciamento de risco:",font=25)
-risktitlelabel.place(x=360,y=410)
+risktitlelabel = tk.Label(root, text="Gerenciamento de risco:", font=25)
+risktitlelabel.place(x=360, y=410)
 
-risklabel=tk.Label(root,text=f"Risco:R${varnotfill}")
-risklabel.place(x=200,y=450)
+risklabel = tk.Label(root, text=f"Risco:R${varnotfill}")
+risklabel.place(x=200, y=450)
 
-cashlabel=tk.Label(root,text=f"Saldo:R${varnotfill}")
-cashlabel.place(x=200,y=470)
+cashlabel = tk.Label(root, text=f"Saldo:R${varnotfill}")
+cashlabel.place(x=200, y=470)
 
-periodlabel=tk.Label(root,text=f"periodo: de: {varnotfill}/{varnotfill}/{varnotfill}- até: {varnotfill}/{varnotfill}/{varnotfill}")
-periodlabel.place(x=200,y=490)
+periodlabel = tk.Label(root,
+                       text=f"periodo: de: {varnotfill}/{varnotfill}/{varnotfill}- até: {varnotfill}/{varnotfill}/{varnotfill}")
+periodlabel.place(x=200, y=490)
 
-lastriskupdate=tk.Label(root,text=f"ultimo calculo de risco: {varnotfill}/{varnotfill}/{varnotfill}")
-lastriskupdate.place(x=450,y=490)
+lastriskupdate = tk.Label(root, text=f"ultimo calculo de risco: {varnotfill}/{varnotfill}/{varnotfill}")
+lastriskupdate.place(x=450, y=490)
 
-moneyreturnlabel=tk.Label(root,text=f"Retorno: R${varnotfill}")
-moneyreturnlabel.place(x=450,y=470)
+moneyreturnlabel = tk.Label(root, text=f"Retorno: R${varnotfill}")
+moneyreturnlabel.place(x=450, y=470)
 
-riskbutton=tk.Button(root,text="calcular risco",command=riskcalc_window)
-riskbutton.place(x=410,y=540)
+lastsimbutton=tk.Button(root, text="Ultima simulação", )
+lastsimbutton.place(x=330, y=540)
+riskbutton = tk.Button(root, text="calcular risco", command=riskcalc_window)
+riskbutton.place(x=450, y=540)
 
 canvas.bind("<Configure>", on_configure)
 
+alt_load_btn = tk.Button(root, text="carregar portifolio", command=open_file)
+alt_load_btn.place(x=15, y=545)
 
-
-
-
-
-
-
-
-
-
-alt_load_btn=tk.Button(root,text="carregar portifolio",command=open_file)
-alt_load_btn.place(x=15,y=545)
-
-portfolioedit_btn=tk.Button(root,text="editar portifolio",command=portfoloioedit_window)
-portfolioedit_btn.place(x=20,y=515)
-
-
-
-
-
-
-
-
-
+portfolioedit_btn = tk.Button(root, text="editar portifolio", command=portfoloioedit_window)
+portfolioedit_btn.place(x=20, y=515)
 
 root.mainloop()
