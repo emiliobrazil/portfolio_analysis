@@ -1,9 +1,12 @@
 """
 Finance Lib
 
-Description: The Finance Lib simplifies the management of your investment. It introduces two fundamental classes, Stock and StockValidator, to help you efficiently track and manage individual stock holdings.
-- The Stock class allows you to specify a stock symbol, start date, and end date for historical data, while raising a ValueError if the symbol is invalid. 
-- The StockValidator class ensures the validity of stock symbols in the Brazilian market and provides a list of Brazilian stock tickers for reference. 
+Description: The Finance Lib simplifies the management of your investments. It introduces two fundamental classes, Stock and StockValidator, designed to help you efficiently track and manage individual stock holdings.
+
+The Stock class enables you to specify a stock symbol, start date, and end date for historical data. It will raise a ValueError if the symbol is invalid.
+
+The StockValidator class is responsible for ensuring the validity of stock symbols within the Brazilian market. It also provides a handy list of Brazilian stock tickers for reference.
+
 These core components of Finance Lib's streamline your portfolio management tasks, helping you make well-informed investment decisions.
 
 License: Apache License, Version 2.0
