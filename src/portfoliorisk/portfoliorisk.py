@@ -15,9 +15,10 @@ def compute_covariances_and_means (portfolio, type_period='months'):
     returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
     returns_covariance_matrix = returns.cov()
     returns_means = returns.mean()
+
     return returns_covariance_matrix, returns_means
 
-def monte_carlo_simulation (portfolio, file_path_simulation=None, file_path_portfolio=None, num_periods, type_period='months', num_trials=1000):
+def monte_carlo_simulation (portfolio, num_periods, file_path=None, type_period='months', num_trials=1000):
     """
     Receives a portfolio, a file path to save the results of the simulation in npy, an amount of
     periods and the type of period (days, months or years), the number of periods to iterate, the
@@ -27,7 +28,7 @@ def monte_carlo_simulation (portfolio, file_path_simulation=None, file_path_port
     """
     # data = blah blah blah
     df = pd.DataFrame(data)
-    returns_covariance_matrix, return_means = compute_covariances_and_means(portfolio, type_period)
+    returns_covariance_matrix, returns_means = compute_covariances_and_means(portfolio, type_period)
 
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
     asset_weights = np.array([asset[1] for asset in portfolio])
@@ -45,10 +46,10 @@ def monte_carlo_simulation (portfolio, file_path_simulation=None, file_path_port
             simulated_portfolio_values = np.exp(period_log_returns)
             simulated_returns[period][idx] = np.sum(simulated_portfolio_values)
     
-    if file_path_simulation is not None:
+    if file_path is not None:
         if not file_path_simulation.endswith('.npy'):
-            raise ValueError(f'Not supported file path: {file_path_simulation}. File must be in npy format.')
-        np.save(file_path_simulation, simulated_returns)
+            raise ValueError(f'Not supported file path: {file_path}. File must be in npy format.')
+        np.save(file_path, simulated_returns)
 
     return simulated_returns, portfolio
 
@@ -103,8 +104,10 @@ def portfolio_scores_at_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100]
         simulated_returns = load_monte_carlo_simulation(portfolio, simulation_path, type_period)[0]
     else:
         simulated_returns = monte_carlo_simulation(portfolio, None, None, num_periods, type_period, num_trials)[0]
+
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
         scores[period] = sp.stats.scoreatpercentile(simulated_returns[period], percentiles)
+    
     return scores
