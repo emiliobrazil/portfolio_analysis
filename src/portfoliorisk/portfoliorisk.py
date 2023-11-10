@@ -6,7 +6,7 @@ import pandas as pd
 
 def compute_covariances_and_means (portfolio, type_period='months'):
     """
-    Receives a portfolio.
+    Receives a portfolio and the type of period to be analysed (days, months or years).
     Returns an approximate covariance matrix of the portfolio
     and an array of the approximate expected value of each stock.
     """
@@ -54,7 +54,8 @@ def monte_carlo_simulation (portfolio, num_periods, type_period='months', file_p
 
 def load_monte_carlo_simulation (portfolio, file_path, type_period='months'):
     """
-    Receives a portfolio and a file path of the simulation in npy.
+    Receives a portfolio, a file path of the simulation in npy and the type of period to be analysed
+    (days, months or years).
     Returns an array of returns simulated by a Monte Carlo simulation, the portfolio and the type of period.
     """
     if not file_path.endswith('.npy'):
@@ -79,7 +80,7 @@ def portfolio_expected_return (portfolio, num_periods, type_period='months', sim
 
 def portfolio_risk_index (portfolio, type_period='months'):
     """
-    Receives a portfolio.
+    Receives a portfolio and the type of period to be analysed (days, months or years).
     Returns a risk index.
     """
     returns_covariance_matrix, _ = compute_covariances_and_means(portfolio, type_period)
@@ -94,8 +95,9 @@ def portfolio_risk_index (portfolio, type_period='months'):
 
 def portfolio_scores_at_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100], num_periods=30, type_period='months', simulation_path=None, num_trials=1000):
     """
-    Receives a portfolio, an array-like of percentiles, a file path to load
-    a saved simulation (if any) and the number of trials per period.
+    Receives a portfolio, an array-like of percentiles, the number of periods to iterate,
+    the type of period (days, months or years), a file path to load a saved simulation
+    (if any) and the number of trials per period.
     Runs a Monte Carlo simulation if no simulation is loaded.
     Returns the score at the percentiles.
     """
