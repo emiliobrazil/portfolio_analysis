@@ -46,7 +46,7 @@ def monte_carlo_simulation (portfolio, num_periods, type_period='months', file_p
             simulated_returns[period][idx] = np.sum(simulated_portfolio_values)
     
     if file_path is not None:
-        if not file_path_simulation.endswith('.npy'):
+        if not file_path.endswith('.npy'):
             raise ValueError(f'Not supported file path: {file_path}. File must be in npy format.')
         np.save(file_path, simulated_returns)
 
@@ -92,10 +92,10 @@ def portfolio_risk_index (portfolio, type_period='months'):
 
     return portfolio_risk
 
-def portfolio_scores_at_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100], num_periods=30, type_period='months', simulation_path=None):
+def portfolio_scores_at_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100], num_periods=30, type_period='months', simulation_path=None, num_trials=1000):
     """
-    Receives a portfolio, an array-like of percentiles and a file path to load
-    a saved simulation, if any.
+    Receives a portfolio, an array-like of percentiles, a file path to load
+    a saved simulation (if any) and the number of trials per period.
     Runs a Monte Carlo simulation if no simulation is loaded.
     Returns the score at the percentiles.
     """
