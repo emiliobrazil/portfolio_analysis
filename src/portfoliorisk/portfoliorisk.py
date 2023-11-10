@@ -18,12 +18,11 @@ def compute_covariances_and_means (portfolio, type_period='months'):
 
     return returns_covariance_matrix, returns_means
 
-def monte_carlo_simulation (portfolio, num_periods, file_path=None, type_period='months', num_trials=1000):
+def monte_carlo_simulation (portfolio, num_periods, type_period='months', file_path=None, num_trials=1000):
     """
-    Receives a portfolio, a file path to save the results of the simulation in npy, an amount of
-    periods and the type of period (days, months or years), the number of periods to iterate, the
-    type of periods (days, months or years) and the number of trials for each period for the Monte
-    Carlo simulation.
+    Receives a portfolio, an amount of periods, the type of period (days, months or years), a
+    file path to save the results of the simulation in npy and the number of trials for each
+    period for the Monte Carlo simulation.
     Returns an array of simulated returns and the portfolio in list format.
     """
     # data = blah blah blah
