@@ -1,4 +1,3 @@
-import json
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -9,7 +8,7 @@ def compute_covariances_and_means (portfolio, type_period='months'):
     """
     Receives a portfolio.
     Returns an approximate covariance matrix of the portfolio
-    and an array of the approximate expected value of each asset.
+    and an array of the approximate expected value of each stock.
     """
     # data = something something from finance lib
     df = pd.DataFrame(data)
@@ -21,9 +20,9 @@ def compute_covariances_and_means (portfolio, type_period='months'):
 def monte_carlo_simulation (portfolio, file_path_simulation=None, file_path_portfolio=None, num_periods, type_period='months', num_trials=1000):
     """
     Receives a portfolio, a file path to save the results of the simulation in npy, an amount of
-    periods and the type of period (days, months or years), a file path to save the portfolio in
-    JSON, the number of periods to iterate, the type of periods (days, months or years) and the
-    number of trials for each period for the Monte Carlo simulation.
+    periods and the type of period (days, months or years), the number of periods to iterate, the
+    type of periods (days, months or years) and the number of trials for each period for the Monte
+    Carlo simulation.
     Returns an array of simulated returns and the portfolio in list format.
     """
     # data = blah blah blah
@@ -50,13 +49,7 @@ def monte_carlo_simulation (portfolio, file_path_simulation=None, file_path_port
         if not file_path_simulation.endswith('.npy'):
             raise ValueError(f'Not supported file path: {file_path_simulation}. File must be in npy format.')
         np.save(file_path_simulation, simulated_returns)
-    
-    if file_path_portfolio is not None:
-        if not file_path_portfolio.endswith('.json'):
-            raise ValueError(f'Not supported file path: {file_path_portfolio}. File must be in JSON format.')
-        with open(file_path_portfolio, 'w') as json_file:
-            json.dump(portfolio, json_file)
-    
+
     return simulated_returns, portfolio
 
 def load_monte_carlo_simulation (portfolio, file_path, type_period='months'):
@@ -89,9 +82,9 @@ def portfolio_risk_index (portfolio, type_period='months'):
     Receives a portfolio.
     Returns a risk index.
     """
-    returns_covariance_matrix, _ = compute_covariances_and_means(open_portfolio, type_period)
+    returns_covariance_matrix, _ = compute_covariances_and_means(portfolio, type_period)
 
-    asset_weights = np.array([asset[1] for asset in open_portfolio])
+    asset_weights = np.array([asset[1] for asset in portfolio])
     asset_weights = asset_weights / asset_weights.sum()
 
     portfolio_variance = np.dot(asset_weights, np.dot(returns_covariance_matrix, asset_weights))
@@ -99,7 +92,7 @@ def portfolio_risk_index (portfolio, type_period='months'):
 
     return portfolio_risk
 
-def portfolio_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100], num_periods=30, type_period='months', simulation_path=None):
+def portfolio_scores_at_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100], num_periods=30, type_period='months', simulation_path=None):
     """
     Receives a portfolio, an array-like of percentiles and a file path to load
     a saved simulation, if any.
