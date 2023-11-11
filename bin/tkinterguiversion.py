@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 
 import os
 
-from CL_portifolio_management.CL_portfolio_management import Portfolio
+from r1092 import Portfolio
 
 from tkcalendar import DateEntry
 import webbrowser
@@ -126,7 +126,7 @@ print(brazilian_stocks_dict)
 scrollslabelslist = []
 editstocklabelslist=[]
 varnotfill = "???"
-
+entry_dict={}
 
 def argumentedfunction():
     no_web_err(root=root)
@@ -182,18 +182,53 @@ def no_web_err(root):
 
     tk.Label(root, text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2, rely=0.5)
     tk.Button(root, text="OK", command=root.destroy).place(relx=0.45, rely=0.7)
+def mainscrollhset():
+    canvas.update_idletasks()  # Atualize o canvas
+    canvas_height = content_frame.winfo_reqheight()  # Altura total do conteúdo
+    canvas.config(scrollregion=(0, 0, 0, canvas_height))  # Atualize a região de rolagem do canvas
+
+    # Verifique se a altura total do conteúdo é maior que a altura visível
+    if canvas_height > canvas.winfo_height():
+        scrollbar.configure(command=canvas.yview)
+        canvas.bind("<MouseWheel>", on_mouse_wheel)
+    else:
+        scrollbar.configure(command=None)
+        canvas.unbind("<MouseWheel>")
 
 
 def portfoloioedit_window():
     def adicionar_elemento():
         elemento = entry.get()
-        lista.append({"nome": elemento, "selecionado": tk.BooleanVar()})
+        selecionado = tk.BooleanVar()
+        lista.append({"nome": elemento, "selecionado": selecionado})
         update_lista()
 
     def save_changes():
-        pass
+        usr_portfolio.portfolio.clear()
 
+        for elemento in lista:
+            nome = elemento["nome"]
+            selecionado = elemento["selecionado"].get()
+            entrada = entry_dict.get(nome, None)
 
+            if selecionado and entrada:
+                valor_entrada = entrada.get()
+                usr_portfolio.portfolio[nome] = valor_entrada
+
+        print(usr_portfolio.portfolio)
+        #tudo ok
+        for widget in content_frame.winfo_children():
+            widget.destroy()
+        global  scrollslabelslist
+        scrollslabelslist=[]
+        for i in usr_portfolio.portfolio:
+            label = tk.Label(content_frame, text=f" {i}")
+            label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
+            label.bind("<MouseWheel>", on_mouse_wheel)
+            label.pack()
+            scrollslabelslist.append(label)
+        mainscrollhset()
+        root.destroy()
 
     def on_canvas_configure(event):
         canvas.configure(scrollregion=canvas.bbox("all"))
@@ -202,8 +237,9 @@ def portfoloioedit_window():
         canvas.itemconfig(canvas_frame, width=canvas.winfo_width())
 
     def update_lista():
-        for widget in lista_frame.winfo_children():
-            widget.destroy()
+        global entry_dict
+        for i in lista_frame.winfo_children():
+            i.destroy()
 
         for idx, elemento in enumerate(lista):
             frame = tk.Frame(lista_frame)
@@ -213,17 +249,24 @@ def portfoloioedit_window():
             label.pack(side="left")
 
             entry = tk.Entry(frame)
-            if label.cget("text") in usr_portfolio.portfolio:
-                print(label.cget("text"))
-                entry.insert(0, usr_portfolio.portfolio[label.cget('text')])
             entry.pack(side="left")
 
             checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
             checkbox.place(relx=0.7)
+            checkbox.bind("<Button-1>", lambda event, index=idx: update_checkbox_state(index))
+
+            # Verifique se a chave existe no dicionário usr_portfolio.portfolio
+            if elemento["nome"] in usr_portfolio.portfolio:
+                entry.insert(0, usr_portfolio.portfolio[elemento["nome"]])
+
+            entry_dict[elemento["nome"]] = entry
 
         # Atualize o scrollregion do canvas para incluir todo o conteúdo
-        canvas.update_idletasks()  # Garante que os widgets estejam totalmente atualizados
+        canvas.update_idletasks()
         canvas.configure(scrollregion=canvas.bbox("all"))
+    def update_checkbox_state(index):
+        lista[index]["selecionado"].set(not lista[index]["selecionado"].get())
+        print(lista[index]["selecionado"].get())
 
     lista = []
 
@@ -237,7 +280,7 @@ def portfoloioedit_window():
     adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
     adicionar_button.pack(side="top")
 
-    remover_button = tk.Button(root, text="Salvar alterações")
+    remover_button = tk.Button(root, text="Salvar alterações",command=save_changes)
     remover_button.pack(side="top")
 
     canvas = tk.Canvas(root)
@@ -453,7 +496,7 @@ upareaperiod_label.place(x=650, y=200)
 upperiodbtn = tk.Button(root, text="selecionar periodo", command=period_selector)
 upperiodbtn.place(x=650, y=250)
 
-stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "gcache", "u2clm4ND_mid.png"]))
+stock_graphimg = Image.open(os.sep.join([os.getcwd(), "gcache", "u2clm4ND_mid.png"]))
 stock_graphimg.thumbnail((400, 225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
