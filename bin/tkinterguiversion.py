@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 
 import os
 
-from r1092 import Portfolio
+from CL_portifolio_management.CL_portfolio_management import Portfolio
 
 from tkcalendar import DateEntry
 import webbrowser
@@ -460,8 +460,8 @@ content_frame = tk.Frame(canvas)
 canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
 # Adicione conteúdo ao frame (substitua isto pelo seu conteúdo real)
-for i in brazilian_stocks:
-    label = tk.Label(content_frame, text=f" {i[0]}")
+for i in usr_portfolio.portfolio:
+    label = tk.Label(content_frame, text=f" {i}")
     label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
     label.bind("<MouseWheel>", on_mouse_wheel)
     label.pack()
@@ -496,7 +496,7 @@ upareaperiod_label.place(x=650, y=200)
 upperiodbtn = tk.Button(root, text="selecionar periodo", command=period_selector)
 upperiodbtn.place(x=650, y=250)
 
-stock_graphimg = Image.open(os.sep.join([os.getcwd(), "gcache", "u2clm4ND_mid.png"]))
+stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI","gcache", "u2clm4ND_mid.png"]))
 stock_graphimg.thumbnail((400, 225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
