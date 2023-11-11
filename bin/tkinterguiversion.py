@@ -124,9 +124,10 @@ usr_portfolio = Portfolio(brazilian_stocks, "Meu portifolio")
 
 print(brazilian_stocks_dict)
 scrollslabelslist = []
-editstocklabelslist=[]
+editstocklabelslist = []
 varnotfill = "???"
-entry_dict={}
+entry_dict = {}
+
 
 def argumentedfunction():
     no_web_err(root=root)
@@ -182,6 +183,8 @@ def no_web_err(root):
 
     tk.Label(root, text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2, rely=0.5)
     tk.Button(root, text="OK", command=root.destroy).place(relx=0.45, rely=0.7)
+
+
 def mainscrollhset():
     canvas.update_idletasks()  # Atualize o canvas
     canvas_height = content_frame.winfo_reqheight()  # Altura total do conteúdo
@@ -216,11 +219,11 @@ def portfoloioedit_window():
                 usr_portfolio.portfolio[nome] = valor_entrada
 
         print(usr_portfolio.portfolio)
-        #tudo ok
+        # tudo ok
         for widget in content_frame.winfo_children():
             widget.destroy()
-        global  scrollslabelslist
-        scrollslabelslist=[]
+        global scrollslabelslist
+        scrollslabelslist = []
         for i in usr_portfolio.portfolio:
             label = tk.Label(content_frame, text=f" {i}")
             label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
@@ -264,6 +267,7 @@ def portfoloioedit_window():
         # Atualize o scrollregion do canvas para incluir todo o conteúdo
         canvas.update_idletasks()
         canvas.configure(scrollregion=canvas.bbox("all"))
+
     def update_checkbox_state(index):
         lista[index]["selecionado"].set(not lista[index]["selecionado"].get())
         print(lista[index]["selecionado"].get())
@@ -280,7 +284,7 @@ def portfoloioedit_window():
     adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
     adicionar_button.pack(side="top")
 
-    remover_button = tk.Button(root, text="Salvar alterações",command=save_changes)
+    remover_button = tk.Button(root, text="Salvar alterações", command=save_changes)
     remover_button.pack(side="top")
 
     canvas = tk.Canvas(root)
@@ -303,8 +307,11 @@ def portfoloioedit_window():
 
     root.mainloop()
 
+
 def update_scrollbar_elements(selected_items):
     pass
+
+
 def creditwindow():
     j = tk.Tk()
     j.geometry("300x300")
@@ -330,11 +337,21 @@ def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
     file_name = tk.filedialog.askopenfilename()
-    if file_name !="":
+    if file_name != "":
         file_name = file_name.replace("/", os.sep)
-        file_name=file_name.replace("\\",os.sep)
+        file_name = file_name.replace("\\", os.sep)
         usr_portfolio = usr_portfolio.load(file_name)
-
+    for widget in content_frame.winfo_children():
+        widget.destroy()
+    global scrollslabelslist
+    scrollslabelslist = []
+    for i in usr_portfolio.portfolio:
+        label = tk.Label(content_frame, text=f" {i}")
+        label.bind("<Button-1>", lambda event, label=label: change_label_color(event, label))
+        label.bind("<MouseWheel>", on_mouse_wheel)
+        label.pack()
+        scrollslabelslist.append(label)
+    mainscrollhset()
 
 def period_selector():
     j = tk.Tk()
@@ -368,14 +385,14 @@ def period_selector():
 def save_file():
     # Lógica para salvar um arquivo
 
-    file_name = tk.filedialog.asksaveasfilename( **{
+    file_name = tk.filedialog.asksaveasfilename(**{
         'defaultextension': ".jprt",
-        'filetypes': [("Arquivo de portifolio", "*.jprt"),("Arquivos de Texto", "*.txt") ,("Todos os Arquivos", "*.*")]
+        'filetypes': [("Arquivo de portifolio", "*.jprt"), ("Arquivos de Texto", "*.txt"), ("Todos os Arquivos", "*.*")]
     })
-    if file_name != "" and file_name!=():
+    if file_name != "" and file_name != ():
         file_name = file_name.replace("/", os.sep)
         print(file_name)
-        file_name=file_name.replace("\\",os.sep)
+        file_name = file_name.replace("\\", os.sep)
         print(file_name)
         usr_portfolio.save(file_name)
 
@@ -496,7 +513,7 @@ upareaperiod_label.place(x=650, y=200)
 upperiodbtn = tk.Button(root, text="selecionar periodo", command=period_selector)
 upperiodbtn.place(x=650, y=250)
 
-stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI","gcache", "u2clm4ND_mid.png"]))
+stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "gcache", "u2clm4ND_mid.png"]))
 stock_graphimg.thumbnail((400, 225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
@@ -532,7 +549,7 @@ lastriskupdate.place(x=450, y=490)
 moneyreturnlabel = tk.Label(root, text=f"Retorno: R${varnotfill}")
 moneyreturnlabel.place(x=450, y=470)
 
-lastsimbutton=tk.Button(root, text="Ultima simulação", )
+lastsimbutton = tk.Button(root, text="Ultima simulação", )
 lastsimbutton.place(x=350, y=540)
 riskbutton = tk.Button(root, text="calcular risco", command=riskcalc_window)
 riskbutton.place(x=500, y=540)

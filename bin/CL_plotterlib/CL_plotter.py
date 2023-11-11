@@ -49,6 +49,8 @@ class PortfolioFig:
             plt.gca().set_facecolor(self.bgcollor)
         if self.grid_check:
             plt.grid(True)
+        if self.title is not None:
+            plt.title(self.title)
 
         plt.savefig(cache_path)
 
@@ -59,6 +61,10 @@ if __name__ == "__main__":
     y1 = [1, 2, 4, 8]
     y2 = [1, 2, 3, 4]
     y3 = [0, 0, 5, 20]
+
     figura = PortfolioFig(ax, [y1, y2, y3])
+    figura.set_title("TTITULO")
+    figura.set_axletitle("x","eixo x")
+    figura.set_axletitle("y", "eixo y")
     figura.set_bgcollor("lightblue")
     figura.fig_cache("")
