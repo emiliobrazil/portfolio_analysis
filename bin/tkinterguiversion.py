@@ -342,7 +342,7 @@ def creditwindow():
 def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
-    file_name = tk.filedialog.askopenfilename()
+    file_name = tk.filedialog.askopenfilename( filetypes=[('Portifolio', '*.jprt')], initialdir= '..'+os.sep+'_data_port' )
     if file_name != "":
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
