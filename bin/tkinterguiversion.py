@@ -135,6 +135,8 @@ def argumentedfunction():
 
 def riskcalc_window():
     j = tk.Tk()
+    style = ttk.Style(j)
+    style.theme_use('clam')
 
     def riskrun_btn():
         print("entrou na riskrun_btn")
@@ -180,7 +182,8 @@ def no_web_err(root):
     root = tk.Tk()
     root.geometry("300x300")
     root.title("Sem acesso a internet")
-
+    style = ttk.Style(root)
+    style.theme_use('clam')
     tk.Label(root, text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2, rely=0.5)
     tk.Button(root, text="OK", command=root.destroy).place(relx=0.45, rely=0.7)
 
@@ -277,7 +280,9 @@ def portfoloioedit_window():
     root = tk.Tk()
     root.title("Editar portifolio")
     root.geometry("400x500")
-
+    style = ttk.Style(root)
+    style.theme_use('clam')
+    
     entry = tk.Entry(root)
     entry.pack(side="top", padx=100)
 
@@ -316,7 +321,8 @@ def creditwindow():
     j = tk.Tk()
     j.geometry("300x300")
     j.title("creditos")
-
+    style = ttk.Style(j)
+    style.theme_use('clam')
     credits_text = tk.Label(j,
                             text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
     credits_text.place(x=-90, y=20)
@@ -340,7 +346,7 @@ def open_file():
     if file_name != "":
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
-        usr_portfolio = usr_portfolio.load(file_name)
+        usr_portfolio = Portfolio.load(file_name)
     for widget in content_frame.winfo_children():
         widget.destroy()
     global scrollslabelslist
@@ -357,6 +363,9 @@ def period_selector():
     j = tk.Tk()
     j.geometry("270x380")
     j.title("selecionar periodo")
+
+    style = ttk.Style(j)
+    style.theme_use('clam')
 
     tk.Label(j, text="Selecione o periodo", font=25).place(x=50, y=10)
     tk.Label(j, text="Inicio:").place(x=0, y=50)
@@ -429,6 +438,9 @@ def update_tocks_scroll(p_window, scroll, stock_list):
 root = tk.Tk()
 root.geometry("800x600")
 root.title("analise de portifolio")
+
+style = ttk.Style(root)
+style.theme_use('clam')
 
 menu_bar = tk.Menu(root)
 
