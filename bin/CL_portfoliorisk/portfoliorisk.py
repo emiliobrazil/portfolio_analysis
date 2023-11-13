@@ -95,7 +95,8 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
         simulated_returns = load_monte_carlo_simulation(simulation)[-1]
     elif isinstance(simulation, np.ndarray):
         simulated_returns = simulation
-
+    if np.shape(simulated_returns)[0] < num_periods+1:
+        raise ValueError(f'Matrix corresponding to the simulation must have at least {num_period+1} rows. Simulation matrix shape: {np.shape(simulated_returns)}.')
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
