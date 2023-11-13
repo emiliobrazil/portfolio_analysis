@@ -88,8 +88,8 @@ def portfolio_risk_index (portfolio, df):
 
 def portfolio_scores_at_percentiles (portfolio, simulation, percentiles=[5, 10, 50, 90, 95], num_periods=30):
     """
-    Receives a list corresponding to a portfolio, the simulation to be loaded, an array-like of
-    percentiles and the number of periods to iterate.
+    Receives a list corresponding to a portfolio, the simulation to be loaded,
+    an array-like of percentiles and the number of periods to iterate.
     Returns the score at the percentiles.
     """
     if isinstance(simulation, str):
