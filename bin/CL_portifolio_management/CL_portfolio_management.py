@@ -63,6 +63,7 @@ class Portfolio:
 
     def add_stock(self, symb: str, quatity: int):
         if symb in self.portfolio:
+            #TODO: sum the quant
             raise RuntimeError('DUPLICATED STOCK: You cannot add a symbol that alread is in the portfolio')
         self.__setitem__(symb, quatity)
         
@@ -76,7 +77,7 @@ class Portfolio:
     
 
     def save(self, path: str = '.') -> str:
-        complete_path = path + os.sep + self.name + 'jprt'
+        complete_path = path + os.sep + self.name + '.jprt'
         with open(complete_path, 'w') as outfile:
             Jportfolio = {
                 'name': self.name, 
@@ -115,7 +116,6 @@ class Portfolio:
         return type(sym) is str
     
 
-
 def test():
     prt = Portfolio([['PETR', 100], ['QTR02', 20]], 'test')
     prt.add_stock('nstock', 2000)
@@ -131,6 +131,7 @@ def test():
     ptr2.remove_stock('nstock')
     print(ptr2)
     print(repr(ptr2))
+    
 if __name__ == '__main__':
     test()
 

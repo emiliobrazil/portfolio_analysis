@@ -135,6 +135,8 @@ def argumentedfunction():
 
 def riskcalc_window():
     j = tk.Tk()
+    style = ttk.Style(j)
+    style.theme_use('clam')
 
     def riskrun_btn():
         print("entrou na riskrun_btn")
@@ -182,7 +184,8 @@ def no_web_err(root):
     root = tk.Tk()
     root.geometry("300x300")
     root.title("Sem acesso a internet")
-
+    style = ttk.Style(root)
+    style.theme_use('clam')
     tk.Label(root, text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2, rely=0.5)
     tk.Button(root, text="OK", command=root.destroy).place(relx=0.45, rely=0.7)
 
@@ -281,6 +284,7 @@ def portfoloioedit_window():
     root.geometry("400x500")
     style = ttk.Style(root)
     style.theme_use('clam')
+
     entry = tk.Entry(root)
     entry.pack(side="top", padx=100)
 
@@ -341,11 +345,12 @@ def creditwindow():
 def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
-    file_name = tk.filedialog.askopenfilename()
-    if file_name != "" and file_name!=() and file_name!="()":
+
+    file_name = tk.filedialog.askopenfilename( filetypes=[('Portifolio', '*.jprt')], initialdir= '..'+os.sep+'_data_port' )
+    if file_name != "" and file_name!=():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
-        usr_portfolio = usr_portfolio.load(file_name)
+        usr_portfolio = Portfolio.load(file_name)
     for widget in content_frame.winfo_children():
         widget.destroy()
     global scrollslabelslist
@@ -362,6 +367,9 @@ def period_selector():
     j = tk.Tk()
     j.geometry("270x380")
     j.title("selecionar periodo")
+    style = ttk.Style(j)
+    style.theme_use('clam')
+
     style = ttk.Style(j)
     style.theme_use('clam')
 
@@ -438,6 +446,9 @@ root.geometry("800x600")
 root.title("analise de portifolio")
 #style = ttk.Style(root)
 #style.theme_use('clam')
+
+style = ttk.Style(root)
+style.theme_use('clam')
 
 menu_bar = tk.Menu(root)
 
