@@ -347,11 +347,7 @@ def open_file():
     global usr_portfolio
 
     file_name = tk.filedialog.askopenfilename( filetypes=[('Portifolio', '*.jprt')], initialdir= '..'+os.sep+'_data_port' )
-    if file_name != "":
-
-    file_name = tk.filedialog.askopenfilename()
-    if file_name != "" and file_name!=() and file_name!="()":
-
+    if file_name != "" and file_name!=():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
         usr_portfolio = Portfolio.load(file_name)
