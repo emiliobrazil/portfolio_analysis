@@ -4,8 +4,7 @@ import pandas as pd
 
 def compute_covariances_and_means (df):
     """
-    Receives a data frame corresponding to an amount of periods
-    and the portfolio.
+    Receives a data frame corresponding to an amount of periods and the portfolio.
     Returns an approximate covariance matrix of the portfolio
     and an array of the approximate expected value of each stock.
     """
@@ -46,9 +45,9 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
 
     return simulated_returns
 
-def load_monte_carlo_simulation (portfolio, file_path):
+def load_monte_carlo_simulation (file_path):
     """
-    Receives a list corresponding to a portfolio and a file path of the simulation in npy.
+    Receives a file path of the simulation in npy.
     Returns a matrix of returns simulated by a Monte Carlo simulation.
     """
     if not file_path.endswith('.npy'):
@@ -57,14 +56,14 @@ def load_monte_carlo_simulation (portfolio, file_path):
 
     return simulated_returns
 
-def portfolio_expected_return (portfolio, simulation):
+def portfolio_expected_return (simulation):
     """
-    Receives a list corresponding to a portfolio and the simulation to be loaded.
+    Receives the simulation to be loaded.
     Simulation must be a matrix or a file path to an npy file.
     Returns an approximation of the expected value.
     """
     if isinstance(simulation, str):
-        simulated_returns = load_monte_carlo_simulation(portfolio, simulation)[-1]
+        simulated_returns = load_monte_carlo_simulation(simulation)[-1]
     elif isinstance(simulation, np.ndarray):
         simulated_returns = simulation
 
@@ -86,14 +85,14 @@ def portfolio_risk_index (portfolio, df):
 
     return portfolio_risk
 
-def portfolio_scores_at_percentiles (portfolio, simulation, percentiles=[5, 10, 50, 90, 95], num_periods=30):
+def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95], num_periods=30):
     """
-    Receives a list corresponding to a portfolio, the simulation to be loaded,
-    an array-like of percentiles and the number of periods to iterate.
+    Receives the simulation to be loaded, an array-like of
+    percentiles and the number of periods to iterate.
     Returns the score at the percentiles.
     """
     if isinstance(simulation, str):
-        simulated_returns = load_monte_carlo_simulation(portfolio, simulation)[-1]
+        simulated_returns = load_monte_carlo_simulation(simulation)[-1]
     elif isinstance(simulation, np.ndarray):
         simulated_returns = simulation
 
