@@ -2,33 +2,27 @@ import numpy as np
 import scipy as sp
 import pandas as pd
 
-# May need adaptations according to the format received by finance and management portfolios libs
-
-def compute_covariances_and_means (portfolio, type_period='months'):
+def compute_covariances_and_means (portfolio, df):
     """
-    Receives a portfolio and the type of period to be analysed (days, months or years).
+    Receives a list corresponding to a portfolio, a data frame corresponding to an amount of periods
+    and the portfolio.
     Returns an approximate covariance matrix of the portfolio
     and an array of the approximate expected value of each stock.
     """
-    # data = something something from finance lib
-    df = pd.DataFrame(data)
     returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
     returns_covariance_matrix = returns.cov()
     returns_means = returns.mean()
 
     return returns_covariance_matrix, returns_means
 
-def monte_carlo_simulation (portfolio, num_periods, type_period='months', file_path=None, num_trials=1000):
+def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_trials=1000):
     """
-    Receives a portfolio, an amount of periods, the type of period (days, months or years), a
-    file path to save the results of the simulation in npy and the number of trials for each
-    period for the Monte Carlo simulation.
+    Receives a list corresponding to a portfolio, a data frame corresponding to an amount of periods
+    and the portfolio, a file path to save the results of the simulation in npy and the number of trials
+    for each period for the Monte Carlo simulation.
     Returns an array of simulated returns and the portfolio in list format.
     """
-    # data = blah blah blah
-    df = pd.DataFrame(data)
     returns_covariance_matrix, returns_means = compute_covariances_and_means(portfolio, type_period)
-
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
     asset_weights = np.array([asset[1] for asset in portfolio])
     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
@@ -50,40 +44,39 @@ def monte_carlo_simulation (portfolio, num_periods, type_period='months', file_p
             raise ValueError(f'Not supported file path: {file_path}. File must be in npy format.')
         np.save(file_path, simulated_returns)
 
-    return simulated_returns, portfolio
+    return simulated_returns
 
-def load_monte_carlo_simulation (portfolio, file_path, type_period='months'):
+def load_monte_carlo_simulation (portfolio, file_path):
     """
-    Receives a portfolio, a file path of the simulation in npy and the type of period to be analysed
-    (days, months or years).
-    Returns an array of returns simulated by a Monte Carlo simulation, the portfolio and the type of period.
+    Receives a list corresponding to a portfolio and a file path of the simulation in npy.
+    Returns a matrix of returns simulated by a Monte Carlo simulation.
     """
     if not file_path.endswith('.npy'):
         raise ValueError(f'Not supported file path: {file_path}. File must be in npy format.')
     simulated_returns = np.load(file_path)
 
-    return simulated_returns, portfolio, type_period   
+    return simulated_returns
 
-def portfolio_expected_return (portfolio, num_periods, type_period='months', simulation_path=None, num_trials=1000):
+def portfolio_expected_return (portfolio, simulation):
     """
-    Receives a portfolio, an amount of periods, the type of period (days, months or years) and the
-    file path of the simulation to be loaded, if any.
-    Runs a Monte Carlo simulation if no simulation is loaded.
-    Returns an approximation of the expected value using a Monte Carlo simulation.
+    Receives a list corresponding to a portfolio and the simulation to be loaded.
+    Simulation must be a matrix or a file path to an npy file.
+    Returns an approximation of the expected value.
     """
-    if simulation_path is not None:
-        simulated_returns = load_monte_carlo_simulation(portfolio, simulation_path, type_period)[0][-1]
-    else: # run a Monte Carlo simulation without saving it
-        simulated_returns = monte_carlo_simulation(portfolio, None, None, num_periods, type_period, num_trials)[0][-1]
+    if isinstance(simulation, str):
+        simulated_returns = load_monte_carlo_simulation(portfolio, simulation)[-1]
+    elif isinstance(simulation, np.ndarray):
+        simulated_returns = simulation
 
     return np.mean(simulated_returns)
 
-def portfolio_risk_index (portfolio, type_period='months'):
+def portfolio_risk_index (portfolio, df):
     """
-    Receives a portfolio and the type of period to be analysed (days, months or years).
+    Receives a list corresponding to a portfolio and a data frame
+    corresponding to an amount of periods and the portfolio.
     Returns a risk index.
     """
-    returns_covariance_matrix, _ = compute_covariances_and_means(portfolio, type_period)
+    returns_covariance_matrix, _ = compute_covariances_and_means(portfolio, df)
 
     asset_weights = np.array([asset[1] for asset in portfolio])
     asset_weights = asset_weights / asset_weights.sum()
@@ -93,22 +86,20 @@ def portfolio_risk_index (portfolio, type_period='months'):
 
     return portfolio_risk
 
-def portfolio_scores_at_percentiles (portfolio, percentiles=[5, 10, 50, 90, 100], num_periods=30, type_period='months', simulation_path=None, num_trials=1000):
+def portfolio_scores_at_percentiles (portfolio, simulation, percentiles=[5, 10, 50, 90, 95], num_periods=30):
     """
-    Receives a portfolio, an array-like of percentiles, the number of periods to iterate,
-    the type of period (days, months or years), a file path to load a saved simulation
-    (if any) and the number of trials per period.
-    Runs a Monte Carlo simulation if no simulation is loaded.
+    Receives a list corresponding to a portfolio, the simulation to be loaded, an array-like of
+    percentiles and the number of periods to iterate.
     Returns the score at the percentiles.
     """
-    if simulation_path is not None:
-        simulated_returns = load_monte_carlo_simulation(portfolio, simulation_path, type_period)[0]
-    else:
-        simulated_returns = monte_carlo_simulation(portfolio, None, None, num_periods, type_period, num_trials)[0]
+    if isinstance(simulation, str):
+        simulated_returns = load_monte_carlo_simulation(portfolio, simulation)[-1]
+    elif isinstance(simulation, np.ndarray):
+        simulated_returns = simulation
 
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
-        scores[period] = sp.stats.scoreatpercentile(simulated_returns[period], percentiles)
-    
+        scores[period] = sp.stats.scoreatpercentile(simulated_returns[-num_periods-1+period], percentiles)
+
     return scores
