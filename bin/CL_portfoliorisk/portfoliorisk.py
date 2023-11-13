@@ -2,9 +2,9 @@ import numpy as np
 import scipy as sp
 import pandas as pd
 
-def compute_covariances_and_means (portfolio, df):
+def compute_covariances_and_means (df):
     """
-    Receives a list corresponding to a portfolio, a data frame corresponding to an amount of periods
+    Receives a data frame corresponding to an amount of periods
     and the portfolio.
     Returns an approximate covariance matrix of the portfolio
     and an array of the approximate expected value of each stock.
@@ -22,7 +22,7 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     for each period for the Monte Carlo simulation.
     Returns an array of simulated returns and the portfolio in list format.
     """
-    returns_covariance_matrix, returns_means = compute_covariances_and_means(portfolio, type_period)
+    returns_covariance_matrix, returns_means = compute_covariances_and_means(df)
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
     asset_weights = np.array([asset[1] for asset in portfolio])
     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
@@ -76,7 +76,7 @@ def portfolio_risk_index (portfolio, df):
     corresponding to an amount of periods and the portfolio.
     Returns a risk index.
     """
-    returns_covariance_matrix, _ = compute_covariances_and_means(portfolio, df)
+    returns_covariance_matrix, _ = compute_covariances_and_means(df)
 
     asset_weights = np.array([asset[1] for asset in portfolio])
     asset_weights = asset_weights / asset_weights.sum()
