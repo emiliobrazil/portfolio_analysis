@@ -63,6 +63,7 @@ class Portfolio:
 
     def add_stock(self, symb: str, quatity: int):
         if symb in self.portfolio:
+            #TODO: sum the quant
             raise RuntimeError('DUPLICATED STOCK: You cannot add a symbol that alread is in the portfolio')
         self.__setitem__(symb, quatity)
         
