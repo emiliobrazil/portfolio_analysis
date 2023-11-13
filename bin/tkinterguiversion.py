@@ -156,6 +156,8 @@ def riskcalc_window():
 
     j.geometry("300x200")
     j.title("Calcular risco")
+    style = ttk.Style(j)
+    style.theme_use('clam')
     riskcalc_label = tk.Label(j, text="Selecione o periodo do risco:")
     riskcalc_label.place(x=50, y=20)
     risk_var = tk.IntVar()
@@ -282,7 +284,7 @@ def portfoloioedit_window():
     root.geometry("400x500")
     style = ttk.Style(root)
     style.theme_use('clam')
-    
+
     entry = tk.Entry(root)
     entry.pack(side="top", padx=100)
 
@@ -323,6 +325,7 @@ def creditwindow():
     j.title("creditos")
     style = ttk.Style(j)
     style.theme_use('clam')
+
     credits_text = tk.Label(j,
                             text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
     credits_text.place(x=-90, y=20)
@@ -342,8 +345,13 @@ def creditwindow():
 def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
+
     file_name = tk.filedialog.askopenfilename( filetypes=[('Portifolio', '*.jprt')], initialdir= '..'+os.sep+'_data_port' )
     if file_name != "":
+
+    file_name = tk.filedialog.askopenfilename()
+    if file_name != "" and file_name!=() and file_name!="()":
+
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
         usr_portfolio = Portfolio.load(file_name)
@@ -363,6 +371,8 @@ def period_selector():
     j = tk.Tk()
     j.geometry("270x380")
     j.title("selecionar periodo")
+    style = ttk.Style(j)
+    style.theme_use('clam')
 
     style = ttk.Style(j)
     style.theme_use('clam')
@@ -438,6 +448,8 @@ def update_tocks_scroll(p_window, scroll, stock_list):
 root = tk.Tk()
 root.geometry("800x600")
 root.title("analise de portifolio")
+#style = ttk.Style(root)
+#style.theme_use('clam')
 
 style = ttk.Style(root)
 style.theme_use('clam')
