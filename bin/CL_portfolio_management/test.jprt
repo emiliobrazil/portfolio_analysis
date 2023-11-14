@@ -2,8 +2,6 @@
     "name": "test",
     "version": "0.0.1",
     "portfolio": {
-        "PETR": 100,
-        "QTR02": 20,
-        "nstock": 2000
+        "PETR4": 100
     }
 }

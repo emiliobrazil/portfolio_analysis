@@ -15,6 +15,15 @@ from typing import Tuple, List
 import json
 import os
 
+import sys
+# append the path of the parent directory
+sys.path.append(".." + os.sep + "CL_finance")
+sys.path.append("." + os.sep + "CL_finance")
+
+
+import CL_finance as fnc
+
+
 count = 0 # used to count unamed portfolios
 
 class Portfolio:
@@ -31,6 +40,7 @@ class Portfolio:
         self.name = name
         if self.name is None or type(self.name) is not str :
             self.name = f'unamed{count}'
+        self.simulations = {}
 
 
     def __getitem__(self, symb: str) -> int:
@@ -43,7 +53,7 @@ class Portfolio:
         elif self.is_valid_symblo(symb):
             self.portfolio[symb] = int(quatity)
         else:
-            raise TypeError('Portfolio should be a valid symbol')
+            print(f'Portfolio should be a valid symbol - {symb} discarded')
 
     def __len__(self):
         return len(self.portfolio)
@@ -63,13 +73,13 @@ class Portfolio:
 
     def add_stock(self, symb: str, quatity: int):
         if symb in self.portfolio:
-            #TODO: sum the quant
-            raise RuntimeError('DUPLICATED STOCK: You cannot add a symbol that alread is in the portfolio')
+            self.portfolio[symb] += quatity
         self.__setitem__(symb, quatity)
         
 
     def remove_stock(self, symb: str) -> None:
-        del self.portfolio[symb]
+        if symb in self.portfolio:
+            del self.portfolio[symb]
 
 
     def update_stock(self,  symb: str, quatity: int) -> None:
@@ -113,11 +123,11 @@ class Portfolio:
     
     @staticmethod
     def is_valid_symblo(sym):
-        return type(sym) is str
+        return type(sym) is str and fnc.is_valid(sym)
     
 
 def test():
-    prt = Portfolio([['PETR', 100], ['QTR02', 20]], 'test')
+    prt = Portfolio([['PETR4', 100], ['QTR02', 20], ['PETR4', 100]], 'test')
     prt.add_stock('nstock', 2000)
     print(prt)
     fileName = prt.save()
@@ -126,7 +136,7 @@ def test():
     print(f'Portfolio {ptr2.name} loaded from: {fileName}')
     print(ptr2.symbols)
     print(ptr2.quantities)
-    ptr2.update_stock('PETR', 300)
+    ptr2.update_stock('PETR4', 300)
     ptr2.name = 'new_test'
     ptr2.remove_stock('nstock')
     print(ptr2)
