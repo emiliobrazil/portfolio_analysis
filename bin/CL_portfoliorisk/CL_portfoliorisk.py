@@ -5,9 +5,13 @@ import pandas as pd
 
 def compute_covariances_and_means (df):
     """
-    Receives a data frame corresponding to an amount of periods and the portfolio.
-    Returns an approximate covariance matrix of the portfolio
-    and an array of the approximate expected value of each stock.
+    Computes an approximation of the covariance matrix and the expected returns for a given portfolio.
+
+    Parameters:
+    - df (pd.DataFrame): DataFrame containing historical stock prices.
+
+    Returns:
+    - tuple: Returns a tuple containing approximations of the covariance matrix and expected returns.
     """
     returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
     returns_covariance_matrix = returns.cov()
@@ -17,10 +21,17 @@ def compute_covariances_and_means (df):
 
 def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_trials=1000):
     """
-    Receives a list corresponding to a portfolio, a data frame corresponding to an amount of periods
-    and the portfolio, a file path to save the results of the simulation in npy and the number of trials
-    for each period for the Monte Carlo simulation.
-    Returns an array of simulated returns and the portfolio in list format.
+    Performs a Monte Carlo simulation for a given portfolio.
+
+    Parameters:
+    - portfolio (list): List representing the portfolio with stock weights.
+    - df (pd.DataFrame): DataFrame containing historical stock prices.
+    - num_periods (int): Number of simulation periods.
+    - file_path (str, optional): File path to save the simulation results. Defaults to None.
+    - num_trials (int, optional): Number of trials for each period. Defaults to 1000.
+
+    Returns:
+    - np.ndarray: Array of simulated portfolio returns.
     """
     returns_covariance_matrix, returns_means = compute_covariances_and_means(df)
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
@@ -48,8 +59,13 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
 
 def load_monte_carlo_simulation (file_path):
     """
-    Receives a file path of the simulation in npy.
-    Returns a matrix of returns simulated by a Monte Carlo simulation.
+    Loads a Monte Carlo simulation from a saved file.
+
+    Parameters:
+    - file_path (str): File path of the saved simulation in npy format.
+
+    Returns:
+    - np.ndarray: Matrix of returns simulated by the Monte Carlo simulation.
     """
     if not file_path.endswith('.npy'):
         raise ValueError(f'Not supported file path: {file_path}. File must be in npy format.')
@@ -59,17 +75,27 @@ def load_monte_carlo_simulation (file_path):
 
 def portfolio_expected_return (simulation):
     """
-    Receives a matrix corresponding to a simulation.
-    Simulation must be a matrix or a file path to an npy file.
-    Returns an approximation of the expected value.
+    Computes the approximate expected return for a Monte Carlo simulation.
+
+    Parameters:
+    - simulation (np.ndarray): Matrix corresponding to a Monte Carlo simulation.
+
+    Returns:
+    - float: Approximation of the expected value.
     """
     return np.mean(simulation[-1])
 
 def portfolio_risk_index (portfolio, df):
     """
-    Receives a list corresponding to a portfolio and a data frame
-    corresponding to an amount of periods and the portfolio.
-    Returns a risk index.
+    Computes the risk index for a given portfolio.
+
+    Parameters:
+    - portfolio (list[tuple[str, int]]): List with elements of the form tuple[str, int]
+    representing the portfolio with stock assets and their amount.
+    - df (pd.DataFrame): DataFrame containing historical stock prices.
+
+    Returns:
+    - float: Risk index.
     """
     returns_covariance_matrix, _ = compute_covariances_and_means(df)
 
@@ -83,12 +109,18 @@ def portfolio_risk_index (portfolio, df):
 
 def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95], num_periods=30):
     """
-    Receives the matrix corresponding to a simulation, an array-like
-    of percentiles and the number of periods to iterate.
-    Returns the score at the percentiles.
+    Computes approximate scores at specified percentiles for a Monte Carlo simulation.
+
+    Parameters:
+    - simulation (np.ndarray): Matrix corresponding to a Monte Carlo simulation.
+    - percentiles (list, optional): List of percentiles to calculate scores. Defaults to [5, 10, 50, 90, 95].
+    - num_periods (int, optional): Number of periods to iterate. Defaults to 30.
+
+    Returns:
+    - np.ndarray: Scores at the specified percentiles.
     """
     if np.shape(simulation)[0] < num_periods+1:
-        raise ValueError(f'Matrix corresponding to the simulation must have at least {num_period+1} rows. Simulation matrix shape: {np.shape(simulated_returns)}.')
+        raise ValueError(f'Matrix corresponding to the simulation must have at least {num_periods+1} rows. Simulation matrix shape: {np.shape(simulated_returns)}.')
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
@@ -96,7 +128,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
 
     return scores
 
-def test():
+def test(): # Test all functions
 
     np.random.seed(1)
 
