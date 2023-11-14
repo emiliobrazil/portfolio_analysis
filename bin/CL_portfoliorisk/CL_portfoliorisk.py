@@ -88,6 +88,9 @@ def portfolio_expected_return (simulation):
 def portfolio_risk_index (portfolio, df):
     """
     Computes the approximate risk index for a given portfolio.
+    The risk index is computed using the formula (W^T ⋅ C ⋅ W)^(1/2), where:
+    - W is the column vector of the weights corresponding to the assets in the portfolio.
+    - C is the approximate covariance matrix corresponding to the portfolio for some period of time.
 
     Parameters:
     - portfolio (list[tuple[str, int]]): List with elements of the form tuple[str, int]
