@@ -87,7 +87,7 @@ def portfolio_expected_return (simulation):
 
 def portfolio_risk_index (portfolio, df):
     """
-    Computes the risk index for a given portfolio.
+    Computes the approximate risk index for a given portfolio.
 
     Parameters:
     - portfolio (list[tuple[str, int]]): List with elements of the form tuple[str, int]
@@ -113,7 +113,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
 
     Parameters:
     - simulation (np.ndarray): Matrix corresponding to a Monte Carlo simulation.
-    - percentiles (list, optional): List of percentiles to calculate scores. Defaults to [5, 10, 50, 90, 95].
+    - percentiles (array-like, optional): Array-like object of percentiles to calculate scores. Defaults to [5, 10, 50, 90, 95].
     - num_periods (int, optional): Number of periods to iterate. Defaults to 30.
 
     Returns:
