@@ -153,7 +153,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
 
     return scores
 
-def test(): # Test all functions
+def test():
 
     np.random.seed(1) # Set seed for reproducibility
 
