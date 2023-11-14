@@ -59,16 +59,11 @@ def load_monte_carlo_simulation (file_path):
 
 def portfolio_expected_return (simulation):
     """
-    Receives the simulation to be loaded.
+    Receives a matrix corresponding to a simulation.
     Simulation must be a matrix or a file path to an npy file.
     Returns an approximation of the expected value.
     """
-    if isinstance(simulation, str):
-        simulated_returns = load_monte_carlo_simulation(simulation)[-1]
-    elif isinstance(simulation, np.ndarray):
-        simulated_returns = simulation
-
-    return np.mean(simulated_returns[-1])
+    return np.mean(simulation[-1])
 
 def portfolio_risk_index (portfolio, df):
     """
@@ -88,20 +83,16 @@ def portfolio_risk_index (portfolio, df):
 
 def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95], num_periods=30):
     """
-    Receives the simulation to be loaded, an array-like of
-    percentiles and the number of periods to iterate.
+    Receives the matrix corresponding to a simulation, an array-like
+    of percentiles and the number of periods to iterate.
     Returns the score at the percentiles.
     """
-    if isinstance(simulation, str):
-        simulated_returns = load_monte_carlo_simulation(simulation)[-1]
-    elif isinstance(simulation, np.ndarray):
-        simulated_returns = simulation
-    if np.shape(simulated_returns)[0] < num_periods+1:
+    if np.shape(simulation)[0] < num_periods+1:
         raise ValueError(f'Matrix corresponding to the simulation must have at least {num_period+1} rows. Simulation matrix shape: {np.shape(simulated_returns)}.')
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
-        scores[period] = sp.stats.scoreatpercentile(simulated_returns[-num_periods-1+period], percentiles)
+        scores[period] = sp.stats.scoreatpercentile(simulation[-num_periods-1+period], percentiles)
 
     return scores
 
