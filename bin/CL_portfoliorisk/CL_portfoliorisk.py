@@ -1,3 +1,24 @@
+"""
+Portfolio Risk Module
+
+Description:
+
+This module provides functions for getting estimates for the expected returns,
+the risk index, and the scores at percentiles for a given portfolio of stocks and their quantities.
+
+The portfolios are of the form list[tuple[str, int]].
+
+The module uses Monte Carlo simulations to compute such estimates, being capable of running and saving them.
+
+The mathematical model used is the Modern Portfolio Theory (MPT).
+
+License: Apache License, Version 2.0
+(See https://www.apache.org/licenses/LICENSE-2.0 for details)
+
+Author: Gabriella Santana Morgado
+Date: November 5, 2023
+"""
+
 import os
 import numpy as np
 import scipy as sp
@@ -24,7 +45,8 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     Performs a Monte Carlo simulation for a given portfolio.
 
     Parameters:
-    - portfolio (list): List representing the portfolio with stock weights.
+    - portfolio (list[tuple[str, int]]): List with elements of the form tuple[str, int]
+    representing the portfolio with stock assets and their amount.
     - df (pd.DataFrame): DataFrame containing historical stock prices.
     - num_periods (int): Number of simulation periods.
     - file_path (str, optional): File path to save the simulation results. Defaults to None.
