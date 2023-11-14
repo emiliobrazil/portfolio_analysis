@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -105,7 +106,9 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
     return scores
 
 def test():
+
     np.random.seed(1)
+
     cov_matrix = np.array([[0.01, -0.005, 0.002, 0.001],
                            [-0.005, 0.02, -0.003, 0.0015],
                            [0.002, -0.003, 0.015, -0.002],
@@ -114,12 +117,20 @@ def test():
     sample = np.random.multivariate_normal(means_array, cov_matrix, size=100)
     log_returns = 0.02 * np.cumsum(sample, axis=0) # scale log_returns with 0.02 scaling factor
     prices = np.exp(log_returns)
+
     data = pd.DataFrame(prices, columns=['Stock1', 'Stock2', 'Stock3', 'Stock4'])
     portfolio_list = [('Stock1', 40), ('Stock2', 30), ('Stock3', 200), ('Stock4', 100)]
-    simulation = monte_carlo_simulation (portfolio_list, data, 100)
+
+    script_directory = os.getcwd()
+    file_path = os.path.join(script_directory, "simulationtest.npy")
+
+    simulation = monte_carlo_simulation (portfolio_list, data, 100, file_path)
     print(f'The risk index for 100 period units is approximately {portfolio_risk_index (portfolio_list, data)}.')
     print(f'The expected return after 100 period units is approximately {portfolio_expected_return(simulation)}.')
     print(f'The scores at percentiles 5, 10, 50, 90, 95 for the next 30 period units in order are approximately\n{portfolio_scores_at_percentiles (simulation)}.')
 
+    loaded_simulation = load_monte_carlo_simulation(file_path)
+    print('The simulation was successfully loaded!' if np.array_equal(simulation, loaded_simulation) else 'The loading failed...')
+    
 if __name__ == '__main__':
     test()
