@@ -13,7 +13,7 @@ def compute_covariances_and_means (df):
     Returns:
     - tuple: Returns a tuple containing approximations of the covariance matrix and expected returns.
     """
-    returns = df.pct_change().dropna() # convert into percentage and drop rows with missing values
+    returns = df.pct_change().dropna() # Convert into percentage and drop rows with missing values
     returns_covariance_matrix = returns.cov()
     returns_means = returns.mean()
 
@@ -34,7 +34,7 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     - np.ndarray: Array of simulated portfolio returns.
     """
     returns_covariance_matrix, returns_means = compute_covariances_and_means(df)
-    assets_values_at_last_date = df.iloc[-1:].to_numpy() # get the most recent values for each asset
+    assets_values_at_last_date = df.iloc[-1:].to_numpy() # Get the most recent values for each asset
     asset_weights = np.array([asset[1] for asset in portfolio])
     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
 
@@ -42,9 +42,9 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     num_assets = len(portfolio)
     simulated_returns[0] = np.full(num_trials, np.sum(portfolio_value_at_last_date))
 
-    for idx in range(num_trials): # run a Monte Carlo simulation
+    for idx in range(num_trials): # Run a Monte Carlo simulation
         simulated_portfolio_values = portfolio_value_at_last_date
-        for period in range(1,num_periods+1): # assume log returns are in a multivariate normal distribution
+        for period in range(1,num_periods+1): # Assume log returns are in a multivariate normal distribution
             log_return_variations = np.random.multivariate_normal(returns_means, returns_covariance_matrix)
             period_log_returns = log_return_variations + np.log(simulated_portfolio_values)
             simulated_portfolio_values = np.exp(period_log_returns)
@@ -130,7 +130,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
 
 def test(): # Test all functions
 
-    np.random.seed(1)
+    np.random.seed(1) # Set seed for reproducibility
 
     cov_matrix = np.array([[0.01, -0.005, 0.002, 0.001],
                            [-0.005, 0.02, -0.003, 0.0015],
@@ -138,14 +138,14 @@ def test(): # Test all functions
                            [0.001, 0.0015, -0.002, 0.01]])
     means_array = np.array([0.1, 0.05, 0.02, 0.15])
     sample = np.random.multivariate_normal(means_array, cov_matrix, size=100)
-    log_returns = 0.02 * np.cumsum(sample, axis=0) # scale log_returns with 0.02 scaling factor
+    log_returns = 0.02 * np.cumsum(sample, axis=0) # Scale log_returns with a 0.02 scaling factor
     prices = np.exp(log_returns)
 
     data = pd.DataFrame(prices, columns=['Stock1', 'Stock2', 'Stock3', 'Stock4'])
     portfolio_list = [('Stock1', 40), ('Stock2', 30), ('Stock3', 200), ('Stock4', 100)]
 
     script_directory = os.getcwd()
-    file_path = os.path.join(script_directory, "simulationtest.npy")
+    file_path = os.path.join(script_directory, "simulation_test.npy")
 
     simulation = monte_carlo_simulation (portfolio_list, data, 100, file_path)
     print(f'The risk index for 100 period units is approximately {portfolio_risk_index (portfolio_list, data)}.')
