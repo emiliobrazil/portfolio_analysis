@@ -29,7 +29,7 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
 
     simulated_returns = np.zeros((num_periods+1, num_trials))
     num_assets = len(portfolio)
-    simulated_returns[0] = np.repeat(np.sum(portfolio_value_at_last_date))
+    simulated_returns[0] = np.full(num_trials, np.sum(portfolio_value_at_last_date))
 
     for idx in range(num_trials): # run a Monte Carlo simulation
         simulated_portfolio_values = portfolio_value_at_last_date
