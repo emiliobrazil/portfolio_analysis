@@ -112,6 +112,13 @@ brazilian_stocks = [
     'WHRL4', 'WHRL4B', 'WIZS3', 'WIZS3B', 'WSON33', 'WUNI11',
     'WUNI3', 'WUNI5', 'WUNI6', 'YBRA3', 'YBRA4']
 
+brazilian_stocks = ['PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'ABEV3',
+    'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3', 'ALPA4', 'ALUP11',
+    'ALUP3', 'ALUP4', 'ANIM3', 'ARZZ3', 'ATMP3', 'ATOM3',
+    'AZEV3', 'BIDI11', 'BIDI3', 'BIDI4', 'BOBR3', 'BOBR4',
+    'BOVA11', 'BPAC3', 'BPAN4', 'BRAP4', 'BEEF3', 'BPAC11',
+    'BRAP3', 'BRKM3', 'CCRO3', 'CGRA3']
+
 print(len(brazilian_stocks))
 brazilian_stocks = list(set(brazilian_stocks))
 brazilian_stocks.sort()

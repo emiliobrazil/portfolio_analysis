@@ -23,7 +23,6 @@ sys.path.append("." + os.sep + "CL_finance")
 
 import CL_finance.CL_finance as fnc
 
-print(dir(fnc))
 
 count = 0 # used to count unamed portfolios
 
