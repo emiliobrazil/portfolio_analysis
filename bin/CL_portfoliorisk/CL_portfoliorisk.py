@@ -149,7 +149,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
-        scores[period] = sp.stats.scoreatpercentile(simulation[-num_periods-1+period], percentiles)
+        scores[period] = sp.stats.scoreatpercentile(simulation[period], percentiles)
 
     return scores
 
@@ -161,9 +161,9 @@ def test():
                            [-0.005, 0.02, -0.003, 0.0015],
                            [0.002, -0.003, 0.015, -0.002],
                            [0.001, 0.0015, -0.002, 0.01]])
-    means_array = np.array([0.1, 0.05, 0.02, 0.15])
+    means_array = np.array([0.001, 0.0005, 0.0002, 0.0015])
     sample = np.random.multivariate_normal(means_array, cov_matrix, size=100)
-    log_returns = 0.02 * np.cumsum(sample, axis=0) # Scale log_returns with a 0.02 scaling factor
+    log_returns = np.cumsum(sample, axis=0)
     prices = np.exp(log_returns)
 
     data = pd.DataFrame(prices, columns=['Stock1', 'Stock2', 'Stock3', 'Stock4'])
