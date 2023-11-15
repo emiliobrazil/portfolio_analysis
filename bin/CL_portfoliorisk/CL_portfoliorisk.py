@@ -192,12 +192,13 @@ def test():
     portfolio_list = [('Stock1', 40), ('Stock2', 30), ('Stock3', 200), ('Stock4', 100)]
 
     estimate_log_covs, estimate_log_means = compute_log_covariances_and_means(data)
+    estimate_pct_covs, estimate_pct_means = compute_pct_covariances_and_means(data)
 
     print(f'The estimated covariance matrix of the log returns is given by\n{estimate_log_covs}.')
     print(f'The estimated means array of the log returns is given by\n{estimate_log_means}.')
 
-    print(f'The estimated covariance matrix of the percentual returns is given by\n{estimate_log_covs}.')
-    print(f'The estimated means array of the percentual returns is given by\n{estimate_log_means}.')
+    print(f'The estimated covariance matrix of the percentual returns is given by\n{estimate_pct_covs}.')
+    print(f'The estimated means array of the percentual returns is given by\n{estimate_pct_means}.')
 
     script_directory = os.getcwd()
     file_path = os.path.join(script_directory, "simulation_test.npy")
