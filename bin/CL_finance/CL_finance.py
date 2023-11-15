@@ -37,3 +37,8 @@ def history(symbols: list, start_date: str, end_date: str, interval: str):
         dataframes[symbol] = symbol_history
 
     return dataframes
+
+
+### TODO: def valid_stocks()
+
+### TODO: def get_portfolio_info([symb1, symb2, symb3, ...], priod in ['1d', '1mo', '1y']) ->  Matrix of the mean of the period

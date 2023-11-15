@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 sandBox/.DS_Store
 .DS_Store
+bin/CL_portfoliorisk/simulation_test.npy
