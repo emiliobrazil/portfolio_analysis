@@ -174,6 +174,7 @@ def test():
 
     simulation = monte_carlo_simulation (portfolio_list, data, 100, file_path)
     print(f'The risk index for 100 period units is approximately {portfolio_risk_index (portfolio_list, data)}.')
+    print(f'The expected return after 30 period units is approximately {portfolio_expected_return(simulation[:31])}.')
     print(f'The expected return after 100 period units is approximately {portfolio_expected_return(simulation)}.')
     print(f'The scores at percentiles 5, 10, 50, 90, 95 for the next 30 period units in order are approximately\n{portfolio_scores_at_percentiles (simulation)}.')
 
