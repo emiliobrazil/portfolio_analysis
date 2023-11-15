@@ -10,6 +10,8 @@ from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
 
+
+
 brazilian_stocks = [
     'PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'ABEV3',
     'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3', 'ALPA4', 'ALUP11',

@@ -21,8 +21,9 @@ sys.path.append(".." + os.sep + "CL_finance")
 sys.path.append("." + os.sep + "CL_finance")
 
 
-import CL_finance as fnc
+import CL_finance.CL_finance as fnc
 
+print(dir(fnc))
 
 count = 0 # used to count unamed portfolios
 
@@ -73,7 +74,7 @@ class Portfolio:
 
     def add_stock(self, symb: str, quatity: int):
         if symb in self.portfolio:
-            self.portfolio[symb] += quatity
+            quatity += self.portfolio[symb]
         self.__setitem__(symb, quatity)
         
 
