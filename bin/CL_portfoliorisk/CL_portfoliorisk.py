@@ -74,7 +74,7 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     - num_trials (int, optional): Number of trials for each period. Defaults to 1000.
 
     Returns:
-    - np.ndarray: Array of simulated stock prices corresponding to the portfolio.
+    - np.ndarray: Matrix of simulated stock prices corresponding to the portfolio.
     """
     log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # Get the most recent values for each asset
