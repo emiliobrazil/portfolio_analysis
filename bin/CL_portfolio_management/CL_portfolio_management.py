@@ -20,16 +20,23 @@ import sys
 sys.path.append(".." + os.sep + "CL_finance")
 sys.path.append("." + os.sep + "CL_finance")
 
+try:
+   import CL_finance.CL_finance as CLfnc
+except:
+   import CL_finance as CLfnc
 
-import CL_finance.CL_finance as fnc
+from CL_simulation_class import CL_simulation as CLsml
 
 
 count = 0 # used to count unamed portfolios
 
 class Portfolio:
-    version = '0.0.1'
+    version = '0.0.2'
     def __init__(self, portfolio: List[Tuple[str, int]] = None, name = None):
         self.portfolio = {}
+        self.simulations = [{}]
+        self.__readForSimulation__ = False
+
         if portfolio is not None:
             if type(portfolio) is list:
                     for s in portfolio:
@@ -40,7 +47,6 @@ class Portfolio:
         self.name = name
         if self.name is None or type(self.name) is not str :
             self.name = f'unamed{count}'
-        self.simulations = {}
 
 
     def __getitem__(self, symb: str) -> int:
@@ -48,6 +54,9 @@ class Portfolio:
     
 
     def __setitem__(self, symb: str, quatity: int) -> None:
+        if self.locked:
+            print('Portifolio Loked - Not possible to change it')
+            return
         if symb in self.portfolio:
             self.portfolio[symb] = int(quatity)
         elif self.is_valid_symblo(symb):
@@ -78,13 +87,20 @@ class Portfolio:
         
 
     def remove_stock(self, symb: str) -> None:
+        if self.locked:
+            print('Portifolio Loked - Not possible to change it')
+            return
         if symb in self.portfolio:
             del self.portfolio[symb]
 
 
     def update_stock(self,  symb: str, quatity: int) -> None:
         self.__setitem__(symb, quatity)
-    
+
+
+    def lock(self):
+        self.__readForSimulation__ = True
+
 
     def save(self, path: str = '.') -> str:
         complete_path = path + os.sep + self.name + '.jprt'
@@ -92,11 +108,21 @@ class Portfolio:
             Jportfolio = {
                 'name': self.name, 
                 'version': self.version,
-                'portfolio':self.portfolio
+                'portfolio': self.portfolio,
+                'simulations': self.simulations
                 }
             json_object = json.dumps(Jportfolio, indent=4)
             outfile.write(json_object)
         return complete_path
+
+    def run_simulation(period: str = '1mo'):
+        #TODO
+        return 'FAKE'
+
+
+    @property
+    def last_simulation(self):
+        return self.simulations[-1]
 
 
     @property
@@ -107,6 +133,11 @@ class Portfolio:
     @property
     def quantities(self):
         return self.portfolio.values()
+    
+
+    @property
+    def locked(self):
+        return self.__readForSimulation__
 
 
     @staticmethod
@@ -116,6 +147,8 @@ class Portfolio:
 
         prt = Portfolio(data['portfolio'], data['name'])
 
+        prt.simulations = data['simulations']
+
         if data['version'] != prt.version:
             print(f'WARNING: Load a different version -- current {prt.version} -- Loaded {data["version"]}')
 
@@ -123,12 +156,13 @@ class Portfolio:
     
     @staticmethod
     def is_valid_symblo(sym):
-        return type(sym) is str and fnc.is_valid(sym)
+        return type(sym) is str and CLfnc.is_valid(sym)
     
 
 def test():
-    prt = Portfolio([['PETR4', 100], ['QTR02', 20], ['PETR4', 100]], 'test')
+    prt = Portfolio([['PETR4', 100], ['VALE3', 400], ['PETR4', 100], ['ABEV3', 1000]], 'test')
     prt.add_stock('nstock', 2000)
+    prt.add_stock('ITUB4', 300)
     print(prt)
     fileName = prt.save()
     print(f'Portfolio saved on: {fileName}')
@@ -139,6 +173,8 @@ def test():
     ptr2.update_stock('PETR4', 300)
     ptr2.name = 'new_test'
     ptr2.remove_stock('nstock')
+    ptr2.remove_stock('VALE3')
+    print(ptr2.last_simulation)
     print(ptr2)
     print(repr(ptr2))
     
