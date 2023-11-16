@@ -7,7 +7,5 @@
         "ABEV3": 1000,
         "ITUB4": 300
     },
-    "simulations": [
-        {}
-    ]
+    "simulations": []
 }

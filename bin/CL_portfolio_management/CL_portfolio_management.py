@@ -14,6 +14,7 @@ Date: November 4, 2023
 from typing import Tuple, List
 import json
 import os
+import pandas as pd
 
 import sys
 # append the path of the parent directory
@@ -38,7 +39,7 @@ class Portfolio:
     version = '0.0.2'
     def __init__(self, portfolio: List[Tuple[str, int]] = None, name = None):
         self.portfolio = {}
-        self.simulations = [{}]
+        self.simulations = []
         self.__readForSimulation__ = False
 
         if portfolio is not None:
@@ -51,6 +52,7 @@ class Portfolio:
         self.name = name
         if self.name is None or type(self.name) is not str :
             self.name = f'unamed{count}'
+        self.__is_running = False
 
 
     def __getitem__(self, symb: str) -> int:
@@ -90,6 +92,10 @@ class Portfolio:
         self.__setitem__(symb, quatity)
         
 
+    def portifolio_matrix(self):
+        #TODO
+        return [[0]]
+
     def remove_stock(self, symb: str) -> None:
         if self.locked:
             print('Portifolio Loked - Not possible to change it')
@@ -105,7 +111,6 @@ class Portfolio:
     def lock(self):
         self.__readForSimulation__ = True
 
-
     def save(self, path: str = '.') -> str:
         complete_path = path + os.sep + self.name + '.jprt'
         with open(complete_path, 'w') as outfile:
@@ -113,20 +118,36 @@ class Portfolio:
                 'name': self.name, 
                 'version': self.version,
                 'portfolio': self.portfolio,
-                'simulations': self.simulations
+                'simulations': [d.to_dict() for d in self.simulations]
                 }
             json_object = json.dumps(Jportfolio, indent=4)
             outfile.write(json_object)
         return complete_path
 
-    def run_simulation(period: str = '1mo'):
-        #TODO
-        return 'FAKE'
-
+    def run_simulation(self, period: str = '1mo') -> bool:
+        if self.is_running:
+            print('Simulation already running, NOT possible run another, WAIT!!')
+            return False
+        self.__readForSimulation__ = True
+        self.__is_running = True
+        #TODO multi_thread
+        sml = CLsml(self.portifolio_matrix, period=period)
+        self.__is_running = False
+        if sml is not None:
+            self.simulations.append(sml)
+            return True
+        else:
+            return False
+        
+    @property
+    def is_running(self):
+        return self.__is_running
 
     @property
     def last_simulation(self):
-        return self.simulations[-1]
+        if len(self.simulations) > 0:
+            return self.simulations[-1]
+        return {}
 
 
     @property
@@ -151,11 +172,12 @@ class Portfolio:
 
         prt = Portfolio(data['portfolio'], data['name'])
 
-        prt.simulations = data['simulations']
+        prt.simulations = [CLsml.from_dict(dt) for dt in data['simulations'] if len(dt) > 0] 
 
         if data['version'] != prt.version:
             print(f'WARNING: Load a different version -- current {prt.version} -- Loaded {data["version"]}')
-
+        if len(prt.simulations) > 0:
+            prt.locked()
         return prt
     
     @staticmethod
@@ -181,6 +203,11 @@ def test():
     print(ptr2.last_simulation)
     print(ptr2)
     print(repr(ptr2))
+    ptr2.run_simulation('1d')
+    ptr2.save()
+    ptr3 = Portfolio('new_test')
+    print(ptr3)
+
     
 if __name__ == '__main__':
     test()
