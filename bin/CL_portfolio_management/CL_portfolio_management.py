@@ -177,7 +177,7 @@ class Portfolio:
         if data['version'] != prt.version:
             print(f'WARNING: Load a different version -- current {prt.version} -- Loaded {data["version"]}')
         if len(prt.simulations) > 0:
-            prt.locked()
+            prt.lock()
         return prt
     
     @staticmethod
