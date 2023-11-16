@@ -101,4 +101,124 @@ def history(symbols: list, start_date: str, end_date: str, interval: str):
     return dataframes
 
 
+
+class MeanPriceMatrix:
+  def __init__(self, symbols: list, start_date, end_date, period: str):
+    self.symbols = symbols
+    self.start_date = start_date
+    self.end_date = end_date
+    self.period = period
+    self.history = history(self.symbols, self.start_date, self.end_date)
+    if self.period == '1d':
+      self.get_portifolio_matrix = self.matrix_daily_price(self.start_date, self.end_date)
+    elif self.period == '1mo':
+      self.get_portifolio_matrix = self.matrix_monthly_price(self.start_date, self.end_date)
+    elif self.period == '1y':
+      self.get_portifolio_matrix = self.matrix_yearly_price(self.start_date, self.end_date)
+
+
+  def mean_daily_price(self, day: str):
+    mean_prices = np.zeros((1, len(self.symbols)))
+    for symbol in self.symbols:
+      h = history([symbol], self.start_date, self.end_date)[symbol]
+      low = h.loc[day, 'Low']
+      high = h.loc[day, 'High']
+      mean = (low + high)/2
+      mean_prices[0, self.symbols.index(symbol)] = mean
+    return mean_prices
+
+
+  def matrix_daily_price(self, start_date, end_date):
+    days = self.days_per_period(self.symbols[0], start_date, end_date)
+    matrix = np.zeros((days, len(self.symbols)))
+    historical_data = yf.Ticker(self.symbols[0] +'.SA').history(start= start_date, end= end_date)
+    historical_data.index = historical_data.index.strftime('%Y-%m-%d')
+    row = 0
+    for day in historical_data.index:
+      matrix[row] = self.mean_daily_price(day)[0]
+      row += 1
+    return matrix
+
+
+  def days_per_period(self, symbol, start_date: str, end_date: str) -> int:
+    historical_data = yf.Ticker(symbol +'.SA').history(start= start_date, end= end_date)
+    historical_data.index = historical_data.index.strftime('%Y-%m-%d')
+    days = 0
+    for day in historical_data.index:
+      days += 1
+    return days
+
+
+  def mean_monthly_price(self, start_date: str, end_date: str):
+    matrix = self.matrix_daily_price(start_date, end_date)
+    mean_monthly = np.mean(matrix, axis=0)
+    return mean_monthly
+
+
+  def matrix_monthly_price(self, start_date: str, end_date: str):
+    months_info = self.get_monthly_date_ranges(start_date, end_date)
+    number_of_months = len(months_info)
+    matrix = np.zeros((number_of_months, len(self.symbols)))
+    row = 0
+    for m in months_info:
+      first_day = m[0]
+      last_day = m[1]
+      matrix[row] = self.mean_monthly_price(first_day, last_day)
+      row += 1
+    return matrix
+
+
+  def get_monthly_date_ranges(self, start_date: str, end_date: str):
+    monthly_date_ranges = []
+    current_date = pd.to_datetime(start_date)
+    end_date = pd.to_datetime(end_date)
+    while current_date <= end_date:
+      first_day_of_month = current_date.replace(day=1)
+      last_day_of_month = pd.to_datetime(first_day_of_month) + pd.offsets.MonthEnd(0)
+      monthly_date_ranges.append((first_day_of_month, last_day_of_month))
+      current_date = pd.to_datetime(last_day_of_month) + pd.DateOffset(days=1)
+    all_monthly_dates = []
+    for start__date, end__date in monthly_date_ranges:
+      formatted_start_date = start__date.strftime('%Y-%m-%d')
+      formatted_end_date = end__date.strftime('%Y-%m-%d')
+      all_monthly_dates.append((formatted_start_date, formatted_end_date))
+    return all_monthly_dates
+
+
+  def mean_yearly_price(self, start_date: str, end_date: str):
+    matrix = self.matrix_monthly_price(start_date, end_date)
+    if len(matrix) == 12:
+      mean_yearly = np.mean(matrix, axis=0)
+      return mean_yearly
+
+
+  def get_yearly_date_ranges(self, start_date: str, end_date: str):
+    yearly_date_ranges = []
+    current_date = pd.to_datetime(start_date)
+    end_date = pd.to_datetime(end_date)
+    while current_date <= end_date:
+      first_day_of_year = current_date.replace(month=1, day=1)
+      last_day_of_year = pd.to_datetime(first_day_of_year) + pd.offsets.YearEnd(0)
+      yearly_date_ranges.append((first_day_of_year, last_day_of_year))
+      current_date = pd.to_datetime(last_day_of_year) + pd.DateOffset(days=1)
+    all_yearly_dates = []
+    for start__date, end__date in yearly_date_ranges:
+      formatted_start_date = start__date.strftime('%Y-%m-%d')
+      formatted_end_date = end__date.strftime('%Y-%m-%d')
+      all_yearly_dates.append((formatted_start_date, formatted_end_date))
+    return all_yearly_dates
+
+
+  def matrix_yearly_price(self, start_date, end_date):
+    years_info = self.get_yearly_date_ranges(start_date, end_date)
+    number_of_years = len(years_info)
+    matrix = np.zeros((number_of_years, len(self.symbols)))
+    row = 0
+    for m in range(number_of_years):
+      first_day = years_info[row][0]
+      last_day = years_info[row][1]
+      matrix[row] = self.mean_yearly_price(first_day, last_day)
+      row += 1
+    return matrix
+
 ### TODO: def get_portfolio_matrix([symb1, symb2, symb3, ...], priod in ['1d', '1mo', '1y']) ->  Matrix of the mean of the period
