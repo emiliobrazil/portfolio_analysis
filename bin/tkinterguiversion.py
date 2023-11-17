@@ -289,7 +289,7 @@ def portfoloioedit_window():
     lista = []
 
     root = tk.Tk()
-    root.title("Editar portifolio")
+    root.title("Criar portifolio")
     root.geometry("400x500")
     style = ttk.Style(root)
     style.theme_use('clam')
@@ -588,7 +588,7 @@ canvas.bind("<Configure>", on_configure)
 alt_load_btn = tk.Button(root, text="carregar portifolio", command=open_file)
 alt_load_btn.place(x=5, y=545)
 
-portfolioedit_btn = tk.Button(root, text="editar portifolio", command=portfoloioedit_window)
+portfolioedit_btn = tk.Button(root, text="criar portifolio", command=portfoloioedit_window)
 portfolioedit_btn.place(x=10, y=515)
 
 root.mainloop()
