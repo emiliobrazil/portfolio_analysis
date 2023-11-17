@@ -221,21 +221,19 @@ def change_fronthistory(iniday,finday):
     #unstable please read again
     sym = stockname_label.cget("text")
     sym=sym.replace(' ','')
-    print(len(sym[0]))
-    if True:
+    print(len(sym))
+    if False:
         print(f'{sym}')
         arr=yf.Ticker(sym+'.SA').history(start='2023-10-10',end='2023-11-10',interval='1d')
         print(arr)
 
 
 
-    if False:
+    if True:
+        arr=fnc.history([sym],iniday,finday,'1d')
+        arr=arr[sym]
+        print(arr)
 
-        print(type(sym),sym)
-        print(iniday,finday)
-        symbclass=fnc.MeanPriceMatrix(sym,iniday,finday,'1d')
-        prices=symbclass.get_portifolio_matrix
-        print(prices)
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
 
     figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache']))
