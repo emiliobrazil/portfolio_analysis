@@ -33,14 +33,18 @@ class PortfolioFig:
 
     def fig_cache(self, cache_path, lblshow=False):
         # Itera sobre as listas de dados e plota cada linha
-        plt.rc('font', size=42)
+        plt.rc('font', size=20)
+        if self.y_axis[0]>self.y_axis[-1]:
+            line_color='red'
+        else:
+            line_color='green'
         if lblshow:
 
             plt.plot(self.x_axis, self.y_axis, label=self.labels[i - 1])
             plt.legend()
         else:
 
-            plt.plot(self.x_axis, self.y_axis)
+            plt.plot(self.x_axis, self.y_axis,color=line_color,linewidth=5)
 
         # Adiciona legendas e rótulos
 
@@ -54,11 +58,12 @@ class PortfolioFig:
             plt.title(self.title)
         fig = plt.gcf()
 
-        fig.set_size_inches(1920 / 100, 1080/ 100)  # Convertendo de pixels para polegadas
+        fig.set_size_inches(1280 / 100, 720/ 100)  # Convertendo de pixels para polegadas
         plt.xticks([self.x_axis[0],self.x_axis[-1]])
         # Salvar a figura em um arquivo PNG com DPI personalizado
-        plt.savefig('exemplo.png', dpi=500)
+        plt.savefig('exemplo.png', dpi=200)
         plt.savefig(cache_path)
+        plt.close()
 
 
 if __name__ == "__main__":

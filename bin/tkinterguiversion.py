@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
-
+from time import time
 import os
 import yfinance as yf
 from CL_portfolio_libs.CL_portfolio_management import Portfolio
@@ -221,7 +221,7 @@ def change_fronthistory(iniday,finday):
     #unstable please read again
     sym = stockname_label.cget("text")
     sym=sym.replace(' ','')
-    print(len(sym))
+    print(sym)
     if False:
         print(f'{sym}')
         arr=yf.Ticker(sym+'.SA').history(start='2023-10-10',end='2023-11-10',interval='1d')
@@ -232,9 +232,9 @@ def change_fronthistory(iniday,finday):
     if True:
         arr=fnc.history([sym],iniday,finday,'1d')
         arr=arr[sym]
-        print(arr)
-
+    dt=time()
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
+    figure.set_bgcollor('black')
 
     figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache']))
 
@@ -248,6 +248,16 @@ def change_fronthistory(iniday,finday):
     stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
     stock_graph_label.pack()
     stock_graph_label.place(x=220, y=100)
+    iniprice=arr["Open"][0]
+    finalprice=arr["Open"][-1]
+    if iniprice>finalprice:
+        value_c='red'
+        strdir=''
+    else:
+        value_c='green'
+        strdir='+'
+    stockvalue_label.config(text=f"{strdir}{round(100*(finalprice-iniprice)/(iniprice),3)}% R$:{round(finalprice,2)}",fg=value_c)
+    print(f"tempo:{time()-dt}")
 def portfoloioedit_window():
 
     def adicionar_elemento():
@@ -576,7 +586,7 @@ stockname_label = tk.Label(root, text=f"{varnotfill}")
 stockname_label.place(x=220, y=70)
 
 stockvalue_label = tk.Label(root, text=f"R$:{varnotfill}")
-stockvalue_label.place(x=550, y=70)
+stockvalue_label.place(x=520, y=70)
 
 stocknumber_label = tk.Label(root, text=f"voce possui: {varnotfill} ações nesse empresa")
 stocknumber_label.place(x=300, y=330)
