@@ -209,8 +209,11 @@ def mainscrollhset():
         scrollbar.configure(command=canvas.yview)
         canvas.bind("<MouseWheel>", on_mouse_wheel)
     else:
+        print(900)
         scrollbar.configure(command=None)
         canvas.unbind("<MouseWheel>")
+        for label in scrollslabelslist:
+            label.unbind("<MouseWheel>")
 
 
 def portfoloioedit_window():
