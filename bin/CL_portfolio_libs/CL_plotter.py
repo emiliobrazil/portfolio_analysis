@@ -33,6 +33,7 @@ class PortfolioFig:
 
     def fig_cache(self, cache_path, lblshow=False):
         # Itera sobre as listas de dados e plota cada linha
+        plt.rc('font', size=42)
         if lblshow:
 
             plt.plot(self.x_axis, self.y_axis, label=self.labels[i - 1])
@@ -52,10 +53,11 @@ class PortfolioFig:
         if self.title is not None:
             plt.title(self.title)
         fig = plt.gcf()
-        fig.set_size_inches(1920 / 100, 1080/ 100)  # Convertendo de pixels para polegadas
 
+        fig.set_size_inches(1920 / 100, 1080/ 100)  # Convertendo de pixels para polegadas
+        plt.xticks([self.x_axis[0],self.x_axis[-1]])
         # Salvar a figura em um arquivo PNG com DPI personalizado
-        plt.savefig('exemplo.png', dpi=1000)
+        plt.savefig('exemplo.png', dpi=500)
         plt.savefig(cache_path)
 
 

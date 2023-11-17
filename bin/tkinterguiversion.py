@@ -216,35 +216,40 @@ def mainscrollhset():
         canvas.unbind("<MouseWheel>")
         for label in scrollslabelslist:
             label.unbind("<MouseWheel>")
-symbclass=fnc.MeanPriceMatrix(["PETR4"],'2023-10-10','2023-11-10','1d')
-print(symbclass.get_portifolio_matrix)
+
 def change_fronthistory(iniday,finday):
     #unstable please read again
+    sym = stockname_label.cget("text")
+    sym=sym.replace(' ','')
+    print(len(sym[0]))
     if True:
-        arr=yf.Ticker('PETR4'+'.SA').history(start='2023-10-10',end='2023-11-10',interval='1d')
+        print(f'{sym}')
+        arr=yf.Ticker(sym+'.SA').history(start='2023-10-10',end='2023-11-10',interval='1d')
         print(arr)
-        figure=ptt.PortfolioFig(arr.index,arr['Open'])
-        figure.fig_cache(os.sep.join([os.getcwd(),'CL_GUI','gcache']))
-        stock_graphimg = Image.open(os.sep.join([os.getcwd(),'CL_GUI','gcache.png']))
-        stock_graphimg.resize((800, 450))
-        stock_graphimg.thumbnail((400, 225))
-        photo = ImageTk.PhotoImage(stock_graphimg)
 
-        # Crie um widget Label para exibir a imagem
-        stock_graph_label = tk.Label(root, image=photo)
-        stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
-        stock_graph_label.pack()
-        stock_graph_label.place(x=220, y=100)
 
 
     if False:
-        sym=[stockname_label.cget("text")]
+
         print(type(sym),sym)
         print(iniday,finday)
         symbclass=fnc.MeanPriceMatrix(sym,iniday,finday,'1d')
         prices=symbclass.get_portifolio_matrix
         print(prices)
+    figure = ptt.PortfolioFig(arr.index, arr['Open'])
 
+    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache']))
+
+    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache.png']))
+    stock_graphimg.resize((800, 450))
+    stock_graphimg.thumbnail((400, 225))
+    photo = ImageTk.PhotoImage(stock_graphimg)
+
+    # Crie um widget Label para exibir a imagem
+    stock_graph_label = tk.Label(root, image=photo)
+    stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
+    stock_graph_label.pack()
+    stock_graph_label.place(x=220, y=100)
 def portfoloioedit_window():
 
     def adicionar_elemento():
@@ -457,15 +462,10 @@ def period_selector():
 def save_file():
     # Lógica para salvar um arquivo
 
-    file_name = tk.filedialog.asksaveasfilename(**{
-        'defaultextension': ".jprt",
-        'filetypes': [("Arquivo de portifolio", "*.jprt"), ("Arquivos de Texto", "*.txt"), ("Todos os Arquivos", "*.*")]
-    })
+    file_name ='..'+os.sep+'_data_port'
     if file_name != "" and file_name != ():
         file_name = file_name.replace("/", os.sep)
-        print(file_name)
         file_name = file_name.replace("\\", os.sep)
-        print(file_name)
         usr_portfolio.save(file_name)
 
 
