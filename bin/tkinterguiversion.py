@@ -3,13 +3,15 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 import os
-
+import yfinance as yf
 from CL_portfolio_libs.CL_portfolio_management import Portfolio
 
 from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
-
+import threading as th
+import CL_portfolio_libs.CL_finance as fnc
+import CL_portfolio_libs.CL_plotter as ptt
 
 
 brazilian_stocks = [
@@ -214,7 +216,34 @@ def mainscrollhset():
         canvas.unbind("<MouseWheel>")
         for label in scrollslabelslist:
             label.unbind("<MouseWheel>")
+symbclass=fnc.MeanPriceMatrix(["PETR4"],'2023-10-10','2023-11-10','1d')
+print(symbclass.get_portifolio_matrix)
+def change_fronthistory(iniday,finday):
+    #unstable please read again
+    if True:
+        arr=yf.Ticker('PETR4'+'.SA').history(start='2023-10-10',end='2023-11-10',interval='1d')
+        print(arr)
+        figure=ptt.PortfolioFig(arr.index,arr['Open'])
+        figure.fig_cache(os.sep.join([os.getcwd(),'CL_GUI','gcache']))
+        stock_graphimg = Image.open(os.sep.join([os.getcwd(),'CL_GUI','gcache.png']))
+        stock_graphimg.resize((800, 450))
+        stock_graphimg.thumbnail((400, 225))
+        photo = ImageTk.PhotoImage(stock_graphimg)
 
+        # Crie um widget Label para exibir a imagem
+        stock_graph_label = tk.Label(root, image=photo)
+        stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
+        stock_graph_label.pack()
+        stock_graph_label.place(x=220, y=100)
+
+
+    if False:
+        sym=[stockname_label.cget("text")]
+        print(type(sym),sym)
+        print(iniday,finday)
+        symbclass=fnc.MeanPriceMatrix(sym,iniday,finday,'1d')
+        prices=symbclass.get_portifolio_matrix
+        print(prices)
 
 def portfoloioedit_window():
 
@@ -417,6 +446,7 @@ def period_selector():
         endcaldatalist = [endcalg.day, endcalg.month, endcalg.year]
         upareaperiod_label.config(
             text=f"periodo analisado:\nde: {inicaldatalist[0]}/{inicaldatalist[1]}/{inicaldatalist[2]} \nate: {endcaldatalist[0]}/{endcaldatalist[1]}/{endcaldatalist[2]}")
+        change_fronthistory(f"{inicaldatalist[2]}-{inicaldatalist[1]}-{inicaldatalist[0]}",f"{endcaldatalist[2]}-{endcaldatalist[1]}-{endcaldatalist[0]}")
 
     period_fselbt = tk.Button(j, text="Selecionar", command=periodselctorbtn_command)
     period_fselbt.place(x=110, y=320)

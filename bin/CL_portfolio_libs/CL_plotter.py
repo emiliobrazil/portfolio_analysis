@@ -11,7 +11,7 @@ class PortfolioFig:
         self.labels = None
         self.grid_check = False
         self.bgcollor = None
-        self.matrix = [self.x_axis] + self.y_axis
+
 
     def set_axletitle(self, axle, title):
         if axle in ["y", "Y", "V", "v", "vertical"]:
@@ -34,12 +34,12 @@ class PortfolioFig:
     def fig_cache(self, cache_path, lblshow=False):
         # Itera sobre as listas de dados e plota cada linha
         if lblshow:
-            for i in range(1, len(self.matrix)):
-                plt.plot(self.matrix[0], self.matrix[i], label=self.labels[i - 1])
-                plt.legend()
+
+            plt.plot(self.x_axis, self.y_axis, label=self.labels[i - 1])
+            plt.legend()
         else:
-            for i in range(1, len(self.matrix)):
-                plt.plot(self.matrix[0], self.matrix[i])
+
+            plt.plot(self.x_axis, self.y_axis)
 
         # Adiciona legendas e rótulos
 
@@ -51,7 +51,11 @@ class PortfolioFig:
             plt.grid(True)
         if self.title is not None:
             plt.title(self.title)
+        fig = plt.gcf()
+        fig.set_size_inches(1920 / 100, 1080/ 100)  # Convertendo de pixels para polegadas
 
+        # Salvar a figura em um arquivo PNG com DPI personalizado
+        plt.savefig('exemplo.png', dpi=1000)
         plt.savefig(cache_path)
 
 
