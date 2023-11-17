@@ -214,6 +214,7 @@ def mainscrollhset():
 
 
 def portfoloioedit_window():
+
     def adicionar_elemento():
         elemento = entry.get()
         selecionado = tk.BooleanVar()
@@ -222,6 +223,8 @@ def portfoloioedit_window():
 
     def save_changes():
         usr_portfolio.portfolio.clear()
+        usr_portfolio.name=name_entry.get()
+        print(usr_portfolio.name)
 
         for elemento in lista:
             nome = elemento["nome"]
@@ -254,6 +257,7 @@ def portfoloioedit_window():
         canvas.itemconfig(canvas_frame, width=canvas.winfo_width())
 
     def update_lista():
+
         global entry_dict
         for i in lista_frame.winfo_children():
             i.destroy()
@@ -294,8 +298,18 @@ def portfoloioedit_window():
     style = ttk.Style(root)
     style.theme_use('clam')
 
+    name_entry = tk.Entry(root)
+    name_entry.insert(0,"Meu portifolio")
+    name_entry.pack(side="top", padx=100)
+
     entry = tk.Entry(root)
-    entry.pack(side="top", padx=100)
+    entry.pack(side="top",pady=10, padx=100)
+
+    name_label=tk.Label(root,text="Nome do portfolio")
+
+    name_label.place(relx=0,rely=0)
+    stockname_lbl = tk.Label(root, text="Codigo da empresa")
+    stockname_lbl.place(relx=0,rely=0.05)
 
     adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
     adicionar_button.pack(side="top")
@@ -320,6 +334,7 @@ def portfoloioedit_window():
         lista.append({"nome": key, "selecionado": tk.BooleanVar()})
 
     update_lista()
+    save_file()
 
     root.mainloop()
 
