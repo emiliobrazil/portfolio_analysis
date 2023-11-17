@@ -66,7 +66,7 @@ def valid_stocks() -> list:
           'WPLZ11', 'WTSP11B', 'WUNI34', 'XPCM11', 'XPHT11', 'XPIN11', 'XPLG11', 'XRXB34', 'YCHY11', 'YDUQ3']
 
 
-def is_valid(symbol: str) -> bool:
+def is_valid_stock(symbol: str) -> bool:
   """
   input:
       symbol: a str that represents a stock.
@@ -94,7 +94,7 @@ def history(symbols: list, start_date: str, end_date: str, interval: str):
     """
     dataframes = {}
     for symbol in symbols:
-      if is_valid(symbol):
+      if is_valid_stock(symbol):
         symbol_history = yf.Ticker(symbol + '.SA').history(start=start_date, end=end_date, interval=interval)
         dataframes[symbol] = symbol_history
 
@@ -222,3 +222,15 @@ class MeanPriceMatrix:
     return matrix
 
 ### TODO: def get_portfolio_matrix([symb1, symb2, symb3, ...], priod in ['1d', '1mo', '1y']) ->  Matrix of the mean of the period
+
+def test():
+
+  syb = 'PETR4'
+  print(f"{syb} is valid? {is_valid_stock(syb)}")
+
+  print(history([syb], "2020-10-01", "2023-10-21", '1mo'))
+
+### TODO: create test for all functions
+  
+if __name__ == '__main__':
+    test()

@@ -16,21 +16,8 @@ import json
 import os
 import pandas as pd
 
-import sys
-# append the path of the parent directory
-sys.path.append(".." + os.sep + "CL_finance")
-sys.path.append("." + os.sep + "CL_finance")
-sys.path.insert(0, "..")
-
-try:
-   import CL_finance.CL_finance as CLfnc
-except:
-   import CL_finance as CLfnc
-
-try:
-    from .CL_simulation_class import CL_simulation as CLsml
-except:
-    from CL_simulation_class import CL_simulation as CLsml
+from .CL_simulation_class import CL_simulation as CLsml
+from .CL_finance import is_valid_stock
 
 
 count = 0 # used to count unamed portfolios
@@ -182,7 +169,7 @@ class Portfolio:
     
     @staticmethod
     def is_valid_symblo(sym):
-        return type(sym) is str and CLfnc.is_valid(sym)
+        return type(sym) is str and is_valid_stock(sym)
     
 
 def test():

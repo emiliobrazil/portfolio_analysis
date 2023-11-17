@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 
 import os
 
-from CL_portfolio_management.CL_portfolio_management import Portfolio
+from CL_portfolio_libs.CL_portfolio_management import Portfolio
 
 from tkcalendar import DateEntry
 import webbrowser
