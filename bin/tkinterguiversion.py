@@ -445,7 +445,7 @@ def creditwindow():
     style.theme_use('clam')
 
     credits_text = tk.Label(j,
-                            text="Creditos: \n                          Graficos:Henrique Assis \n   Plotagem: \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
+                            text="Creditos: \n                          Graficos:Henrique Assis \n                             Plotagem:Henrique Assis \n                     Arquivos:Emilio Vital \n                                  API financeira:Leticia Aleixo \n                           Risco:Gabriella Morgado")
     credits_text.place(x=-90, y=20)
     gitcredittext = tk.Label(j, text="Github:")
     gitcredittext.place(x=0, y=135)
