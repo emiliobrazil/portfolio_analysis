@@ -148,22 +148,62 @@ def riskcalc_window():
     j = tk.Tk()
     style = ttk.Style(j)
     style.theme_use('clam')
+    global photo2
 
     def riskrun_btn():
         print("entrou na riskrun_btn")
-        sel_var = risk_var.get()
+        sel_var = 1#risk_var.get()
+        print(sel_var)
         if sel_var == 1:
-            pass
+            usr_portfolio.run_simulation('1d')
+            info=usr_portfolio.last_simulation
+
+
+
             #  chamar a risco aqui(dia)
 
         if sel_var == 2:
-            pass
+            usr_portfolio.run_simulation('1mo')
+            info = usr_portfolio.last_simulation()
             #  chamar a risco aqui(mes)
         if sel_var == 3:
-            pass
+            usr_portfolio.run_simulation('1y')
+            info = usr_portfolio.last_simulation()
+        info=info.to_dict()
+        print(info)
+        risklabel_list=['p10','p25','p50','p75','p90']
+        final_plotlist_x=[i for i in range(30)]
+        final_plotlist_y=[]
+        for i in risklabel_list:
+            temp_list=[]
+            for k in info['data'][i]:
+                temp_list.append(info['data'][i][k])
+            final_plotlist_y.append(temp_list)
+        figure=ptt.SimulationFig(final_plotlist_x,final_plotlist_y)
+        figure.set_labels(risklabel_list)
+        pathtoimage=os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f"simulacao{int((info['time_ended']))}.png"])
+        figure.fig_cache(pathtoimage,True)
+        j.destroy()
+        resultwin=tk.Tk()
+        resultwin.geometry('600x450')
+        print(pathtoimage)
+
+        stock_graphimg2 = Image.open(pathtoimage)
+
+        stock_graphimg2.thumbnail((400, 225))
+        photo2 = ImageTk.PhotoImage(stock_graphimg2,master=resultwin)
+
+        # Crie um widget Label para exibir a imagem
+        stock_graph_label2 = tk.Label(resultwin, image=photo2)
+        stock_graph_label2.image = photo2
+        stock_graph_label2.place(x=100, y=100)
+
+
+
+
             #  chamar a risco aqui(ano)
         # pegar o resultado e pllottar
-        j.destroy()
+
 
     j.geometry("300x200")
     j.title("Calcular risco")
@@ -236,9 +276,9 @@ def change_fronthistory(iniday,finday):
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
     figure.set_bgcollor('black')
 
-    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache']))
+    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
 
-    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache.png']))
+    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
     stock_graphimg.resize((800, 450))
     stock_graphimg.thumbnail((400, 225))
     photo = ImageTk.PhotoImage(stock_graphimg)
