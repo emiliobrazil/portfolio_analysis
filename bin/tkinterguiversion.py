@@ -5,7 +5,7 @@ from time import time
 import os
 import yfinance as yf
 from CL_portfolio_libs.CL_portfolio_management import Portfolio
-
+from datetime import datetime
 from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
@@ -534,6 +534,37 @@ def change_label_color(event, label):
     stockarea_title.config(text=f'Analise da empresa {label.cget("text")}')
     stocknametext = stockname_label.cget("text").replace(" ", "")
     stocknumber_label.configure(text=f'Você possui {usr_portfolio[stocknametext]} ações nessa empresa')
+
+    data_string = "2023-11-17 15:30:00"
+    dt=time()
+    # Converter a string em um objeto datetime
+    data_hora_objeto = datetime.strptime(data_string, "%Y-%m-%d %H:%M:%S")
+
+    dia = data_hora_objeto.day
+    mes = data_hora_objeto.month
+    ano = data_hora_objeto.year
+    if dia<6:
+        dia_atual=28
+        if mes==1:
+            mes_atual=12
+            ano_atual=ano-1
+        else:
+            mes_atual=mes-1
+            ano_atual=ano
+    else:
+        dia_atual=dia-5
+        ano_atual=ano
+        mes_atual=mes
+    if dia_atual==29:
+        dia_atual-=1
+    print(dt-time())
+    upareaperiod_label.config(
+            text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual-1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
+
+    change_fronthistory(f'{ano_atual-1}-{mes_atual}-{dia_atual}',f'{ano_atual}-{mes_atual}-{dia_atual}')
+
+
+
 
 
 def cut_text():
