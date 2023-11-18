@@ -143,6 +143,35 @@ entry_dict = {}
 def argumentedfunction():
     no_web_err(root=root)
 
+def lastsimulation_show():
+    info=usr_portfolio.last_simulation
+    info=info.to_dict()
+    risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
+    final_plotlist_x = [i for i in range(30)]
+    final_plotlist_y = []
+    for i in risklabel_list:
+        temp_list = []
+        for k in info['data'][i]:
+            temp_list.append(info['data'][i][k])
+        final_plotlist_y.append(temp_list)
+    figure = ptt.SimulationFig(final_plotlist_x, final_plotlist_y)
+    figure.set_labels(risklabel_list)
+    pathtoimage = os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f"simulacao{int((info['time_ended']))}.png"])
+    figure.fig_cache(pathtoimage, True)
+    resultwin = tk.Tk()
+    resultwin.geometry('600x450')
+    print(pathtoimage)
+
+    stock_graphimg2 = Image.open(pathtoimage)
+
+    stock_graphimg2.thumbnail((400, 225))
+    photo2 = ImageTk.PhotoImage(stock_graphimg2, master=resultwin)
+
+    # Crie um widget Label para exibir a imagem
+    stock_graph_label2 = tk.Label(resultwin, image=photo2)
+    stock_graph_label2.image = photo2
+    stock_graph_label2.place(x=100, y=100)
+
 
 def riskcalc_window():
     j = tk.Tk()
@@ -156,7 +185,7 @@ def riskcalc_window():
         print(sel_var)
         if sel_var == 1:
             usr_portfolio.run_simulation('1d')
-            info=usr_portfolio.last_simulation
+
 
 
 
@@ -164,39 +193,19 @@ def riskcalc_window():
 
         if sel_var == 2:
             usr_portfolio.run_simulation('1mo')
-            info = usr_portfolio.last_simulation()
+
             #  chamar a risco aqui(mes)
         if sel_var == 3:
             usr_portfolio.run_simulation('1y')
-            info = usr_portfolio.last_simulation()
-        info=info.to_dict()
-        print(info)
-        risklabel_list=['p10','p25','p50','p75','p90']
-        final_plotlist_x=[i for i in range(30)]
-        final_plotlist_y=[]
-        for i in risklabel_list:
-            temp_list=[]
-            for k in info['data'][i]:
-                temp_list.append(info['data'][i][k])
-            final_plotlist_y.append(temp_list)
-        figure=ptt.SimulationFig(final_plotlist_x,final_plotlist_y)
-        figure.set_labels(risklabel_list)
-        pathtoimage=os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f"simulacao{int((info['time_ended']))}.png"])
-        figure.fig_cache(pathtoimage,True)
+
+
+
+        lastsimulation_show()
+
         j.destroy()
-        resultwin=tk.Tk()
-        resultwin.geometry('600x450')
-        print(pathtoimage)
 
-        stock_graphimg2 = Image.open(pathtoimage)
 
-        stock_graphimg2.thumbnail((400, 225))
-        photo2 = ImageTk.PhotoImage(stock_graphimg2,master=resultwin)
 
-        # Crie um widget Label para exibir a imagem
-        stock_graph_label2 = tk.Label(resultwin, image=photo2)
-        stock_graph_label2.image = photo2
-        stock_graph_label2.place(x=100, y=100)
 
 
 
@@ -674,7 +683,7 @@ lastriskupdate.place(x=450, y=490)
 moneyreturnlabel = tk.Label(root, text=f"Retorno: R${varnotfill}")
 moneyreturnlabel.place(x=450, y=470)
 
-lastsimbutton = tk.Button(root, text="Ultima simulação", )
+lastsimbutton = tk.Button(root, text="Ultima simulação", command=lastsimulation_show)
 lastsimbutton.place(x=350, y=540)
 riskbutton = tk.Button(root, text="calcular risco", command=riskcalc_window)
 riskbutton.place(x=500, y=540)
