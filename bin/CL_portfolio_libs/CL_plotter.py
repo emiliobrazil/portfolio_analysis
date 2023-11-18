@@ -137,16 +137,4 @@ class SimulationFig:
         plt.savefig(cache_path)
         plt.close()
 
-if __name__ == "__main__":
-    print("teste fora")
-    ax = [1, 2, 3, 4]
-    y1 = [1, 2, 4, 8]
-    y2 = [1, 2, 3, 4]
-    y3 = [0, 0, 5, 20]
 
-    figura = PortfolioFig(ax, [y1, y2, y3])
-    figura.set_title("TTITULO")
-    figura.set_axletitle("x","eixo x")
-    figura.set_axletitle("y", "eixo y")
-    figura.set_bgcollor("lightblue")
-    figura.fig_cache("")
