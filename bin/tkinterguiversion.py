@@ -174,6 +174,7 @@ def lastsimulation_show():
 
 
 def riskcalc_window():
+
     j = tk.Tk()
     style = ttk.Style(j)
     style.theme_use('clam')
@@ -181,25 +182,10 @@ def riskcalc_window():
 
     def riskrun_btn():
         print("entrou na riskrun_btn")
-        sel_var = 1#risk_var.get()
-        print(sel_var)
-        if sel_var == 1:
-            usr_portfolio.run_simulation('1d')
+        print(risk_var.get())
+        print(risk_var.get()in ['1d','1mo','1y'])
 
-
-
-
-            #  chamar a risco aqui(dia)
-
-        if sel_var == 2:
-            usr_portfolio.run_simulation('1mo')
-
-            #  chamar a risco aqui(mes)
-        if sel_var == 3:
-            usr_portfolio.run_simulation('1y')
-
-
-
+        usr_portfolio.run_simulation(risk_var.get())
         lastsimulation_show()
 
         j.destroy()
@@ -214,18 +200,22 @@ def riskcalc_window():
         # pegar o resultado e pllottar
 
 
+
     j.geometry("300x200")
     j.title("Calcular risco")
     style = ttk.Style(j)
     style.theme_use('clam')
     riskcalc_label = tk.Label(j, text="Selecione o periodo do risco:")
     riskcalc_label.place(x=50, y=20)
-    risk_var = tk.IntVar()
-    r1 = tk.Radiobutton(j, text="Dia", variable=risk_var, value=1)
+    risk_var = tk.StringVar(j)
+    r1 = tk.Radiobutton(j, text="Dia", variable=risk_var, value='1d')
     r1.place(x=50, y=50)
-    r2 = tk.Radiobutton(j, text="Mes", variable=risk_var, value=2)
+
+    r2 = tk.Radiobutton(j, text="Mes", variable=risk_var, value='1mo')
+
     r2.place(x=50, y=80)
-    r3 = tk.Radiobutton(j, text="Ano", variable=risk_var, value=3)
+    r3 = tk.Radiobutton(j, text="Ano", variable=risk_var, value='1y')
+
     r3.place(x=50, y=110)
     r1.select()
 
