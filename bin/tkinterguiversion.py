@@ -163,8 +163,9 @@ def lastsimulation_show():
 
 
     stock_graphimg2 = Image.open(pathtoimage)
-
+    dt=time()
     stock_graphimg2.thumbnail((400, 225))
+    print(time()-dt)
     photo2 = ImageTk.PhotoImage(stock_graphimg2, master=resultwin)
 
     # Crie um widget Label para exibir a imagem
@@ -266,13 +267,14 @@ def change_fronthistory(iniday,finday):
         arr=arr[sym]
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
     figure.set_bgcollor('black')
-
+    dt = time()
     figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
 
     stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
+    print(time() - dt)
 
 
-    stock_graphimg.thumbnail((400, 225))
+
     photo = ImageTk.PhotoImage(stock_graphimg)
 
 
@@ -281,6 +283,7 @@ def change_fronthistory(iniday,finday):
     stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
     stock_graph_label.pack()
     stock_graph_label.place(x=220, y=100)
+
 
 
     iniprice=arr["Open"][0]
