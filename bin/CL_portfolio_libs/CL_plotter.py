@@ -62,11 +62,11 @@ class PortfolioFig:
         fig = plt.gcf()
         plt.grid(True, color='white')
 
-        fig.set_size_inches(400 / 50, 225/ 50)  # Convertendo de pixels para polegadas
+        fig.set_size_inches(400 / 40, 225/ 40)  # Convertendo de pixels para polegadas
         plt.xticks([self.x_axis[0],self.x_axis[-1]])
 
         # Salvar a figura em um arquivo PNG com DPI personalizado
-        plt.savefig(cache_path, dpi=50)
+        plt.savefig(cache_path, dpi=40)
         plt.close()
 
 class SimulationFig:
