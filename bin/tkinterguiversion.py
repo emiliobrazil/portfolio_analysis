@@ -260,18 +260,13 @@ def change_fronthistory(iniday,finday):
     #unstable please read again
     sym = stockname_label.cget("text")
     sym=sym.replace(' ','')
-    print(sym)
-    if False:
-        print(f'{sym}')
-        arr=yf.Ticker(sym+'.SA').history(start='2023-10-10',end='2023-11-10',interval='1d')
-        print(arr)
 
 
-
+    dt = time()
     if True:
         arr=fnc.history([sym],iniday,finday,'1d')
         arr=arr[sym]
-    dt=time()
+    print(f"tempo:{time() - dt}")
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
     figure.set_bgcollor('black')
 
@@ -285,8 +280,8 @@ def change_fronthistory(iniday,finday):
     # Crie um widget Label para exibir a imagem
     stock_graph_label = tk.Label(root, image=photo)
     stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
-    stock_graph_label.pack()
-    stock_graph_label.place(x=220, y=100)
+    print(f"tempo 2:{time() - dt}")
+
     iniprice=arr["Open"][0]
     finalprice=arr["Open"][-1]
     if iniprice>finalprice:
@@ -296,7 +291,7 @@ def change_fronthistory(iniday,finday):
         value_c='green'
         strdir='+'
     stockvalue_label.config(text=f"{strdir}{round(100*(finalprice-iniprice)/(iniprice),3)}% R$:{round(finalprice,2)}",fg=value_c)
-    print(f"tempo:{time()-dt}")
+
 def portfoloioedit_window():
 
     def adicionar_elemento():
@@ -547,13 +542,13 @@ def change_label_color(event, label):
         mes_atual=mes
     if dia_atual==29:
         dia_atual-=1
-    print(dt-time())
-    upareaperiod_label.config(
-            text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual-1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
+
+
 
     change_fronthistory(f'{ano_atual-1}-{mes_atual}-{dia_atual}',f'{ano_atual}-{mes_atual}-{dia_atual}')
-
-
+    print(dt - time())
+    upareaperiod_label.config(
+            text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual-1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
 
 
 
