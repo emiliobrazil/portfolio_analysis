@@ -260,7 +260,7 @@ def change_fronthistory(iniday,finday):
     sym=sym.replace(' ','')
 
 
-    dt = time()
+
     if True:
         arr=fnc.history([sym],iniday,finday,'1d')
         arr=arr[sym]
@@ -270,15 +270,19 @@ def change_fronthistory(iniday,finday):
     figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
 
     stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
-    stock_graphimg.resize((800, 450))
+
+
     stock_graphimg.thumbnail((400, 225))
     photo = ImageTk.PhotoImage(stock_graphimg)
+
 
     # Crie um widget Label para exibir a imagem
     stock_graph_label = tk.Label(root, image=photo)
     stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
     stock_graph_label.pack()
     stock_graph_label.place(x=220, y=100)
+
+
     iniprice=arr["Open"][0]
     finalprice=arr["Open"][-1]
     if iniprice>finalprice:
@@ -518,7 +522,7 @@ def change_label_color(event, label):
     stocknumber_label.configure(text=f'Você possui {usr_portfolio[stocknametext]} ações nessa empresa')
 
     data_string = "2023-11-17 15:30:00"
-    dt=time()
+
     # Converter a string em um objeto datetime
     data_hora_objeto = datetime.strptime(data_string, "%Y-%m-%d %H:%M:%S")
 

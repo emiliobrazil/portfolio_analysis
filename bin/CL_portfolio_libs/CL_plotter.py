@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
+from time import time
 
 class PortfolioFig:
     def __init__(self, x_axis, y_axis):
@@ -34,6 +34,7 @@ class PortfolioFig:
         self.bgcollor = collor
 
     def fig_cache(self, cache_path, lblshow=False):
+
         # Itera sobre as listas de dados e plota cada linha
         plt.rc('font', size=20)
         if self.y_axis[0]>self.y_axis[-1]:
@@ -63,9 +64,9 @@ class PortfolioFig:
 
         fig.set_size_inches(1280 / 100, 720/ 100)  # Convertendo de pixels para polegadas
         plt.xticks([self.x_axis[0],self.x_axis[-1]])
+
         # Salvar a figura em um arquivo PNG com DPI personalizado
         plt.savefig(cache_path, dpi=200)
-        plt.savefig(cache_path)
         plt.close()
 
 class SimulationFig:
@@ -134,7 +135,6 @@ class SimulationFig:
         plt.xticks([self.x_axis[0],self.x_axis[-1]])
         # Salvar a figura em um arquivo PNG com DPI personalizado
         plt.savefig(cache_path, dpi=200)
-        plt.savefig(cache_path)
         plt.close()
 
 
