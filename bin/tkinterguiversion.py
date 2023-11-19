@@ -3,128 +3,26 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from time import time
 import os
-import yfinance as yf
+
 from CL_portfolio_libs.CL_portfolio_management import Portfolio
 from datetime import datetime
 from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
-import threading as th
+
 import CL_portfolio_libs.CL_finance as fnc
 import CL_portfolio_libs.CL_plotter as ptt
 
-
-brazilian_stocks = [
-    'PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'ABEV3',
-    'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3', 'ALPA4', 'ALUP11',
-    'ALUP3', 'ALUP4', 'ANIM3', 'ARZZ3', 'ATMP3', 'ATOM3',
-    'AZEV3', 'BIDI11', 'BIDI3', 'BIDI4', 'BOBR3', 'BOBR4',
-    'BOVA11', 'BPAC3', 'BPAN4', 'BRAP4', 'BEEF3', 'BPAC11',
-    'BRAP3', 'BRKM3', 'CCRO3', 'CGRA3',
-    'COGN3', 'CPLE6', 'CSAN3', 'CVCB3', 'CYRE3', 'ECOR3',
-    'EGIE3', 'ELET3', 'ELET6', 'EMBR3', 'ENBR3', 'EQTL3',
-    'FLRY3', 'GGBR3', 'GOAU3', 'GOLL3', 'HAPV3', 'HGTX3',
-    'IGTA3', 'IRBR3', 'ITSA3', 'JHSF3', 'KLBN4', 'LAME3',
-    'LCAM3', 'LREN3', 'MGLU3', 'MRFG3', 'MRVE3', 'MULT3',
-    'NATU3', 'PCAR4', 'PETR3', 'QUAL3', 'RADL3', 'RAIL3',
-    'RENT3', 'SANB3', 'SAPR11', 'SBSP3', 'SMLS3', 'SUZB3',
-    'TAEE3', 'TIMP3', 'TOTS3', 'UGPA3', 'USIM3', 'VIVT3',
-    'VVAR3', 'WEGE3', 'YDUQ3', 'ABEV3', 'AZUL4', 'B3SA3',
-    'BBAS3', 'BBDC3', 'BBDC4',
-    'BBSE3', 'BRAP4', 'BRDT3', 'BRFS3', 'BRKM5', 'BRML3',
-    'B3SA3', 'CCRO3', 'CIEL3', 'CMIG4', 'COGN3', 'CPFE3',
-    'CRFB3', 'CSAN3', 'CSNA3', 'CVCB3', 'CYRE3', 'ECOR3',
-    'EGIE3', 'ELET3', 'ELET6', 'EMBR3', 'ENBR3', 'EQTL3',
-    'FLRY3', 'GGBR4', 'GOAU4', 'GOLL4', 'HAPV3', 'HGTX3',
-    'IGTA3', 'IRBR3', 'ITSA4', 'ITUB3', 'ITUB4', 'JBSS3',
-    'KLBN11', 'LAME4', 'LREN3', 'MGLU3', 'MRFG3', 'MRVE3',
-    'MULT3', 'NATU3', 'PCAR3', 'PETR3', 'PETR4', 'QUAL3',
-    'RADL3', 'RAIL3', 'RENT3', 'SANB11', 'SBSP3', 'SMLS3',
-    'SUZB3', 'TAEE11', 'TIMP3', 'TOTS3', 'UGPA3', 'USIM5',
-    'VALE3', 'VIVT3', 'VIVT4', 'VVAR3', 'WEGE3', 'YDUQ3',
-    'BRFS3', 'BRKM5', 'BRML3', 'BRPR3', 'BRSR3', 'BRSR6',
-    'BSEV3', 'CAMB3', 'CCPR3', 'CEAB3', 'CEAB5', 'CEAB6',
-    'CESP3', 'CESP5', 'CESP6', 'CGAS3', 'CGAS5', 'CGRA3',
-    'CGRA4', 'CIEL3', 'CLSC4', 'CMIG4', 'CMIG4', 'CMIGB4',
-    'CMIGB6', 'CMIGC6', 'CNTO3', 'COGN3', 'CPFE3', 'CPLE3',
-    'CPLE6', 'CPRE3', 'CRFB3', 'CSAB3', 'CSAB4', 'CSAN3',
-    'CSRN3', 'CSRN5', 'CSRN6', 'CTKA3', 'CTKA4', 'CTNM3',
-    'CTNM4', 'CVCB3', 'CYRE3', 'DASA3', 'DIRR3', 'DIRR6',
-    'DMMO3', 'DMMO4', 'DOHL3', 'DOHL4', 'DTEX3', 'EALT4',
-    'ECOR3', 'ECOR4', 'ECPG3', 'ECPG4', 'EEEL3', 'EEEL4',
-    'EGIE3', 'ELEK3', 'ELEK4', 'ELET3', 'ELET6', 'ELPL3',
-    'ELPL4', 'EMAE4', 'EMBR3', 'ENBR3', 'ENMA3', 'ENMA6',
-    'ENMT3', 'ENMT4', 'EQPA3', 'EQPA5', 'EQPA6', 'EQTL3',
-    'ESTR3', 'ESTR4', 'ETER3', 'EUCA4', 'EVEN3', 'EZZE',
-    'FESA3', 'FESA4', 'FHER3', 'FJTA4', 'FLRY3', 'FRAS3',
-    'FRIO3', 'GEPA3', 'GEPA4', 'GFSA3', 'GFSA3B', 'GGBR3',
-    'GOAU3', 'GOAU4', 'GOGL34', 'GOLL3', 'GPAR3', 'GPIV33',
-    'GPIV4', 'GRND3', 'GSHP3', 'GSHP4', 'GUAR3', 'GUAR4',
-    'GUAR4B', 'HAGA4', 'HAPV3', 'HBTS5', 'HETA4', 'HGTX3',
-    'HYPE3', 'IDNT3', 'IDVL3', 'IGBR3', 'IGBR5', 'IGBR6',
-    'IGTA3', 'IGTA3B', 'INHA3', 'INHA4', 'INSC3', 'IRBR3',
-    'IRBR3B', 'IRBR3C', 'ITSA3', 'ITSA4', 'ITSA4B', 'ITUB3',
-    'ITUB3B', 'ITUB4', 'ITUB4B', 'JBSS3', 'JFEN3', 'JHSF3',
-    'JOPA3', 'JOPA4', 'JSLG3', 'KEPL3', 'KEPL4', 'KLBN11',
-    'KLBN3', 'KLBN4', 'LAME3', 'LAME4', 'LATM11', 'LBRN3',
-    'LBRN5', 'LBRN6', 'LEVE3', 'LIGT3', 'LINX3', 'LLIS3',
-    'LOGG3', 'LOGN3', 'LOGN11', 'LPSB3', 'LREN3', 'LUPA3',
-    'LUPA4', 'LWSA3', 'LWSA3B', 'LXRE3', 'MACY34', 'MAGG3',
-    'MAGS3', 'MALL11', 'MALL3', 'MALL4', 'MAPT3', 'MAPT4',
-    'MDIA3', 'MDNE3', 'MDNE4', 'MGLU3', 'MILS3', 'MLAS3',
-    'MMXM3', 'MMXM11', 'MOAR3', 'MOAR4', 'MOVI3', 'MRFG3',
-    'MRVE3', 'MRVE3B', 'MTIG4', 'MTRE3', 'MTSA3', 'MTSA4',
-    'MULT3', 'MYPK3', 'N1CE34', 'NEOE3', 'NEOE4', 'NEOE4B',
-    'NORD3', 'NRTQ3', 'NUTR3', 'ODER3', 'ODER4', 'OMGE3',
-    'OMGE3B', 'ORPD3', 'OSXB3', 'OSXB3B', 'OTRK3', 'P1GG34',
-    'PAES3', 'PAES4', 'PARD3', 'PARD3B', 'PATI3', 'PATI4',
-    'PATI4B', 'PCAR3', 'PCAR4', 'PCAR5', 'PCAR5B', 'PCAR6',
-    'PCAR6B', 'PDGR3', 'PETR3', 'PETR4', 'PETR4B', 'PFIZ34',
-    'PFRM3', 'PFRM3B', 'PINE4', 'PINE4B', 'PLAS3', 'PLAS3B',
-    'PLPL3', 'PLPL4', 'PLPL4B', 'PLRI11', 'PMAM3', 'PMAM4',
-    'PMAM4B', 'PNVL3', 'PNVL4', 'PNVL4B', 'POWE3', 'PPLA11',
-    'PPLA3', 'PPLA4', 'PPLA4B', 'PPLA4C', 'PRBC3', 'PRBC4',
-    'PRBC4B', 'PSSA3', 'PTBL3', 'PTBL3B', 'PTNT3', 'PTNT4',
-    'PTNT4B', 'QUAL3', 'RADL3', 'RAIL3', 'RAIL4', 'RAIL4B',
-    'RAPT3', 'RAPT4', 'RAPT4B', 'RCSL3', 'RCSL4', 'RCSL4B',
-    'RDNI3', 'RDNI3B', 'RDOR3', 'RDOR4', 'RDOR4B', 'REDE3',
-    'REDE4', 'REDE4B', 'RENT3', 'RNEW11', 'RNEW3', 'RNEW4',
-    'RNEW4B', 'RSID3', 'RSID3B', 'RSPD3', 'RSPD4', 'RSPD4B',
-    'RSUL4', 'S3SC3', 'SAPR3', 'SAPR4', 'SAPR4B', 'SAPR4C',
-    'SBSP3', 'SEER3', 'SHOW3', 'SHOW4', 'SHUL4', 'SHUL4B',
-    'SHUL4C', 'SLCE3', 'SLCE4', 'SLED3', 'SLED4', 'SLED4B',
-    'SMLS3', 'SMLS3B', 'SMTO3', 'SOMA3', 'SOMA4', 'SOMA4B',
-    'SPRI3', 'SPRI5', 'SPRI6', 'STBP3', 'STBP3B', 'STKF3',
-    'STKF4', 'STKF4B', 'STTR3', 'STTR4', 'STTR4B', 'SULA11',
-    'SULA3', 'SULA4', 'SULA4B', 'SULA4C', 'SULA4D', 'SULA4E',
-    'TASA3', 'TASA4', 'TASA4B', 'TCNO3', 'TCNO4', 'TECN3',
-    'TEKA3', 'TEKA4', 'TEKA4B', 'TEND3', 'TESA3', 'TESA4',
-    'TESA4B', 'TGMA3', 'TGMA3B', 'TGMA4', 'TGMA4B', 'TORD3',
-    'TORD3B', 'TOYB3', 'TOYB3B', 'TOYB4', 'TOYB4B', 'TPIS3',
-    'TPIS3B', 'TRIS3', 'TRIS4', 'TRIS4B', 'TRPL3', 'TRPL4',
-    'TRPL4B', 'TSLA34', 'TSLA35', 'TUPY3', 'TUPY4', 'TXRX3',
-    'TXRX4', 'UCAS3', 'UCAS4', 'UGPA3', 'UGPA3B', 'UNIP3',
-    'UNIP5', 'UNIP6', 'UPAC33', 'UPAC34', 'UPSS34', 'URPR11',
-    'USIM3', 'USIM3B', 'USIM5', 'USIM5B', 'USIM6', 'USIM6B',
-    'USIN11', 'USIN3', 'USIN4', 'USIN4B', 'UTEC34', 'VALE3',
-    'VCPA3', 'VCPA4', 'VEVE3', 'VINE3', 'VIVO3', 'VIVO4',
-    'VIVT3', 'VIVT4', 'VLID3', 'VLID4', 'VNET3', 'VNET4',
-    'VPTA3', 'VPTA4', 'VPTA4B', 'VSPT3', 'VSPT4', 'VSPT4B',
-    'VULC3', 'VULC4', 'VULC4B', 'VVAR11', 'WEGE3', 'WHRL3',
-    'WHRL4', 'WHRL4B', 'WIZS3', 'WIZS3B', 'WSON33', 'WUNI11',
-    'WUNI3', 'WUNI5', 'WUNI6', 'YBRA3', 'YBRA4']
-
 brazilian_stocks = ['PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'ABEV3',
-    'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3', 'ALPA4', 'ALUP11',
-    'ALUP3', 'ALUP4', 'ANIM3', 'ARZZ3', 'ATMP3', 'ATOM3',
-    'AZEV3', 'BIDI11', 'BIDI3', 'BIDI4', 'BOBR3', 'BOBR4',
-    'BOVA11', 'BPAC3', 'BPAN4', 'BRAP4', 'BEEF3', 'BPAC11',
-    'BRAP3', 'BRKM3', 'CCRO3', 'CGRA3']
+                    'WEGE3', 'BBAS3', 'MGLU3', 'SUZB3', 'ALPA4', 'ALUP11',
+                    'ALUP3', 'ALUP4', 'ANIM3', 'ARZZ3', 'ATMP3', 'ATOM3',
+                    'AZEV3', 'BIDI11', 'BIDI3', 'BIDI4', 'BOBR3', 'BOBR4',
+                    'BOVA11', 'BPAC3', 'BPAN4', 'BRAP4', 'BEEF3', 'BPAC11',
+                    'BRAP3', 'BRKM3', 'CCRO3', 'CGRA3']
 
-print(len(brazilian_stocks))
 brazilian_stocks = list(set(brazilian_stocks))
 brazilian_stocks.sort()
-print(len(brazilian_stocks))
+
 for i in brazilian_stocks:
     brazilian_stocks[brazilian_stocks.index(i)] = [i, 10]
 brazilian_stocks_dict = {}
@@ -133,7 +31,6 @@ for i in brazilian_stocks:
 
 usr_portfolio = Portfolio(brazilian_stocks, "Meu portifolio")
 
-print(brazilian_stocks_dict)
 scrollslabelslist = []
 editstocklabelslist = []
 varnotfill = "???"
@@ -143,9 +40,10 @@ entry_dict = {}
 def argumentedfunction():
     no_web_err(root=root)
 
+
 def lastsimulation_show():
-    info=usr_portfolio.last_simulation
-    info=info.to_dict()
+    info = usr_portfolio.last_simulation
+    info = info.to_dict()
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
     final_plotlist_x = [i for i in range(30)]
     final_plotlist_y = []
@@ -160,7 +58,6 @@ def lastsimulation_show():
     figure.fig_cache(pathtoimage, True)
     resultwin = tk.Tk()
     resultwin.geometry('600x450')
-    print(pathtoimage)
 
     stock_graphimg2 = Image.open(pathtoimage)
 
@@ -174,32 +71,19 @@ def lastsimulation_show():
 
 
 def riskcalc_window():
-
     j = tk.Tk()
     style = ttk.Style(j)
     style.theme_use('clam')
     global photo2
 
     def riskrun_btn():
-        print("entrou na riskrun_btn")
-        print(risk_var.get())
-        print(risk_var.get()in ['1d','1mo','1y'])
-
         usr_portfolio.run_simulation(risk_var.get())
         lastsimulation_show()
 
         j.destroy()
 
-
-
-
-
-
-
-            #  chamar a risco aqui(ano)
+        #  chamar a risco aqui(ano)
         # pegar o resultado e pllottar
-
-
 
     j.geometry("300x200")
     j.title("Calcular risco")
@@ -250,29 +134,28 @@ def mainscrollhset():
         scrollbar.configure(command=canvas.yview)
         canvas.bind("<MouseWheel>", on_mouse_wheel)
     else:
-        print(900)
+
         scrollbar.configure(command=None)
         canvas.unbind("<MouseWheel>")
         for label in scrollslabelslist:
             label.unbind("<MouseWheel>")
 
-def change_fronthistory(iniday,finday):
-    #unstable please read again
-    sym = stockname_label.cget("text")
-    sym=sym.replace(' ','')
 
+def change_fronthistory(iniday, finday):
+    # unstable please read again
+    sym = stockname_label.cget("text")
+    sym = sym.replace(' ', '')
 
     dt = time()
     if True:
-        arr=fnc.history([sym],iniday,finday,'1d')
-        arr=arr[sym]
-    print(f"tempo:{time() - dt}")
+        arr = fnc.history([sym], iniday, finday, '1d')
+        arr = arr[sym]
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
     figure.set_bgcollor('black')
 
-    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
+    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f'{sym}.png']))
 
-    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
+    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f'{sym}.png']))
     stock_graphimg.resize((800, 450))
     stock_graphimg.thumbnail((400, 225))
     photo = ImageTk.PhotoImage(stock_graphimg)
@@ -280,20 +163,20 @@ def change_fronthistory(iniday,finday):
     # Crie um widget Label para exibir a imagem
     stock_graph_label = tk.Label(root, image=photo)
     stock_graph_label.image = photo  # Mantém uma referência à imagem para evitar que ela seja coletada pelo coletor de lixo
-    print(f"tempo 2:{time() - dt}")
 
-    iniprice=arr["Open"][0]
-    finalprice=arr["Open"][-1]
-    if iniprice>finalprice:
-        value_c='red'
-        strdir=''
+    iniprice = arr["Open"][0]
+    finalprice = arr["Open"][-1]
+    if iniprice > finalprice:
+        value_c = 'red'
+        strdir = ''
     else:
-        value_c='green'
-        strdir='+'
-    stockvalue_label.config(text=f"{strdir}{round(100*(finalprice-iniprice)/(iniprice),3)}% R$:{round(finalprice,2)}",fg=value_c)
+        value_c = 'green'
+        strdir = '+'
+    stockvalue_label.config(
+        text=f"{strdir}{round(100 * (finalprice - iniprice) / (iniprice), 3)}% R$:{round(finalprice, 2)}", fg=value_c)
+
 
 def portfoloioedit_window():
-
     def adicionar_elemento():
         elemento = entry.get()
         selecionado = tk.BooleanVar()
@@ -302,8 +185,7 @@ def portfoloioedit_window():
 
     def save_changes():
         usr_portfolio.portfolio.clear()
-        usr_portfolio.name=name_entry.get()
-        print(usr_portfolio.name)
+        usr_portfolio.name = name_entry.get()
 
         for elemento in lista:
             nome = elemento["nome"]
@@ -314,7 +196,6 @@ def portfoloioedit_window():
                 valor_entrada = entrada.get()
                 usr_portfolio.portfolio[nome] = valor_entrada
 
-        print(usr_portfolio.portfolio)
         # tudo ok
         for widget in content_frame.winfo_children():
             widget.destroy()
@@ -367,7 +248,6 @@ def portfoloioedit_window():
 
     def update_checkbox_state(index):
         lista[index]["selecionado"].set(not lista[index]["selecionado"].get())
-        print(lista[index]["selecionado"].get())
 
     lista = []
 
@@ -378,17 +258,17 @@ def portfoloioedit_window():
     style.theme_use('clam')
 
     name_entry = tk.Entry(root)
-    name_entry.insert(0,"Meu portifolio")
+    name_entry.insert(0, "Meu portifolio")
     name_entry.pack(side="top", padx=100)
 
     entry = tk.Entry(root)
-    entry.pack(side="top",pady=10, padx=100)
+    entry.pack(side="top", pady=10, padx=100)
 
-    name_label=tk.Label(root,text="Nome do portfolio")
+    name_label = tk.Label(root, text="Nome do portfolio")
 
-    name_label.place(relx=0,rely=0)
+    name_label.place(relx=0, rely=0)
     stockname_lbl = tk.Label(root, text="Codigo da empresa")
-    stockname_lbl.place(relx=0,rely=0.05)
+    stockname_lbl.place(relx=0, rely=0.05)
 
     adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
     adicionar_button.pack(side="top")
@@ -449,8 +329,9 @@ def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
 
-    file_name = tk.filedialog.askopenfilename( filetypes=[('Portifolio', '*.jprt')], initialdir= '..'+os.sep+'_data_port' )
-    if file_name != "" and file_name!=():
+    file_name = tk.filedialog.askopenfilename(filetypes=[('Portifolio', '*.jprt')],
+                                              initialdir='..' + os.sep + '_data_port')
+    if file_name != "" and file_name != ():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
         usr_portfolio = Portfolio.load(file_name)
@@ -465,6 +346,7 @@ def open_file():
         label.pack()
         scrollslabelslist.append(label)
     mainscrollhset()
+
 
 def period_selector():
     j = tk.Tk()
@@ -493,7 +375,8 @@ def period_selector():
         endcaldatalist = [endcalg.day, endcalg.month, endcalg.year]
         upareaperiod_label.config(
             text=f"periodo analisado:\nde: {inicaldatalist[0]}/{inicaldatalist[1]}/{inicaldatalist[2]} \nate: {endcaldatalist[0]}/{endcaldatalist[1]}/{endcaldatalist[2]}")
-        change_fronthistory(f"{inicaldatalist[2]}-{inicaldatalist[1]}-{inicaldatalist[0]}",f"{endcaldatalist[2]}-{endcaldatalist[1]}-{endcaldatalist[0]}")
+        change_fronthistory(f"{inicaldatalist[2]}-{inicaldatalist[1]}-{inicaldatalist[0]}",
+                            f"{endcaldatalist[2]}-{endcaldatalist[1]}-{endcaldatalist[0]}")
 
     period_fselbt = tk.Button(j, text="Selecionar", command=periodselctorbtn_command)
     period_fselbt.place(x=110, y=320)
@@ -504,7 +387,7 @@ def period_selector():
 def save_file():
     # Lógica para salvar um arquivo
 
-    file_name ='..'+os.sep+'_data_port'
+    file_name = '..' + os.sep + '_data_port'
     if file_name != "" and file_name != ():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
@@ -521,35 +404,32 @@ def change_label_color(event, label):
     stocknumber_label.configure(text=f'Você possui {usr_portfolio[stocknametext]} ações nessa empresa')
 
     data_string = "2023-11-17 15:30:00"
-    dt=time()
+    dt = time()
     # Converter a string em um objeto datetime
     data_hora_objeto = datetime.strptime(data_string, "%Y-%m-%d %H:%M:%S")
 
     dia = data_hora_objeto.day
     mes = data_hora_objeto.month
     ano = data_hora_objeto.year
-    if dia<6:
-        dia_atual=28
-        if mes==1:
-            mes_atual=12
-            ano_atual=ano-1
+    if dia < 6:
+        dia_atual = 28
+        if mes == 1:
+            mes_atual = 12
+            ano_atual = ano - 1
         else:
-            mes_atual=mes-1
-            ano_atual=ano
+            mes_atual = mes - 1
+            ano_atual = ano
     else:
-        dia_atual=dia-5
-        ano_atual=ano
-        mes_atual=mes
-    if dia_atual==29:
-        dia_atual-=1
+        dia_atual = dia - 5
+        ano_atual = ano
+        mes_atual = mes
+    if dia_atual == 29:
+        dia_atual -= 1
 
+    change_fronthistory(f'{ano_atual - 1}-{mes_atual}-{dia_atual}', f'{ano_atual}-{mes_atual}-{dia_atual}')
 
-
-    change_fronthistory(f'{ano_atual-1}-{mes_atual}-{dia_atual}',f'{ano_atual}-{mes_atual}-{dia_atual}')
-    print(dt - time())
     upareaperiod_label.config(
-            text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual-1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
-
+        text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual - 1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
 
 
 def cut_text():
@@ -567,15 +447,12 @@ def paste_text():
     pass
 
 
-def update_tocks_scroll(p_window, scroll, stock_list):
-    pass
-
 
 root = tk.Tk()
 root.geometry("800x600")
 root.title("analise de portifolio")
-#style = ttk.Style(root)
-#style.theme_use('clam')
+# style = ttk.Style(root)
+# style.theme_use('clam')
 
 style = ttk.Style(root)
 style.theme_use('clam')
