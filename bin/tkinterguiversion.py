@@ -220,6 +220,7 @@ def portfoloioedit_window():
             label.pack()
             scrollslabelslist.append(label)
         mainscrollhset()
+        save_file()
         root.destroy()
 
     def on_canvas_configure(event):
