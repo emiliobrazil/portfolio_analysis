@@ -2,12 +2,12 @@ from datetime import datetime
 from time import time
 import numpy as np
 import pandas as pd
+
 try:
     from CL_portfoliorisk import compute_log_covariances_and_means, compute_pct_covariances_and_means, monte_carlo_simulation, portfolio_scores_at_percentiles, portfolio_expected_return, portfolio_risk_index
 
 except:
     from .CL_simulation_class import compute_log_covariances_and_means, compute_pct_covariances_and_means, monte_carlo_simulation, portfolio_scores_at_percentiles, portfolio_expected_return, portfolio_risk_index
-
 
 class CL_simulation:
     def __init__(self, portfolio_list, stock_matrix, num_periods=30, period='1d', run_now = True):
