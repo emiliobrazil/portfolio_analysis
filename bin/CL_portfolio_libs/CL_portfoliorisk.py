@@ -124,9 +124,9 @@ def portfolio_expected_return (simulation):
     - simulation (np.ndarray): Matrix corresponding to a Monte Carlo simulation.
 
     Returns:
-    - np.float64: Approximation of the expected value.
+    - np.ndarray: Matrix of the approximation of the expected value for each period.
     """
-    return np.mean(simulation[-1] - simulation[0])
+    return np.mean(simulation - simulation[0], axis=1)
 
 def portfolio_risk_index (portfolio, df):
     """
@@ -164,7 +164,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
     - num_periods (int, optional): Number of periods to iterate. Defaults to 30.
 
     Returns:
-    - np.ndarray: Scores at the specified percentiles.
+    - np.ndarray: Matrix of the scores at the specified percentiles for each period.
     """
     if np.shape(simulation)[0] < num_periods+1:
         raise ValueError(f'Matrix corresponding to the simulation must have at least {num_periods+1} rows. Simulation matrix shape: {np.shape(simulated_prices)}.')
@@ -200,13 +200,12 @@ def test():
     print(f'The estimated covariance matrix of the percentual returns is given by\n{estimate_pct_covs}.')
     print(f'The estimated means array of the percentual returns is given by\n{estimate_pct_means}.')
 
-    script_directory = os.getcwd()
+    script_directory = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(script_directory, "simulation_test.npy")
 
     simulation = monte_carlo_simulation (portfolio_list, data, 100, file_path)
     print(f'The risk index is approximately {portfolio_risk_index (portfolio_list, data)}.')
-    print(f'The expected return after 30 period units is approximately {portfolio_expected_return(simulation[:31])}.')
-    print(f'The expected return after 100 period units is approximately {portfolio_expected_return(simulation)}.')
+    print(f'The expected returns array is approximately {portfolio_expected_return(simulation)}.')
     print(f'The scores at percentiles 5, 10, 25, 50, 75, 90, 95 for the next 30 period units in order are approximately\n{portfolio_scores_at_percentiles (simulation, [5, 10, 25, 50, 75, 90, 95])}.')
 
     loaded_simulation = load_monte_carlo_simulation(file_path)
