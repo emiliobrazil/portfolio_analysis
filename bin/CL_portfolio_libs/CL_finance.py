@@ -195,13 +195,20 @@ class MeanPriceMatrix:
         matrix[i, :] = self.mean_monthly_price(first_day, last_day)
     return matrix
 
+  
+  def years(self):
+    shape = self.matrix_monthly_price(self.start_date, self.end_date).shape
+    years = []
+    for i in range(0, shape[0], 12):
+      year = self.matrix_monthly_price(self.start_date, self.end_date)[i:i+12, :len(self.symbols)]
+      years.append(year)
+    return years
 
-  def mean_yearly_price(self, start_date: str, end_date: str):
-    matrix = self.matrix_monthly_price(start_date, end_date)
-    if len(matrix) == 12:
-      mean_yearly = np.mean(matrix, axis=0)
-      return mean_yearly
 
+  def mean_yearly_price(self, year_matrix):
+    mean_yearly = np.mean(year_matrix, axis=0)
+    return mean_yearly
+    
 
   def matrix_yearly_price(self, start_date, end_date):
     """
@@ -214,25 +221,10 @@ class MeanPriceMatrix:
       Returns:
       - numpy.ndarray: Yearly price matrix.
     """
-    years_info = self.get_yearly_date_ranges(start_date, end_date)
-    number_of_years = len(years_info)
-    matrix = np.zeros((number_of_years, len(self.symbols)))
-    for i, (first_day, last_day) in enumerate(years_info):
-        matrix[i, :] = self.mean_yearly_price(first_day, last_day)
+    matrix = np.zeros((len(self.years()), len(self.symbols)))
+    for year in range(0, len(self.years())):
+      matrix[year, :] = self.mean_yearly_price(self.years()[year])
     return matrix
-
-
-  def get_yearly_date_ranges(self, start_date: str, end_date: str):
-    start_date = pd.to_datetime(start_date)
-    end_date = pd.to_datetime(end_date)
-    yearly_date_ranges = []
-    current_date = start_date.replace(month=1, day=1)
-    while current_date <= end_date:
-        first_day_of_year = current_date
-        last_day_of_year = current_date + pd.offsets.YearEnd(0)
-        yearly_date_ranges.append((first_day_of_year, last_day_of_year))
-        current_date = last_day_of_year + pd.DateOffset(days=1)
-    return yearly_date_ranges
 
 
   def get_monthly_date_ranges(self, start_date: str, end_date: str):
