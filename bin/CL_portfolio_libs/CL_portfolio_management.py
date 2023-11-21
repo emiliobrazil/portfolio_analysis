@@ -16,9 +16,12 @@ import json
 import os
 import pandas as pd
 
-from .CL_simulation_class import CL_simulation as CLsml
-from .CL_finance import is_valid_stock
-
+try:
+    from CL_simulation_class import CL_simulation as CLsml
+    from CL_finance import is_valid_stock
+except:
+    from .CL_simulation_class import CL_simulation as CLsml
+    from .CL_finance import is_valid_stock
 
 count = 0 # used to count unamed portfolios
 
