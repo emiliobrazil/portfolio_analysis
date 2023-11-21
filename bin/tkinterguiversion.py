@@ -346,6 +346,7 @@ def portfoloioedit_window():
             i.destroy()
 
         for idx, elemento in enumerate(lista):
+
             frame = tk.Frame(lista_frame)
             frame.pack(fill="x")
 
@@ -356,8 +357,11 @@ def portfoloioedit_window():
             entry.pack(side="left")
 
             checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
+
+
             checkbox.place(relx=0.7)
             checkbox.bind("<Button-1>", lambda event, index=idx: update_checkbox_state(index))
+
 
             # Verifique se a chave existe no dicionário usr_portfolio.portfolio
             if elemento["nome"] in usr_portfolio.portfolio:
@@ -667,7 +671,7 @@ upareaperiod_label.place(x=650, y=200)
 upperiodbtn = tk.Button(root, text="selecionar periodo", command=period_selector)
 upperiodbtn.place(x=650, y=250)
 
-stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "gcache", "u2clm4ND_mid.png"]))
+stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "icons", "BLANK_STOCK.png"]))
 stock_graphimg.thumbnail((400, 225))
 photo = ImageTk.PhotoImage(stock_graphimg)
 
@@ -687,21 +691,19 @@ horizontal_separator.place(x=152, rely=0.67, relwidth=1, relheight=1)
 risktitlelabel = tk.Label(root, text="Gerenciamento de risco:", font=25)
 risktitlelabel.place(x=360, y=410)
 
-risklabel = tk.Label(root, text=f"Risco:R${varnotfill}")
-risklabel.place(x=200, y=450)
+risklabel = tk.Label(root, text=f"Indice de Risco:R${varnotfill}")
+risklabel.place(x=200, y=470)
 
-cashlabel = tk.Label(root, text=f"Saldo:R${varnotfill}")
-cashlabel.place(x=200, y=470)
 
 periodlabel = tk.Label(root,
                        text=f"periodo: de: {varnotfill}/{varnotfill}/{varnotfill}- até: {varnotfill}/{varnotfill}/{varnotfill}")
 periodlabel.place(x=200, y=490)
 
 lastriskupdate = tk.Label(root, text=f"ultimo calculo de risco: {varnotfill}/{varnotfill}/{varnotfill}")
-lastriskupdate.place(x=450, y=490)
+lastriskupdate.place(x=500, y=490)
 
 moneyreturnlabel = tk.Label(root, text=f"Retorno: R${varnotfill}")
-moneyreturnlabel.place(x=450, y=470)
+moneyreturnlabel.place(x=500, y=470)
 
 lastsimbutton = tk.Button(root, text="Ultima simulação", command=lastsimulation_show)
 lastsimbutton.place(x=350, y=540)

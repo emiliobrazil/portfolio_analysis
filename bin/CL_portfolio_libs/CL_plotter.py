@@ -49,6 +49,7 @@ class PortfolioFig:
 
             plt.plot(self.x_axis, self.y_axis,color=line_color,linewidth=5)
 
+
         # Adiciona legendas e rótulos
 
         plt.xlabel(self.X_title)
