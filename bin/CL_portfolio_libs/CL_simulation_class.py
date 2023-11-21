@@ -23,13 +23,12 @@ class CL_simulation:
             self.time_started = time()
             self._run_simulation(portfolio_list, stock_matrix)
             self.time_ended = time()
+            self.risk_index = portfolio_risk_index (portfolio_list, stock_matrix)
 
     def _run_simulation(self, portfolio_list, stock_matrix):
         simulation = monte_carlo_simulation (portfolio_list, stock_matrix, self.num_periods)
-        self.data = pd.DataFrame(portfolio_scores_at_percentiles(simulation, [10, 25, 50, 75, 90]), 
-                            columns=['p10', 'p25', 'p50', 'p75', 'p90'])
-        self.expected_value = portfolio_expected_return (simulation)
-        self.risk_index = portfolio_risk_index (self.portfolio_list, stock_matrix)
+        self.data = pd.DataFrame(np.concatenate((portfolio_scores_at_percentiles(simulation, [10, 25, 50, 75, 90]), portfolio_expected_return (simulation)[:, np.newaxis]), axis=1),
+                            columns=['p10', 'p25', 'p50', 'p75', 'p90', 'expected_return'])
 
     def to_dict(self) -> dict:
         return{
@@ -53,6 +52,7 @@ class CL_simulation:
         sml.period_ended = sml_dict['period_ended']
         sml.time_started = sml_dict['time_started']
         sml.time_ended = sml_dict['time_ended']
+        sml.risk_index = sml_dict['risk_index']
         sml.data = pd.DataFrame(sml_dict['data'])
         return sml
 
@@ -70,7 +70,8 @@ def test():
     portfolio_list = [('Stock1', 40), ('Stock2', 30), ('Stock3', 200), ('Stock4', 100)]
     
     sim1 = CL_simulation(portfolio_list, data)
-    print(f"The simulation's information is given by {sim1.to_dict()}.")
+    print(f"The simulation's information is given by:\n{sim1.to_dict()}.")
+    print(f"The simulation's percentiles and expected return are given by:\n{sim1.data}")
     sim2 = CL_simulation.from_dict(sim1.to_dict())
     print('Hey! It worked! Dictionary successfuly loaded!' if sim1.to_dict() == sim2.to_dict() else 'Oh, no! Something went wrong when loading the dictionary...')
 
