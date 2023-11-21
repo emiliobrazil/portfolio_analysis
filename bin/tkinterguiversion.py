@@ -528,7 +528,8 @@ def change_label_color(event, label):
     stocknametext = stockname_label.cget("text").replace(" ", "")
     stocknumber_label.configure(text=f'Você possui {usr_portfolio[stocknametext]} ações nessa empresa')
 
-    data_string = "2023-11-17 15:30:00"
+    data_atual = datetime.now()
+    data_string = data_atual.strftime("%Y-%m-%d %H:%M:%S")
 
     # Converter a string em um objeto datetime
     data_hora_objeto = datetime.strptime(data_string, "%Y-%m-%d %H:%M:%S")
