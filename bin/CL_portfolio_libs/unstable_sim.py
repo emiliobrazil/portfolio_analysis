@@ -2,7 +2,12 @@ from datetime import datetime
 from time import time
 import numpy as np
 import pandas as pd
-import CL_portfoliorisk as risk
+try:
+    from CL_portfoliorisk import compute_log_covariances_and_means, compute_pct_covariances_and_means, monte_carlo_simulation, portfolio_scores_at_percentiles, portfolio_expected_return, portfolio_risk_index
+
+except:
+    from .CL_simulation_class import compute_log_covariances_and_means, compute_pct_covariances_and_means, monte_carlo_simulation, portfolio_scores_at_percentiles, portfolio_expected_return, portfolio_risk_index
+
 
 class CL_simulation:
     def __init__(self, portfolio_list, stock_matrix, num_periods=30, period='1d', run_now = True):
@@ -20,11 +25,11 @@ class CL_simulation:
             self.time_ended = time()
 
     def _run_simulation(self, portfolio_list, stock_matrix):
-        simulation = risk.monte_carlo_simulation (portfolio_list, stock_matrix, self.num_periods)
-        self.data = pd.DataFrame(risk.portfolio_scores_at_percentiles(simulation, [10, 25, 50, 75, 90]), 
+        simulation = monte_carlo_simulation (portfolio_list, stock_matrix, self.num_periods)
+        self.data = pd.DataFrame(portfolio_scores_at_percentiles(simulation, [10, 25, 50, 75, 90]), 
                             columns=['p10', 'p25', 'p50', 'p75', 'p90'])
-        self.expected_value = risk.portfolio_expected_return (simulation)
-        self.risk_index = risk.portfolio_risk_index (self.portfolio_list, stock_matrix)
+        self.expected_value = portfolio_expected_return (simulation)
+        self.risk_index = portfolio_risk_index (self.portfolio_list, stock_matrix)
 
     def to_dict(self) -> dict:
         return{
