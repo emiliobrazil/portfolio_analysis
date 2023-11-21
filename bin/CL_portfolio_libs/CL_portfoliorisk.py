@@ -200,7 +200,13 @@ def test():
     print(f'The estimated covariance matrix of the percentual returns is given by\n{estimate_pct_covs}.')
     print(f'The estimated means array of the percentual returns is given by\n{estimate_pct_means}.')
 
-    script_directory = os.path.dirname(os.path.realpath(__file__))
+    try:
+        # Attempt to get the directory of the script (for standalone scripts)
+        script_directory = os.path.dirname(os.path.realpath(__file__))
+    except NameError:
+        # If __file__ is not defined, use the current working directory (for Jupyter or interactive environments)
+        script_directory = os.getcwd()
+    
     file_path = os.path.join(script_directory, "simulation_test.npy")
 
     simulation = monte_carlo_simulation (portfolio_list, data, 100, file_path)
