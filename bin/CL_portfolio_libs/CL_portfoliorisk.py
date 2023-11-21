@@ -167,7 +167,7 @@ def portfolio_scores_at_percentiles (simulation, percentiles=[5, 10, 50, 90, 95]
     - np.ndarray: Matrix of the scores at the specified percentiles for each period.
     """
     if np.shape(simulation)[0] < num_periods+1:
-        raise ValueError(f'Matrix corresponding to the simulation must have at least {num_periods+1} rows. Simulation matrix shape: {np.shape(simulated_prices)}.')
+        raise ValueError(f'Matrix corresponding to the simulation must have at least {num_periods+1} rows. Simulation matrix shape: {np.shape(simulation)}.')
     percentiles = np.array(percentiles)
     scores = np.zeros((num_periods+1, np.shape(percentiles)[0]))
     for period in range(num_periods+1):
