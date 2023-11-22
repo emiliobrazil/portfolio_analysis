@@ -241,13 +241,13 @@ class MeanPriceMatrix:
 
 
 def test():
-
   syb = 'PETR4'
   print(f"{syb} is valid? {is_valid_stock(syb)}")
-
-  print(history([syb], "2020-10-01", "2023-10-21", '1mo'))
-
-### TODO: create test for all functions
   
+  print(history([syb], "2020-10-01", "2023-10-21", '1mo'))
+  
+  matrix_syb = MeanPriceMatrix([syb, 'MGLU3', 'MWET4'], "2020-10-01", "2023-10-21", '1mo')
+  print(matrix_syb.get_portifolio_matrix)
+
 if __name__ == '__main__':
     test()
