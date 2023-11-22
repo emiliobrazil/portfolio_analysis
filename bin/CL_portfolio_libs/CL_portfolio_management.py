@@ -90,7 +90,7 @@ class Portfolio:
         start_date = start_year + today_date[4:]
         prices = MeanPriceMatrix(symbols, start_date, today_date, period)
         stock_matrix = prices.get_portifolio_matrix
-        return stock_matrix
+        return pd.DataFrame(stock_matrix)
 
     def remove_stock(self, symb: str) -> None:
         if self.locked:
@@ -210,7 +210,7 @@ def test():
     ptr2.save()
     ptr3 = Portfolio('new_test')
     print(ptr3)
-    print(ptr.portfolio_matrix)
+    print(ptr.portifolio_matrix)
     
 if __name__ == '__main__':
     test()
