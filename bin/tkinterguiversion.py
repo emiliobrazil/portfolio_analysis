@@ -3,13 +3,11 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from time import time
 import os
-import yfinance as yf
 from CL_portfolio_libs.CL_portfolio_management import Portfolio
 from datetime import datetime
 from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
-import threading as th
 import CL_portfolio_libs.CL_finance as fnc
 import CL_portfolio_libs.CL_plotter as ptt
 
