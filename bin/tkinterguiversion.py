@@ -34,7 +34,7 @@ def lastsimulation_show():
     info=usr_portfolio.last_simulation
     info=info.to_dict()
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
-    final_plotlist_x = [i for i in range(30)]
+    final_plotlist_x = [i for i in range(31)]
     final_plotlist_y = []
     for i in risklabel_list:
         temp_list = []
