@@ -210,7 +210,7 @@ def test():
     ptr2.save()
     ptr3 = Portfolio('new_test')
     print(ptr3)
-    print(ptr.portifolio_matrix)
+    print(prt.portifolio_matrix)
     
 if __name__ == '__main__':
     test()
