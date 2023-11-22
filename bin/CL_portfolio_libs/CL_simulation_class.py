@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from time import time
 import numpy as np
 import pandas as pd
