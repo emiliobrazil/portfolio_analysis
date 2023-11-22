@@ -12,7 +12,7 @@ except:
 class CL_simulation:
     def __init__(self, portfolio_list, stock_matrix, num_periods=30, period='1d', run_now = True):
         if run_now:
-            today_date = datetime.now().strftime('%Y-%m-%d') 
+            today_date = datetime.datetime.now().strftime('%Y-%m-%d') 
             start_year = str(int(today_date[:4]) - 5) # 5 years before today
             start_date = start_year + today_date[4:]
             self.portfolio_list = portfolio_list

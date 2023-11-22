@@ -15,13 +15,14 @@ from typing import Tuple, List
 import json
 import os
 import pandas as pd
+import datetime
 
 try:
     from CL_simulation_class import CL_simulation as CLsml
-    from CL_finance import is_valid_stock
+    from CL_finance import is_valid_stock, MeanPriceMatrix
 except:
     from .CL_simulation_class import CL_simulation as CLsml
-    from .CL_finance import is_valid_stock
+    from .CL_finance import is_valid_stock, MeanPriceMatrix
 
 count = 0 # used to count unamed portfolios
 
@@ -82,9 +83,14 @@ class Portfolio:
         self.__setitem__(symb, quatity)
         
 
-    def portifolio_matrix(self):
-        #TODO
-        return [[0]]
+    def portifolio_matrix(self, period='1mo'):
+        symbols = [asset[0] for asset in self.portfolio_list]
+        today_date = datetime.datetime.now().strftime('%Y-%m-%d') 
+        start_year = str(int(today_date[:4]) - 5) # 5 years before today
+        start_date = start_year + today_date[4:]
+        prices = MeanPriceMatrix(symbols, start_date, today_date, period)
+        stock_matrix = prices.get_portifolio_matrix
+        return stock_matrix
 
     def remove_stock(self, symb: str) -> None:
         if self.locked:
@@ -121,13 +127,20 @@ class Portfolio:
         self.__readForSimulation__ = True
         self.__is_running = True
         #TODO multi_thread
-        sml = CLsml(self.portifolio_matrix, period=period)
+        sml = CLsml(self.portfolio_list, self.portifolio_matrix(), period=period)
         self.__is_running = False
         if sml is not None:
             self.simulations.append(sml)
             return True
         else:
             return False
+    
+    @property
+    def portfolio_list (self):
+         if type(self.portfolio) is list:
+             return self.portfolio
+         elif type(self.portfolio) is dict:
+             return list(self.portfolio.items())
         
     @property
     def is_running(self):
@@ -197,7 +210,7 @@ def test():
     ptr2.save()
     ptr3 = Portfolio('new_test')
     print(ptr3)
-
+    print(ptr.portfolio_matrix)
     
 if __name__ == '__main__':
     test()
