@@ -10,6 +10,7 @@ import webbrowser
 from tkinter import filedialog
 import CL_portfolio_libs.CL_finance as fnc
 import CL_portfolio_libs.CL_plotter as ptt
+import threading as th
 
 
 
@@ -34,6 +35,7 @@ def lastsimulation_show():
     info=usr_portfolio.last_simulation
     info=info.to_dict()
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
+    #risklabel_list = ['p25', 'p50', 'p75', 'p90', 'p10']
     final_plotlist_x = [i for i in range(31)]
     final_plotlist_y = []
     for i in risklabel_list:
@@ -42,6 +44,8 @@ def lastsimulation_show():
             temp_list.append(info['data'][i][k])
         final_plotlist_y.append(temp_list)
     figure = ptt.SimulationFig(final_plotlist_x, final_plotlist_y)
+    figure.set_title(f'Simulação de: {usr_portfolio.name}')
+
     figure.set_labels(risklabel_list)
     pathtoimage = os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f"simulacao{int((info['time_ended']))}.png"])
     figure.fig_cache(pathtoimage, True)
@@ -70,8 +74,12 @@ def riskcalc_window():
 
     def riskrun_btn():
 
+        dt=time()
 
-        usr_portfolio.run_simulation(risk_var.get())
+        usr_portfolio.run_simulation(risk_var)
+
+
+        print("simlacao tempo",time()-dt)
         lastsimulation_show()
 
         j.destroy()
@@ -149,9 +157,9 @@ def change_fronthistory(iniday,finday):
 
 
 
-    if True:
-        arr=fnc.history([sym],iniday,finday,'1d')
-        arr=arr[sym]
+
+    arr=fnc.history([sym],iniday,finday,'1d')
+    arr=arr[sym]
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
     figure.set_bgcollor('black')
     dt = time()
@@ -173,8 +181,8 @@ def change_fronthistory(iniday,finday):
 
 
 
-    iniprice=arr["Open"][0]
-    finalprice=arr["Open"][-1]
+    iniprice=arr["Open"].iloc[0]
+    finalprice=arr["Open"].iloc[-1]
     if iniprice>finalprice:
         value_c='red'
         strdir=''
@@ -314,8 +322,6 @@ def portfoloioedit_window():
     root.mainloop()
 
 
-def update_scrollbar_elements(selected_items):
-    pass
 
 
 def creditwindow():

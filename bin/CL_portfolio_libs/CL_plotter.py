@@ -37,7 +37,7 @@ class PortfolioFig:
 
         # Itera sobre as listas de dados e plota cada linha
         plt.rc('font', size=20)
-        if self.y_axis[0]>self.y_axis[-1]:
+        if self.y_axis.iloc[0] >self.y_axis.iloc[-1]:
             line_color='red'
         else:
             line_color='green'
@@ -106,9 +106,9 @@ class SimulationFig:
         plt.rc('font', size=20)
 
         if lblshow:
-            for i in range(len(self.y_axis)-1):
+            for i in range(len(self.y_axis)):
 
-                plt.plot(self.x_axis, self.y_axis[i], label=self.labels[i - 1])
+                plt.plot(self.x_axis, self.y_axis[i], label=self.labels[i])
                 plt.legend()
         else:
             for i in range(len(self.y_axis)):
@@ -131,9 +131,10 @@ class SimulationFig:
         if self.title is not None:
             plt.title(self.title)
         fig = plt.gcf()
+        plt.grid(linestyle='--', linewidth=0.5,visible=True, color='black')
 
         fig.set_size_inches(400 / 50, 225/ 50)  # Convertendo de pixels para polegadas
-        plt.xticks([self.x_axis[0],self.x_axis[-1]])
+        plt.xticks([0,10,20,30])
 
         # Salvar a figura em um arquivo PNG com DPI personalizado
         plt.savefig(cache_path, dpi=50)
