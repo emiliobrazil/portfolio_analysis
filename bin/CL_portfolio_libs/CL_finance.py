@@ -135,22 +135,20 @@ class MeanPriceMatrix:
       self.get_portifolio_matrix = self.matrix_yearly_price(self.start_date, self.end_date)
 
 
-  def get_high_matrix(self, start_date, end_date):
-    high_data = pd.DataFrame()
+  def get_price_matrix(self, start_date, end_date, price_type):
+    data_matrix = pd.DataFrame()
     for symbol in self.symbols:
-      data = yf.Ticker(symbol +'.SA').history(start= start_date, end= end_date)
-      high_data[symbol] = data['High']
-    high_matrix = high_data.to_numpy()
-    return high_matrix
+      data = yf.Ticker(symbol +'.SA').history(start=start_date, end=end_date)
+      data_matrix[symbol] = data[price_type]
+    return data_matrix.to_numpy()
+
+
+  def get_high_matrix(self, start_date, end_date):
+    return self.get_price_matrix(start_date, end_date, price_type='High')
 
 
   def get_low_matrix(self, start_date, end_date):
-    low_data = pd.DataFrame()
-    for symbol in self.symbols:
-      data = yf.Ticker(symbol +'.SA').history(start= start_date, end= end_date)
-      low_data[symbol] = data['Low']
-    low_matrix = low_data.to_numpy()
-    return low_matrix
+    return self.get_price_matrix(start_date, end_date, price_type='Low')
 
 
   def matrix_daily_price(self, start_date, end_date):
@@ -166,8 +164,7 @@ class MeanPriceMatrix:
     """
     high_matrix = self.get_high_matrix(start_date, end_date)
     low_matrix = self.get_low_matrix(start_date, end_date)
-    sum_matrix = high_matrix + low_matrix
-    result_matrix = np.multiply(0.5, sum_matrix)
+    result_matrix = 0.5 * (high_matrix + low_matrix)
     return result_matrix
 
 
@@ -180,11 +177,11 @@ class MeanPriceMatrix:
   def matrix_monthly_price(self, start_date: str, end_date: str):
     """
       Calculates the monthly price matrix based on the mean monthly price matrix.
-
+  
       Parameters:
       - start_date (str): Start date for the data retrieval.
       - end_date (str): End date for the data retrieval.
-
+  
       Returns:
       - numpy.ndarray: Monthly price matrix.
     """
@@ -197,12 +194,10 @@ class MeanPriceMatrix:
 
   
   def years(self):
-    shape = self.matrix_monthly_price(self.start_date, self.end_date).shape
-    years = []
-    for i in range(0, shape[0], 12):
-      year = self.matrix_monthly_price(self.start_date, self.end_date)[i:i+12, :len(self.symbols)]
-      years.append(year)
-    return years
+    monthly_matrix = self.matrix_monthly_price(self.start_date, self.end_date)
+    shape = monthly_matrix.shape
+    years = [monthly_matrix[i:i+12, :len(self.symbols)] for i in range(0, shape[0], 12)]
+    return np.asarray(years, dtype=object)
 
 
   def mean_yearly_price(self, year_matrix):
@@ -221,22 +216,18 @@ class MeanPriceMatrix:
       Returns:
       - numpy.ndarray: Yearly price matrix.
     """
-    matrix = np.zeros((len(self.years()), len(self.symbols)))
-    for year in range(0, len(self.years())):
-      matrix[year, :] = self.mean_yearly_price(self.years()[year])
+    yearly_matrix = self.years()
+    matrix = np.zeros((len(yearly_matrix), len(self.symbols)))
+    for year in range(len(yearly_matrix)):
+      matrix[year, :] = np.mean(yearly_matrix[year], axis=0)
     return matrix
 
 
   def get_monthly_date_ranges(self, start_date: str, end_date: str):
     start_date = pd.to_datetime(start_date)
     end_date = pd.to_datetime(end_date)
-    all_monthly_dates = []
-    current_date = start_date.replace(day=1)
-    while current_date <= end_date:
-        first_day_of_month = current_date
-        last_day_of_month = current_date + pd.offsets.MonthEnd(0)
-        all_monthly_dates.append((first_day_of_month, last_day_of_month))
-        current_date = last_day_of_month + pd.DateOffset(days=1)
+    all_monthly_dates = [ (current_date, current_date + pd.offsets.MonthEnd(0))
+        for current_date in pd.date_range(start_date, end_date, freq='MS') ]
     return all_monthly_dates
 
 
