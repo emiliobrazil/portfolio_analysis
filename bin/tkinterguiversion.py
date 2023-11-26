@@ -47,6 +47,8 @@ def lastsimulation_show():
     timestrip="%Y-%m-%d %H:%M:%S"
     lastsimulation_touse=tsobj.strftime(timestrip)
     lastriskupdate.config(text=f"Ultima simulação: {lastsimulation_touse}")
+    expected_rtn=round(info['exp_return'],2)
+    moneyreturnlabel.config(text=f"Retorno: R${expected_rtn}")
 
 
 
