@@ -78,7 +78,7 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     """
     log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # Get the most recent values for each asset
-    asset_weights = np.array([asset[1] for asset in portfolio])
+    asset_weights = np.array([asset[1] for asset in portfolio],dtype=np.float64)
     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
 
     simulated_prices = np.zeros((num_periods+1, num_trials))
@@ -146,7 +146,7 @@ def portfolio_risk_index (portfolio, df):
     """
     returns_pct_covariance_matrix, _ = compute_pct_covariances_and_means(df)
 
-    asset_weights = np.array([asset[1] for asset in portfolio])
+    asset_weights = np.array([asset[1] for asset in portfolio],dtype=np.float64)
     asset_weights = asset_weights / asset_weights.sum()
 
     portfolio_variance = np.dot(asset_weights, np.dot(returns_pct_covariance_matrix, asset_weights))

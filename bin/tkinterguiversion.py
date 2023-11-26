@@ -79,8 +79,16 @@ def riskcalc_window():
     def riskrun_btn():
 
         dt=time()
+        print(risk_var.get())
+        if risk_var.get()=="1d":
+            risk_period="1d"
+        if risk_var.get()=="1mo":
+            risk_period = "1mo"
+        if risk_var.get()=="1y":
+            risk_period = "1y"
 
-        usr_portfolio.run_simulation(risk_var)
+
+        usr_portfolio.run_simulation(risk_period)
 
 
         print("simlacao tempo",time()-dt)
