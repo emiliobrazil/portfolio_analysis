@@ -17,6 +17,10 @@ from datetime import datetime
 
 
 
+for i in os.listdir(os.sep.join([os.getcwd(),"CL_GUI","gcache"])):
+    if i=="nomedia":
+        continue
+    os.remove(os.sep.join([os.getcwd(),"CL_GUI","gcache",i]))
 
 
 
