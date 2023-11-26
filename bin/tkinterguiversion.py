@@ -34,8 +34,7 @@ entry_dict = {}
 mainico_path=os.sep.join([os.getcwd(),"CL_GUI","icons","cl.ico"])
 
 
-def argumentedfunction():
-    no_web_err(root=root)
+
 
 def lastsimulation_show():
 
@@ -77,6 +76,7 @@ def lastsimulation_show():
     resultwin = tk.Tk()
     resultwin.geometry('600x450')
     resultwin.iconbitmap(mainico_path)
+    resultwin.title(f"Simulação de: {usr_portfolio.name}")
 
     stock_graphimg2 = Image.open(pathtoimage)
     dt=time()
@@ -94,6 +94,7 @@ def riskcalc_window():
 
     j = tk.Tk()
     j.iconbitmap(mainico_path)
+
     style = ttk.Style(j)
     style.theme_use('clam')
     global photo2
@@ -158,15 +159,6 @@ def on_mouse_wheel(event):
     canvas.yview_scroll(-1 * int(event.delta * 0.01), "units")
 
 
-def no_web_err(root):
-    root.destroy()
-    root = tk.Tk()
-    root.geometry("300x300")
-    root.title("Sem acesso a internet")
-    style = ttk.Style(root)
-    style.theme_use('clam')
-    tk.Label(root, text="Sem acesso a internet \n Reinicie o aplicativo ou tente mais tarde").place(relx=0.2, rely=0.5)
-    tk.Button(root, text="OK", command=root.destroy).place(relx=0.45, rely=0.7)
 
 
 def mainscrollhset():
@@ -504,31 +496,13 @@ def change_label_color(event, label):
 
 
 
-def cut_text():
-    # Lógica para recortar texto
-    pass
-
-
-def copy_text():
-    # Lógica para copiar texto
-    pass
-
-
-def paste_text():
-    # Lógica para colar texto
-    pass
-
-
-def update_tocks_scroll(p_window, scroll, stock_list):
-    pass
 
 
 root = tk.Tk()
 root.iconbitmap(mainico_path)
 root.geometry("800x600")
 root.title("analise de portfólio")
-#style = ttk.Style(root)
-#style.theme_use('clam')
+
 
 style = ttk.Style(root)
 style.theme_use('clam')
@@ -541,17 +515,14 @@ file_menu.add_command(label="Salvar", command=save_file)
 file_menu.add_separator()
 file_menu.add_command(label="Sair", command=root.quit)
 
-setup_menu = tk.Menu(menu_bar, tearoff=0)
-setup_menu.add_command(label="Recortar", command=cut_text)
-setup_menu.add_command(label="Copiar", command=copy_text)
-setup_menu.add_command(label="sem net", command=argumentedfunction)
+
 
 help_menu = tk.Menu(menu_bar, tearoff=0)
-help_menu.add_command(label="Guia de uso", command=cut_text)
+help_menu.add_command(label="Guia de uso")
 help_menu.add_command(label="Creditos", command=creditwindow)
 
 menu_bar.add_cascade(label="Arquivo", menu=file_menu)
-menu_bar.add_cascade(label="Confiurações", menu=setup_menu)
+
 menu_bar.add_cascade(label="Ajuda", menu=help_menu)
 
 root.config(menu=menu_bar)
@@ -641,7 +612,7 @@ risklabel.place(x=200, y=470)
 
 
 periodlabel = tk.Label(root,
-                       text=f"periodo: de: {varnotfill}/{varnotfill}/{varnotfill}- até: {varnotfill}/{varnotfill}/{varnotfill}")
+                       text=f"Periodo:{varnotfill}")
 periodlabel.place(x=200, y=490)
 
 lastriskupdate = tk.Label(root, text=f"ultimo calculo de risco: {varnotfill}/{varnotfill}/{varnotfill}")
