@@ -20,7 +20,7 @@ from datetime import datetime
 
 
 
-usr_portfolio = Portfolio([], "Meu portifolio")
+usr_portfolio = Portfolio([], "Meu portfólio")
 
 
 scrollslabelslist = []
@@ -314,13 +314,13 @@ def portfoloioedit_window():
     lista = []
 
     root = tk.Tk()
-    root.title("Criar portifolio")
+    root.title("Criar portfólio")
     root.geometry("400x500")
     style = ttk.Style(root)
     style.theme_use('clam')
 
     name_entry = tk.Entry(root)
-    name_entry.insert(0,"Meu portifolio")
+    name_entry.insert(0,"Meu portfólio")
     name_entry.pack(side="top", padx=100)
 
     entry = tk.Entry(root)
@@ -515,7 +515,7 @@ def update_tocks_scroll(p_window, scroll, stock_list):
 
 root = tk.Tk()
 root.geometry("800x600")
-root.title("analise de portifolio")
+root.title("analise de portfólio")
 #style = ttk.Style(root)
 #style.theme_use('clam')
 
@@ -646,10 +646,10 @@ riskbutton.place(x=500, y=540)
 
 canvas.bind("<Configure>", on_configure)
 
-alt_load_btn = tk.Button(root, text="carregar portifolio", command=open_file)
+alt_load_btn = tk.Button(root, text="carregar portfólio", command=open_file)
 alt_load_btn.place(x=5, y=545)
 
-portfolioedit_btn = tk.Button(root, text="criar portifolio", command=portfoloioedit_window)
+portfolioedit_btn = tk.Button(root, text="criar portfólio", command=portfoloioedit_window)
 portfolioedit_btn.place(x=10, y=515)
 
 root.mainloop()
