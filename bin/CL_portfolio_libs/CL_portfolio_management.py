@@ -27,7 +27,7 @@ except:
 count = 0 # used to count unamed portfolios
 
 class Portfolio:
-    version = '0.0.2'
+    version = '0.0.3'
     def __init__(self, portfolio: List[Tuple[str, int]] = None, name = None):
         self.portfolio = {}
         self.simulations = []

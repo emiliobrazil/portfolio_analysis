@@ -1,0 +1,10 @@
+{
+    "name": "Meu portfolio",
+    "version": "0.0.2",
+    "portfolio": {
+        "PETR4": "50",
+        "MGEL4": "100",
+        "NIKE34": "70"
+    },
+    "simulations": []
+}

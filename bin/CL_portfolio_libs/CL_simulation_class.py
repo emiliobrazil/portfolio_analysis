@@ -27,9 +27,10 @@ class CL_simulation:
 
     def _run_simulation(self, portfolio_list, stock_matrix):
         simulation = monte_carlo_simulation (portfolio_list, stock_matrix, self.num_periods)
-        self.data = pd.DataFrame(np.concatenate((portfolio_scores_at_percentiles(simulation, [10, 25, 50, 75, 90]), portfolio_expected_return (simulation)[:, np.newaxis]), axis=1),
+        returns = portfolio_expected_return (simulation)
+        self.data = pd.DataFrame(np.concatenate((portfolio_scores_at_percentiles(simulation, [10, 25, 50, 75, 90]), returns[:, np.newaxis]), axis=1),
                             columns=['p10', 'p25', 'p50', 'p75', 'p90', 'expected_return'])
-        self.risk_index = portfolio_risk_index (portfolio_list, stock_matrix)
+        self.exp_return = returns[-1]
 
     def to_dict(self) -> dict:
         return{
@@ -41,7 +42,8 @@ class CL_simulation:
             'time_started': self.time_started,
             'time_ended': self.time_ended,
             'data': self.data.to_dict(),
-            'risk_index': self.risk_index
+            'risk_index': self.risk_index,
+            'exp_return': self.exp_return
         }
     
     @staticmethod
@@ -56,6 +58,7 @@ class CL_simulation:
         sml.time_ended = sml_dict['time_ended']
         sml.risk_index = sml_dict['risk_index']
         sml.data = pd.DataFrame(sml_dict['data'])
+        sml.exp_return = sml_dict['exp_return']
         return sml
 
 def test():
