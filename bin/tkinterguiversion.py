@@ -31,6 +31,7 @@ scrollslabelslist = []
 editstocklabelslist = []
 varnotfill = "???"
 entry_dict = {}
+mainico_path=os.sep.join([os.getcwd(),"CL_GUI","icons","cl.ico"])
 
 
 def argumentedfunction():
@@ -75,7 +76,7 @@ def lastsimulation_show():
     figure.fig_cache(pathtoimage, True)
     resultwin = tk.Tk()
     resultwin.geometry('600x450')
-
+    resultwin.iconbitmap(mainico_path)
 
     stock_graphimg2 = Image.open(pathtoimage)
     dt=time()
@@ -92,6 +93,7 @@ def lastsimulation_show():
 def riskcalc_window():
 
     j = tk.Tk()
+    j.iconbitmap(mainico_path)
     style = ttk.Style(j)
     style.theme_use('clam')
     global photo2
@@ -128,6 +130,7 @@ def riskcalc_window():
 
 
     j.geometry("300x200")
+    j.iconbitmap(mainico_path)
     j.title("Calcular risco")
     style = ttk.Style(j)
     style.theme_use('clam')
@@ -318,6 +321,7 @@ def portfoloioedit_window():
     lista = []
 
     root = tk.Tk()
+    root.iconbitmap(mainico_path)
     root.title("Criar portfólio")
     root.geometry("400x500")
     style = ttk.Style(root)
@@ -370,6 +374,7 @@ def creditwindow():
     j = tk.Tk()
     j.geometry("300x300")
     j.title("creditos")
+    j.iconbitmap(mainico_path)
     style = ttk.Style(j)
     style.theme_use('clam')
 
@@ -414,6 +419,7 @@ def period_selector():
     j = tk.Tk()
     j.geometry("270x380")
     j.title("selecionar periodo")
+    j.iconbitmap(mainico_path)
     style = ttk.Style(j)
     style.theme_use('clam')
 
@@ -518,6 +524,7 @@ def update_tocks_scroll(p_window, scroll, stock_list):
 
 
 root = tk.Tk()
+root.iconbitmap(mainico_path)
 root.geometry("800x600")
 root.title("analise de portfólio")
 #style = ttk.Style(root)
