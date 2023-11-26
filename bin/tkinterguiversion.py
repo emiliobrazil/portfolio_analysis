@@ -11,6 +11,7 @@ from tkinter import filedialog
 import CL_portfolio_libs.CL_finance as fnc
 import CL_portfolio_libs.CL_plotter as ptt
 import threading as th
+from datetime import datetime
 
 
 
@@ -37,6 +38,19 @@ def lastsimulation_show():
     if info=={}:
         return None
     info=info.to_dict()
+    lastsimulation_ts=int(info['time_ended'])-10800
+    lastsim_riskidx=info['risk_index']
+    lastsim_period=f"{info['num_periods']}{info['period'].replace('1','')}"
+    risklabel.config(text=f"Indice de Risco:{round(lastsim_riskidx,5)}")
+    periodlabel.config(text=f"Periodo: {lastsim_period}")
+    tsobj=datetime.utcfromtimestamp(lastsimulation_ts)
+    timestrip="%Y-%m-%d %H:%M:%S"
+    lastsimulation_touse=tsobj.strftime(timestrip)
+    lastriskupdate.config(text=f"Ultima simulação: {lastsimulation_touse}")
+
+
+
+
     print(info)
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
     #risklabel_list = ['p25', 'p50', 'p75', 'p90', 'p10']
@@ -609,7 +623,7 @@ horizontal_separator.place(x=152, rely=0.67, relwidth=1, relheight=1)
 risktitlelabel = tk.Label(root, text="Gerenciamento de risco:", font=25)
 risktitlelabel.place(x=360, y=410)
 
-risklabel = tk.Label(root, text=f"Indice de Risco:R${varnotfill}")
+risklabel = tk.Label(root, text=f"Indice de Risco:{varnotfill}")
 risklabel.place(x=200, y=470)
 
 
