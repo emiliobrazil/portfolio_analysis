@@ -4,7 +4,6 @@ from PIL import Image, ImageTk
 from time import time
 import os
 from CL_portfolio_libs.CL_portfolio_management import Portfolio
-from datetime import datetime
 from tkcalendar import DateEntry
 import webbrowser
 from tkinter import filedialog
@@ -13,53 +12,40 @@ import CL_portfolio_libs.CL_plotter as ptt
 import threading as th
 from datetime import datetime
 
-
-
-
-
-for i in os.listdir(os.sep.join([os.getcwd(),"CL_GUI","gcache"])):
-    if i=="nomedia":
+for i in os.listdir(os.sep.join([os.getcwd(), "CL_GUI", "gcache"])):
+    if i == "nomedia":
         continue
-    os.remove(os.sep.join([os.getcwd(),"CL_GUI","gcache",i]))
-
-
+    os.remove(os.sep.join([os.getcwd(), "CL_GUI", "gcache", i]))
 
 usr_portfolio = Portfolio([], "Meu portfólio")
-
 
 scrollslabelslist = []
 editstocklabelslist = []
 varnotfill = "???"
 entry_dict = {}
-mainico_path=os.sep.join([os.getcwd(),"CL_GUI","icons","cl.ico"])
-
-
+mainico_path = os.sep.join([os.getcwd(), "CL_GUI", "icons", "cl.ico"])
 
 
 def lastsimulation_show():
-
-    info=usr_portfolio.last_simulation
-    if info=={}:
+    info = usr_portfolio.last_simulation
+    if info == {}:
         return None
-    info=info.to_dict()
-    lastsimulation_ts=int(info['time_ended'])-10800
-    lastsim_riskidx=info['risk_index']
-    lastsim_period=f"{info['num_periods']}{info['period'].replace('1','')}"
-    risklabel.config(text=f"Indice de Risco:{round(lastsim_riskidx,5)}")
+    info = info.to_dict()
+    lastsimulation_ts = int(info['time_ended']) - 10800
+    lastsim_riskidx = info['risk_index']
+    lastsim_period = f"{info['num_periods']}{info['period'].replace('1', '')}"
+    risklabel.config(text=f"Indice de Risco:{round(lastsim_riskidx, 5)}")
     periodlabel.config(text=f"Periodo: {lastsim_period}")
-    tsobj=datetime.utcfromtimestamp(lastsimulation_ts)
-    timestrip="%Y-%m-%d %H:%M:%S"
-    lastsimulation_touse=tsobj.strftime(timestrip)
+    tsobj = datetime.utcfromtimestamp(lastsimulation_ts)
+    timestrip = "%Y-%m-%d %H:%M:%S"
+    lastsimulation_touse = tsobj.strftime(timestrip)
     lastriskupdate.config(text=f"Ultima simulação: {lastsimulation_touse}")
-    expected_rtn=round(info['exp_return'],2)
+    expected_rtn = round(info['exp_return'], 2)
     moneyreturnlabel.config(text=f"Retorno: R${expected_rtn}")
-
-
-
 
     print(info)
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
-    #risklabel_list = ['p25', 'p50', 'p75', 'p90', 'p10']
+    # risklabel_list = ['p25', 'p50', 'p75', 'p90', 'p10']
     final_plotlist_x = [i for i in range(31)]
     final_plotlist_y = []
     for i in risklabel_list:
@@ -79,9 +65,9 @@ def lastsimulation_show():
     resultwin.title(f"Simulação de: {usr_portfolio.name}")
 
     stock_graphimg2 = Image.open(pathtoimage)
-    dt=time()
+    dt = time()
     stock_graphimg2.thumbnail((400, 225))
-    print(time()-dt)
+    print(time() - dt)
     photo2 = ImageTk.PhotoImage(stock_graphimg2, master=resultwin)
 
     # Crie um widget Label para exibir a imagem
@@ -91,7 +77,6 @@ def lastsimulation_show():
 
 
 def riskcalc_window():
-
     j = tk.Tk()
     j.iconbitmap(mainico_path)
 
@@ -101,34 +86,24 @@ def riskcalc_window():
 
     def riskrun_btn():
 
-        dt=time()
+        dt = time()
         print(risk_var.get())
-        if risk_var.get()=="1d":
-            risk_period="1d"
-        if risk_var.get()=="1mo":
+        if risk_var.get() == "1d":
+            risk_period = "1d"
+        if risk_var.get() == "1mo":
             risk_period = "1mo"
-        if risk_var.get()=="1y":
+        if risk_var.get() == "1y":
             risk_period = "1y"
-
 
         usr_portfolio.run_simulation(risk_period)
 
-
-        print("simlacao tempo",time()-dt)
+        print("simlacao tempo", time() - dt)
         lastsimulation_show()
 
         j.destroy()
 
-
-
-
-
-
-
-            #  chamar a risco aqui(ano)
+        #  chamar a risco aqui(ano)
         # pegar o resultado e pllottar
-
-
 
     j.geometry("300x200")
     j.iconbitmap(mainico_path)
@@ -159,8 +134,6 @@ def on_mouse_wheel(event):
     canvas.yview_scroll(-1 * int(event.delta * 0.01), "units")
 
 
-
-
 def mainscrollhset():
     canvas.update_idletasks()  # Atualize o canvas
     canvas_height = content_frame.winfo_reqheight()  # Altura total do conteúdo
@@ -177,28 +150,23 @@ def mainscrollhset():
         for label in scrollslabelslist:
             label.unbind("<MouseWheel>")
 
-def change_fronthistory(iniday,finday):
-    #unstable please read again
+
+def change_fronthistory(iniday, finday):
+    # unstable please read again
     sym = stockname_label.cget("text")
-    sym=sym.replace(' ','')
+    sym = sym.replace(' ', '')
 
-
-
-
-    arr=fnc.history([sym],iniday,finday,'1d')
-    arr=arr[sym]
+    arr = fnc.history([sym], iniday, finday, '1d')
+    arr = arr[sym]
     figure = ptt.PortfolioFig(arr.index, arr['Open'])
     figure.set_bgcollor('black')
     dt = time()
-    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
+    figure.fig_cache(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f'{sym}.png']))
 
-    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache',f'{sym}.png']))
+    stock_graphimg = Image.open(os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f'{sym}.png']))
     print(time() - dt)
 
-
-
     photo = ImageTk.PhotoImage(stock_graphimg)
-
 
     # Crie um widget Label para exibir a imagem
     stock_graph_label = tk.Label(root, image=photo)
@@ -206,40 +174,37 @@ def change_fronthistory(iniday,finday):
     stock_graph_label.pack()
     stock_graph_label.place(x=220, y=100)
 
-
-
-    iniprice=arr["Open"].iloc[0]
-    finalprice=arr["Open"].iloc[-1]
-    if iniprice>finalprice:
-        value_c='red'
-        strdir=''
+    iniprice = arr["Open"].iloc[0]
+    finalprice = arr["Open"].iloc[-1]
+    if iniprice > finalprice:
+        value_c = 'red'
+        strdir = ''
     else:
-        value_c='green'
-        strdir='+'
-    stockvalue_label.config(text=f"{strdir}{round(100*(finalprice-iniprice)/(iniprice),3)}% R$:{round(finalprice,2)}",fg=value_c)
+        value_c = 'green'
+        strdir = '+'
+    stockvalue_label.config(
+        text=f"{strdir}{round(100 * (finalprice - iniprice) / (iniprice), 3)}% R$:{round(finalprice, 2)}", fg=value_c)
+
 
 def portfoloioedit_window():
-
     def adicionar_elemento():
         elemento = entry.get()
-        elemento=elemento.upper()
+        elemento = elemento.upper()
         entry.delete(0, tk.END)
-        for i in [" ",",",".","/","+","-","~","*","!","@","#","%","$","(",")"]:
-            elemento=elemento.replace(i,"")
+        for i in [" ", ",", ".", "/", "+", "-", "~", "*", "!", "@", "#", "%", "$", "(", ")"]:
+            elemento = elemento.replace(i, "")
 
         if usr_portfolio.is_valid_symblo(elemento):
             for i in lista:
-                if i["nome"]==elemento:
+                if i["nome"] == elemento:
                     return None
             selecionado = tk.BooleanVar()
             lista.append({"nome": elemento, "selecionado": selecionado})
             update_lista()
 
-
     def save_changes():
         usr_portfolio.portfolio.clear()
-        usr_portfolio.name=name_entry.get()
-
+        usr_portfolio.name = name_entry.get()
 
         for elemento in lista:
             nome = elemento["nome"]
@@ -249,7 +214,6 @@ def portfoloioedit_window():
             if selecionado and entrada:
                 valor_entrada = entrada.get()
                 usr_portfolio.portfolio[nome] = valor_entrada
-
 
         # tudo ok
         for widget in content_frame.winfo_children():
@@ -291,10 +255,8 @@ def portfoloioedit_window():
 
             checkbox = tk.Checkbutton(frame, variable=elemento["selecionado"])
 
-
             checkbox.place(relx=0.7)
             checkbox.bind("<Button-1>", lambda event, index=idx: update_checkbox_state(index))
-
 
             # Verifique se a chave existe no dicionário usr_portfolio.portfolio
             if elemento["nome"] in usr_portfolio.portfolio:
@@ -309,7 +271,6 @@ def portfoloioedit_window():
     def update_checkbox_state(index):
         lista[index]["selecionado"].set(not lista[index]["selecionado"].get())
 
-
     lista = []
 
     root = tk.Tk()
@@ -320,17 +281,17 @@ def portfoloioedit_window():
     style.theme_use('clam')
 
     name_entry = tk.Entry(root)
-    name_entry.insert(0,"Meu portfólio")
+    name_entry.insert(0, "Meu portfólio")
     name_entry.pack(side="top", padx=100)
 
     entry = tk.Entry(root)
-    entry.pack(side="top",pady=10, padx=100)
+    entry.pack(side="top", pady=10, padx=100)
 
-    name_label=tk.Label(root,text="Nome do portfolio")
+    name_label = tk.Label(root, text="Nome do portfolio")
 
-    name_label.place(relx=0,rely=0)
+    name_label.place(relx=0, rely=0)
     stockname_lbl = tk.Label(root, text="Codigo da empresa")
-    stockname_lbl.place(relx=0,rely=0.05)
+    stockname_lbl.place(relx=0, rely=0.05)
 
     adicionar_button = tk.Button(root, text="Adicionar", command=adicionar_elemento)
     adicionar_button.pack(side="top")
@@ -358,8 +319,6 @@ def portfoloioedit_window():
     save_file()
 
     root.mainloop()
-
-
 
 
 def creditwindow():
@@ -390,8 +349,9 @@ def open_file():
     # Lógica para abrir um arquivo
     global usr_portfolio
 
-    file_name = tk.filedialog.askopenfilename( filetypes=[('Portifolio', '*.jprt')], initialdir= '..'+os.sep+'_data_port' )
-    if file_name != "" and file_name!=():
+    file_name = tk.filedialog.askopenfilename(filetypes=[('Portifolio', '*.jprt')],
+                                              initialdir='..' + os.sep + '_data_port')
+    if file_name != "" and file_name != ():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
         usr_portfolio = Portfolio.load(file_name)
@@ -406,6 +366,7 @@ def open_file():
         label.pack()
         scrollslabelslist.append(label)
     mainscrollhset()
+
 
 def period_selector():
     j = tk.Tk()
@@ -435,7 +396,8 @@ def period_selector():
         endcaldatalist = [endcalg.day, endcalg.month, endcalg.year]
         upareaperiod_label.config(
             text=f"periodo analisado:\nde: {inicaldatalist[0]}/{inicaldatalist[1]}/{inicaldatalist[2]} \nate: {endcaldatalist[0]}/{endcaldatalist[1]}/{endcaldatalist[2]}")
-        change_fronthistory(f"{inicaldatalist[2]}-{inicaldatalist[1]}-{inicaldatalist[0]}",f"{endcaldatalist[2]}-{endcaldatalist[1]}-{endcaldatalist[0]}")
+        change_fronthistory(f"{inicaldatalist[2]}-{inicaldatalist[1]}-{inicaldatalist[0]}",
+                            f"{endcaldatalist[2]}-{endcaldatalist[1]}-{endcaldatalist[0]}")
 
     period_fselbt = tk.Button(j, text="Selecionar", command=periodselctorbtn_command)
     period_fselbt.place(x=110, y=320)
@@ -446,7 +408,7 @@ def period_selector():
 def save_file():
     # Lógica para salvar um arquivo
 
-    file_name ='..'+os.sep+'_data_port'
+    file_name = '..' + os.sep + '_data_port'
     if file_name != "" and file_name != ():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
@@ -471,38 +433,32 @@ def change_label_color(event, label):
     dia = data_hora_objeto.day
     mes = data_hora_objeto.month
     ano = data_hora_objeto.year
-    if dia<6:
-        dia_atual=28
-        if mes==1:
-            mes_atual=12
-            ano_atual=ano-1
+    if dia < 6:
+        dia_atual = 28
+        if mes == 1:
+            mes_atual = 12
+            ano_atual = ano - 1
         else:
-            mes_atual=mes-1
-            ano_atual=ano
+            mes_atual = mes - 1
+            ano_atual = ano
     else:
-        dia_atual=dia-5
-        ano_atual=ano
-        mes_atual=mes
-    if dia_atual==29:
-        dia_atual-=1
+        dia_atual = dia - 5
+        ano_atual = ano
+        mes_atual = mes
+    if dia_atual == 29:
+        dia_atual -= 1
 
-
-
-    change_fronthistory(f'{ano_atual-1}-{mes_atual}-{dia_atual}',f'{ano_atual}-{mes_atual}-{dia_atual}')
+    change_fronthistory(f'{ano_atual - 1}-{mes_atual}-{dia_atual}', f'{ano_atual}-{mes_atual}-{dia_atual}')
 
     upareaperiod_label.config(
-            text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual-1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
+        text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual - 1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
     upperiodbtn.config(command=period_selector)
-
-
-
 
 
 root = tk.Tk()
 root.iconbitmap(mainico_path)
 root.geometry("800x600")
 root.title("analise de portfólio")
-
 
 style = ttk.Style(root)
 style.theme_use('clam')
@@ -514,8 +470,6 @@ file_menu.add_command(label="Abrir", command=open_file)
 file_menu.add_command(label="Salvar", command=save_file)
 file_menu.add_separator()
 file_menu.add_command(label="Sair", command=root.quit)
-
-
 
 help_menu = tk.Menu(menu_bar, tearoff=0)
 help_menu.add_command(label="Guia de uso")
@@ -609,7 +563,6 @@ risktitlelabel.place(x=360, y=410)
 
 risklabel = tk.Label(root, text=f"Indice de Risco:{varnotfill}")
 risklabel.place(x=200, y=470)
-
 
 periodlabel = tk.Label(root,
                        text=f"Periodo:{varnotfill}")
