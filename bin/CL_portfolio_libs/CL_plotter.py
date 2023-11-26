@@ -103,7 +103,7 @@ class SimulationFig:
 
     def fig_cache(self, cache_path, lblshow=False):
         # Itera sobre as listas de dados e plota cada linha
-        plt.rc('font', size=20)
+        plt.rc('font', size=16)
 
         if lblshow:
             for i in range(len(self.y_axis)):

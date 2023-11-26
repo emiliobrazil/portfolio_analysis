@@ -32,8 +32,12 @@ def argumentedfunction():
     no_web_err(root=root)
 
 def lastsimulation_show():
+
     info=usr_portfolio.last_simulation
+    if info=={}:
+        return None
     info=info.to_dict()
+    print(info)
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
     #risklabel_list = ['p25', 'p50', 'p75', 'p90', 'p10']
     final_plotlist_x = [i for i in range(31)]
@@ -195,9 +199,19 @@ def portfoloioedit_window():
 
     def adicionar_elemento():
         elemento = entry.get()
-        selecionado = tk.BooleanVar()
-        lista.append({"nome": elemento, "selecionado": selecionado})
-        update_lista()
+        elemento=elemento.upper()
+        entry.delete(0, tk.END)
+        for i in [" ",",",".","/","+","-","~","*","!","@","#","%","$","(",")"]:
+            elemento=elemento.replace(i,"")
+
+        if usr_portfolio.is_valid_symblo(elemento):
+            for i in lista:
+                if i["nome"]==elemento:
+                    return None
+            selecionado = tk.BooleanVar()
+            lista.append({"nome": elemento, "selecionado": selecionado})
+            update_lista()
+
 
     def save_changes():
         usr_portfolio.portfolio.clear()
@@ -452,6 +466,7 @@ def change_label_color(event, label):
 
     upareaperiod_label.config(
             text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual-1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
+    upperiodbtn.config(command=period_selector)
 
 
 
@@ -563,7 +578,7 @@ upareaperiod_label = tk.Label(root,
                               text=f"periodo analisado:\nde: {varnotfill}/{varnotfill}/{varnotfill} \nate: {varnotfill}/{varnotfill}/{varnotfill}")
 upareaperiod_label.place(x=650, y=200)
 
-upperiodbtn = tk.Button(root, text="selecionar periodo", command=period_selector)
+upperiodbtn = tk.Button(root, text="selecionar periodo")
 upperiodbtn.place(x=650, y=250)
 
 stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "icons", "BLANK_STOCK.png"]))
