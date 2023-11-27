@@ -562,7 +562,7 @@ upareaperiod_label = tk.Label(root,
                               text=f"periodo analisado:\nde: {varnotfill}/{varnotfill}/{varnotfill} \nate: {varnotfill}/{varnotfill}/{varnotfill}")
 upareaperiod_label.place(x=650, y=200)
 
-upperiodbtn = tk.Button(root, text="selecionar periodo",state=tk.DISABLED)
+upperiodbtn = tk.Button(root, text="selecionar periodo",command=period_selector,state=tk.DISABLED)
 upperiodbtn.place(x=650, y=250)
 
 stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "icons", "BLANK_STOCK.png"]))
