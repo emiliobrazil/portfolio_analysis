@@ -12,18 +12,19 @@ except:
 class CL_simulation:
     def __init__(self, portfolio_list, stock_matrix, num_periods=30, period='1d', run_now = True):
         if run_now:
-            today_date = datetime.datetime.now().strftime('%Y-%m-%d') 
-            start_year = str(int(today_date[:4]) - 5) # 5 years before today
-            start_date = start_year + today_date[4:]
+            now = datetime.datetime.now()
+            end = now + datetime.timedelta(days=30)
+            today_date = now.strftime('%Y-%m-%d')
+            end_date = end.strftime('%Y-%m-%d')
             self.portfolio_list = portfolio_list
             self.num_periods = num_periods
             self.period = period
             self.period_started = today_date
-            self.period_ended = start_date
+            self.period_ended = end_date
             self.time_started = time()
+            self.risk_index = portfolio_risk_index (portfolio_list, stock_matrix)
             self._run_simulation(portfolio_list, stock_matrix)
             self.time_ended = time()
-            self.risk_index = portfolio_risk_index (portfolio_list, stock_matrix)
 
     def _run_simulation(self, portfolio_list, stock_matrix):
         simulation = monte_carlo_simulation (portfolio_list, stock_matrix, self.num_periods)
