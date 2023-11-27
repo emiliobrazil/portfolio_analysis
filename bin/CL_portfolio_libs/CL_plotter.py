@@ -103,7 +103,7 @@ class SimulationFig:
 
     def fig_cache(self, cache_path, lblshow=False):
         # Itera sobre as listas de dados e plota cada linha
-        plt.rc('font', size=16)
+        plt.rc('font', size=13)
 
         if lblshow:
             for i in range(len(self.y_axis)):
@@ -122,8 +122,8 @@ class SimulationFig:
 
         # Adiciona legendas e rótulos
 
-        plt.xlabel(self.X_title)
-        plt.ylabel(self.Y_title)
+        plt.xlabel(self.X_title, ha='right')
+        plt.ylabel(self.Y_title,va="top")
         if self.bgcollor is not None:
             plt.gca().set_facecolor(self.bgcollor)
         if self.grid_check:

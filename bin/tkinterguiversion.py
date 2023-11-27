@@ -43,6 +43,7 @@ def lastsimulation_show():
     lastriskupdate.config(text=f"Ultima simulação: {lastsimulation_touse}")
     expected_rtn = round(info['exp_return'], 2)
     moneyreturnlabel.config(text=f"Retorno: R${expected_rtn}")
+    periodsdict={'d':'dias','mo':'meses','y':'anos'}
 
     print(info)
     risklabel_list = ['p10', 'p25', 'p50', 'p75', 'p90']
@@ -56,6 +57,8 @@ def lastsimulation_show():
         final_plotlist_y.append(temp_list)
     figure = ptt.SimulationFig(final_plotlist_x, final_plotlist_y)
     figure.set_title(f'Simulação de: {usr_portfolio.name}')
+    figure.set_axletitle("x",f"{periodsdict[info['period'].replace('1', '')]}")
+    figure.set_axletitle("y",f"R$")
 
     figure.set_labels(risklabel_list)
     pathtoimage = os.sep.join([os.getcwd(), 'CL_GUI', 'gcache', f"simulacao{int((info['time_ended']))}.png"])
