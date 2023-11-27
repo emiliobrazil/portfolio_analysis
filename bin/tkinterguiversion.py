@@ -94,14 +94,18 @@ def riskcalc_window():
             risk_period = "1mo"
         if risk_var.get() == "1y":
             risk_period = "1y"
+        def th_sim(risk_period):
+            usr_portfolio.run_simulation(risk_period)
 
-        usr_portfolio.run_simulation(risk_period)
+            print("simlacao tempo", time() - dt)
+            save_file()
+            lastsimulation_show()
+            j.destroy()
 
-        print("simlacao tempo", time() - dt)
-        save_file()
-        lastsimulation_show()
+        threadfn=th.Thread(target=th_sim,args=(risk_period,))
+        threadfn.run()
 
-        j.destroy()
+
 
         #  chamar a risco aqui(ano)
         # pegar o resultado e pllottar

@@ -78,7 +78,7 @@ def simulate_one_trial(args):
  
     return idx, simulated_prices
  
-def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, parallel=True, num_trials=1000):
+def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_trials=1000):
     """
     Performs a Monte Carlo simulation for a given portfolio.
 
@@ -96,7 +96,8 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, parallel
  
     log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
     assets_values_at_last_date = df.iloc[-1:].to_numpy() # Get the most recent values for each asset
-    asset_weights = np.array([asset[1] for asset in portfolio],dtype=np.float64)     portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
+    asset_weights = np.array([asset[1] for asset in portfolio],dtype=np.float64)
+    portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
 
     simulated_prices = np.zeros((num_periods+1, num_trials))     
     num_assets = len(portfolio)
