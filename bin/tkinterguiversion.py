@@ -321,7 +321,8 @@ def portfoloioedit_window():
         lista.append({"nome": key, "selecionado": tk.BooleanVar()})
 
     update_lista()
-    save_file()
+    if usr_portfolio.portfolio!={}:
+        save_file()
 
     root.mainloop()
 
