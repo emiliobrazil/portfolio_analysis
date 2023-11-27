@@ -113,6 +113,12 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, parallel
                 simulated_prices[period][idx] = np.sum(simulated_portfolio_values)
     
     else:
+        total_cores = multiprocessing.cpu_count()  # Get the total number of CPU cores
+        if total_cores > 1:
+            num_processes = total_cores - 1  # Use all cores except one
+        else:
+            num_processes = 1  # If only one core available, use just that one
+
         log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
         assets_values_at_last_date = df.iloc[-1:].to_numpy()
         asset_weights = np.array([asset[1] for asset in portfolio], dtype=np.float64)
@@ -123,7 +129,7 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, parallel
 
         args = [(idx, num_periods, log_returns_covariance_matrix, log_returns_means, portfolio_value_at_last_date) for idx in range(num_trials)]
 
-        with multiprocessing.Pool() as pool:
+        with multiprocessing.Pool(processes=num_processes) as pool:
             results = pool.map(simulate_one_trial, args)
 
         for idx, simulated_price in results:
