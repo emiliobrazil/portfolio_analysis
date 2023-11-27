@@ -127,7 +127,7 @@ class Portfolio:
         self.__readForSimulation__ = True
         self.__is_running = True
         #TODO multi_thread
-        sml = CLsml(self.portfolio_list, self.portifolio_matrix(), period=period)
+        sml = CLsml(self.portfolio_list, self.portifolio_matrix(period= period), period=period)
         self.__is_running = False
         if sml is not None:
             self.simulations.append(sml)
