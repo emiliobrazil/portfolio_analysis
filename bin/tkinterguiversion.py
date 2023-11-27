@@ -204,8 +204,12 @@ def portfoloioedit_window():
             update_lista()
 
     def save_changes():
-        usr_portfolio.portfolio.clear()
-        usr_portfolio.name = name_entry.get()
+        global usr_portfolio
+
+        usr_portfolio=Portfolio(usr_portfolio.portfolio,name_entry.get())
+        lastsimbutton.config(command=None)
+
+
 
         for elemento in lista:
             nome = elemento["nome"]
