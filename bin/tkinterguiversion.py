@@ -106,6 +106,7 @@ def riskcalc_window():
             print("simlacao tempo", time() - dt)
 
             save_file()
+            lastsimbutton.config(state=tk.NORMAL)
             j.after(0, lastsimulation_show)
             riskbutton.config(state=tk.NORMAL)
 
@@ -224,7 +225,7 @@ def portfoloioedit_window():
         global usr_portfolio
 
         usr_portfolio=Portfolio([],name_entry.get())
-        lastsimbutton.config(command=None)
+        lastsimbutton.config(state=tk.DISABLED)
 
 
 
@@ -475,7 +476,7 @@ def change_label_color(event, label):
 
     upareaperiod_label.config(
         text=f"periodo analisado:\nde: {dia_atual}/{mes_atual}/{ano_atual - 1} \nate: {dia_atual}/{mes_atual}/{ano_atual}")
-    upperiodbtn.config(command=period_selector)
+    upperiodbtn.config(state=tk.NORMAL)
 
 
 root = tk.Tk()
@@ -561,7 +562,7 @@ upareaperiod_label = tk.Label(root,
                               text=f"periodo analisado:\nde: {varnotfill}/{varnotfill}/{varnotfill} \nate: {varnotfill}/{varnotfill}/{varnotfill}")
 upareaperiod_label.place(x=650, y=200)
 
-upperiodbtn = tk.Button(root, text="selecionar periodo")
+upperiodbtn = tk.Button(root, text="selecionar periodo",state=tk.DISABLED)
 upperiodbtn.place(x=650, y=250)
 
 stock_graphimg = Image.open(os.sep.join([os.getcwd(), "CL_GUI", "icons", "BLANK_STOCK.png"]))
@@ -597,7 +598,7 @@ lastriskupdate.place(x=500, y=490)
 moneyreturnlabel = tk.Label(root, text=f"Retorno: R${varnotfill}")
 moneyreturnlabel.place(x=500, y=470)
 
-lastsimbutton = tk.Button(root, text="Ultima simulação", command=lastsimulation_show)
+lastsimbutton = tk.Button(root, text="Ultima simulação", command=lastsimulation_show,state=tk.DISABLED)
 lastsimbutton.place(x=350, y=540)
 riskbutton = tk.Button(root, text="calcular risco", command=riskcalc_window)
 riskbutton.place(x=500, y=540)
