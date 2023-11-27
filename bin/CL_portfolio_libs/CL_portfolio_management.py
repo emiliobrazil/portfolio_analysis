@@ -16,6 +16,7 @@ import json
 import os
 import pandas as pd
 import datetime
+import dateutil.relativedelta import relativedelta
 
 try:
     from CL_simulation_class import CL_simulation as CLsml
@@ -84,13 +85,21 @@ class Portfolio:
         
 
     def portifolio_matrix(self, period='1mo'):
+        today_date = datetime.datetime.now()
+        if period == '1d':
+          start_day = today_date - relativedelta(days=60) # 60 days before today
+          start_date = start_day.strftime('%Y-%m-%d')
+        elif period == '1mo':
+          start_month = today_date - relativedelta(months=60) # 60 months before today
+          start_date = start_month.strftime('%Y-%m-%d')
+        elif period == '1y':
+          start_year = today_date - relativedelta(years=5) # 5 years before today
+          start_date = start_year.strftime('%Y-%m-%d') 
         symbols = [asset[0] for asset in self.portfolio_list]
-        today_date = datetime.datetime.now().strftime('%Y-%m-%d') 
-        start_year = str(int(today_date[:4]) - 5) # 5 years before today
-        start_date = start_year + today_date[4:]
         prices = MeanPriceMatrix(symbols, start_date, today_date, period)
         stock_matrix = prices.get_portifolio_matrix
         return pd.DataFrame(stock_matrix)
+        
 
     def remove_stock(self, symb: str) -> None:
         if self.locked:
