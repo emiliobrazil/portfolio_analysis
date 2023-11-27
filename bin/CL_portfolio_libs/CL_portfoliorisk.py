@@ -20,6 +20,7 @@ Date: November 5, 2023
 """
 
 import os
+import multiprocessing
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -61,7 +62,24 @@ def compute_pct_covariances_and_means (df):
 
     return returns_covariance_matrix, returns_means
 
-def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_trials=1000):
+def simulate_one_trial(args):
+    """
+    Simulates a single trial for the Monte Carlo simulation.
+    """
+    idx, num_periods, log_returns_covariance_matrix, log_returns_means, portfolio_value_at_last_date = args
+
+    simulated_portfolio_values = portfolio_value_at_last_date
+    simulated_prices = np.zeros(num_periods+1)
+
+    for period in range(num_periods+1):
+        log_return_variations = np.random.multivariate_normal(log_returns_means, log_returns_covariance_matrix)
+        period_log_returns = log_return_variations + np.log(simulated_portfolio_values)
+        simulated_portfolio_values = np.exp(period_log_returns)
+        simulated_prices[period] = np.sum(simulated_portfolio_values)
+ 
+    return idx, simulated_prices
+ 
+def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, parallel=True, num_trials=1000):
     """
     Performs a Monte Carlo simulation for a given portfolio.
 
@@ -76,28 +94,46 @@ def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_tria
     Returns:
     - np.ndarray: Matrix of simulated stock prices corresponding to the portfolio.
     """
-    log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
-    assets_values_at_last_date = df.iloc[-1:].to_numpy() # Get the most recent values for each asset
-    asset_weights = np.array([asset[1] for asset in portfolio],dtype=np.float64)
-    portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
+    if not parallel:
+        log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
+        assets_values_at_last_date = df.iloc[-1:].to_numpy() # Get the most recent values for each asset
+        asset_weights = np.array([asset[1] for asset in portfolio],dtype=np.float64)
+        portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
 
-    simulated_prices = np.zeros((num_periods+1, num_trials))
-    num_assets = len(portfolio)
-    simulated_prices[0] = np.full(num_trials, np.sum(portfolio_value_at_last_date))
+        simulated_prices = np.zeros((num_periods+1, num_trials))
+        num_assets = len(portfolio)
+        simulated_prices[0] = np.full(num_trials, np.sum(portfolio_value_at_last_date))
 
-    for idx in range(num_trials): # Run a Monte Carlo simulation
-        simulated_portfolio_values = portfolio_value_at_last_date
-        for period in range(1,num_periods+1): # Assume log returns are in a multivariate normal distribution
-            log_return_variations = np.random.multivariate_normal(log_returns_means, log_returns_covariance_matrix)
-            period_log_returns = log_return_variations + np.log(simulated_portfolio_values)
-            simulated_portfolio_values = np.exp(period_log_returns)
-            simulated_prices[period][idx] = np.sum(simulated_portfolio_values)
+        for idx in range(num_trials): # Run a Monte Carlo simulation
+            simulated_portfolio_values = portfolio_value_at_last_date
+            for period in range(1,num_periods+1): # Assume log returns are in a multivariate normal distribution
+                log_return_variations = np.random.multivariate_normal(log_returns_means, log_returns_covariance_matrix)
+                period_log_returns = log_return_variations + np.log(simulated_portfolio_values)
+                simulated_portfolio_values = np.exp(period_log_returns)
+                simulated_prices[period][idx] = np.sum(simulated_portfolio_values)
+    
+    else:
+        log_returns_covariance_matrix, log_returns_means = compute_log_covariances_and_means(df)
+        assets_values_at_last_date = df.iloc[-1:].to_numpy()
+        asset_weights = np.array([asset[1] for asset in portfolio], dtype=np.float64)
+        portfolio_value_at_last_date = assets_values_at_last_date * asset_weights
+
+        simulated_prices = np.zeros((num_periods+1, num_trials))
+        simulated_prices[0] = np.full(num_trials, np.sum(portfolio_value_at_last_date))
+
+        args = [(idx, num_periods, log_returns_covariance_matrix, log_returns_means, portfolio_value_at_last_date) for idx in range(num_trials)]
+
+        with multiprocessing.Pool() as pool:
+            results = pool.map(simulate_one_trial, args)
+
+        for idx, simulated_price in results:
+            simulated_prices[:, idx] = simulated_price
     
     if file_path is not None:
         if not file_path.endswith('.npy'):
             raise ValueError(f'Not supported file path: {file_path}. File must be in npy format.')
         np.save(file_path, simulated_prices)
-
+    
     return simulated_prices
 
 def load_monte_carlo_simulation (file_path):
