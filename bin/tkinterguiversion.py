@@ -15,7 +15,8 @@ from datetime import datetime
 for i in os.listdir(os.sep.join([os.getcwd(), "CL_GUI", "gcache"])):
     if i == "nomedia":
         continue
-    os.remove(os.sep.join([os.getcwd(), "CL_GUI", "gcache", i]))
+    if os.path.exists(os.sep.join([os.getcwd(), "CL_GUI", "gcache", i])):
+        os.remove(os.sep.join([os.getcwd(), "CL_GUI", "gcache", i]))
 
 usr_portfolio = Portfolio([], "Meu portfólio")
 
@@ -95,15 +96,27 @@ def riskcalc_window():
         if risk_var.get() == "1y":
             risk_period = "1y"
         def th_sim(risk_period):
+            riskbutton.config(state=tk.DISABLED)
+            j.destroy()
+
+            print('passou')
+
             usr_portfolio.run_simulation(risk_period)
 
             print("simlacao tempo", time() - dt)
+
             save_file()
-            lastsimulation_show()
-            j.destroy()
+            j.after(0, lastsimulation_show)
+            riskbutton.config(state=tk.NORMAL)
+
+
+
+
+
 
         threadfn=th.Thread(target=th_sim,args=(risk_period,))
-        threadfn.run()
+        threadfn.start()
+
 
 
 
@@ -210,7 +223,7 @@ def portfoloioedit_window():
     def save_changes():
         global usr_portfolio
 
-        usr_portfolio=Portfolio(usr_portfolio.portfolio,name_entry.get())
+        usr_portfolio=Portfolio([],name_entry.get())
         lastsimbutton.config(command=None)
 
 

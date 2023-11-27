@@ -16,7 +16,7 @@ import json
 import os
 import pandas as pd
 import datetime
-import dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta
 
 try:
     from CL_simulation_class import CL_simulation as CLsml
