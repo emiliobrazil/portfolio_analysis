@@ -98,6 +98,7 @@ def riskcalc_window():
         usr_portfolio.run_simulation(risk_period)
 
         print("simlacao tempo", time() - dt)
+        save_file()
         lastsimulation_show()
 
         j.destroy()
