@@ -2,27 +2,27 @@
 <h2>Requisitos e sistema operacional</h2>
 para que o app funcione adequadamente o mesmo deve operar em:
 
-1)um ambiente com python 3.4 (ou superior)
+1) um ambiente com python 3.4 (ou superior)
 
-2)processador com no minimo 2 nucleos e 2GHz
+2) processador com no minimo 2 nucleos e 2GHz
    
-3)no minimo 4GB de RAM
+3) no minimo 4GB de RAM
 
 Embora não seja um requisito o aplicativo foi testado e aprovado
 nos seguintes sistemas operacionais:
 
-1)Windows 11
+1) Windows 11
 
-2)Windows 10
+2) Windows 10
 
-3)Linux UBbuntu 23.04
+3) Linux UBbuntu 23.04
 
 Em outros sistemas operacionais não há garantia de 
 estabilidade, abertura ou funcionamento do programa
 
 <h2>Utilizando o app</h2>
 Guia de uso do aplicativo
-<h3>Tela inicial</h3>
+<h3>1) Tela inicial</h3>
 
 Ao iniciar o aplicativo a seguinte tela será apresentada
 
@@ -31,7 +31,7 @@ Ao iniciar o aplicativo a seguinte tela será apresentada
 Caso essa tela tenha sido apresentada o programa
 provavelmente está sendo executado corretamente
 
-<h3>Criando um portifolio</h3>
+<h3>2) Criando um portifolio</h3>
 
 Ao abrir o aplicativo não será exibida nenhuma ação
 sendo necessario a criação de uma coleção de ações(portfólio)
