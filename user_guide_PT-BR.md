@@ -141,7 +141,7 @@ ao clicar em "Ajuda">"Creditos" será possivel observar os criadores do projeto
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/002b1875-030d-4c9f-931c-62bc720b14f1)
 
 
-
+<h2>Vantagens desse programa</h2>
 
 
 
