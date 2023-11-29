@@ -148,18 +148,11 @@ Ao clicar em "Ajuda">"Creditos" será possivel observar os criadores do projeto
 
 1) Simulações rapidas e precisas: o aplicativo juntamente com o metodo de montecarlo permite simulações que duram poucos minutos e apresentam boa precisão
 
-2)Avaliação de Riscos: Ajuda a entender os riscos. Imagine um superpoder que permite simular diferentes situações para ver quais são os riscos em cada uma delas.
+2) Avaliação de Riscos: Ajuda a entender os riscos. Imagine um superpoder que permite simular diferentes situações para ver quais são os riscos em cada uma delas.
 
-3)Mostra o que Importa mais: Ajuda a descobrir quais informações são realmente importantes no meio de muitos dados.
+3) Dados atualizados: coleta os dados atualizados em tempo real, garantindo maior fidelidade na simulação.
 
+4) Facil e simples de usar: o programa possui uma interface rustica, sem complicações e modernismos, alem de prover toda sua usabilidade em poucos cliques, permitindo que qualquer usuario possa usa-lo sem complicações.
 
-4)Facil e simples de usar: o programa possui uma interface rustica, sem complicações e modernismos, alem de prover toda sua usabilidade em poucos cliques, permitindo que qualquer usuario possa usa-lo sem complicações.
-
-5)Leve e funciona em quase todos os computadores:Com requisistos minimos praticamente universais, o proograma pode ser executado sem problemas em quase todos os computadores atualmente.
-
-
-
-
-
-
+5) Leve e funciona em quase todos os computadores:Com requisistos minimos praticamente universais, o proograma pode ser executado sem problemas em quase todos os computadores atualmente.
 
