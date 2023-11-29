@@ -382,6 +382,11 @@ def open_file():
         file_name = file_name.replace("/", os.sep)
         file_name = file_name.replace("\\", os.sep)
         usr_portfolio = Portfolio.load(file_name)
+    if usr_portfolio.last_simulation !={}:
+        lastsimbutton.config(state=tk.NORMAL)
+    else:
+        lastsimbutton.config(state=tk.DISABLED)
+
     for widget in content_frame.winfo_children():
         widget.destroy()
     global scrollslabelslist
