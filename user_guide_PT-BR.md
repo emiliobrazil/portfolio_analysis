@@ -22,7 +22,7 @@ estabilidade, abertura ou funcionamento do programa
 
 <h2>Utilizando o app</h2>
 Guia de uso do aplicativo
-<h3>1) Tela inicial</h3>
+<h3>1 Tela inicial</h3>
 
 Ao iniciar o aplicativo a seguinte tela será apresentada
 
@@ -31,7 +31,7 @@ Ao iniciar o aplicativo a seguinte tela será apresentada
 Caso essa tela tenha sido apresentada o programa
 provavelmente está sendo executado corretamente
 
-<h3>2) Criando um portifolio</h3>
+<h3>2 Criando um portifolio</h3>
 
 Ao abrir o aplicativo não será exibida nenhuma ação
 sendo necessario a criação de uma coleção de ações(portfólio)
