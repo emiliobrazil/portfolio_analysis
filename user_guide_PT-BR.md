@@ -36,10 +36,12 @@ provavelmente está sendo executado corretamente
 Ao abrir o aplicativo não será exibida nenhuma ação
 sendo necessario a criação de uma coleção de ações(portfólio)
 clique no botão "Criar Portfólio" e será exibido a seguinte tela
+
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/d4ac8550-170d-4774-bb29-7ecb8bd14674)
 
+
 Em "Nome do portfolio" é o nome a se nomear o portfolio
-esse será o nome do arquivo que será salvo e exxibido em diversos gráficos
+esse será o nome do arquivo que será salvo e exibido em diversos gráficos
 
 Em "Codigo da empresa" é o campo destinado a os codigos da empresa
 esse codigo é o codigo que cada empresa de capital aberto possui para sua ação
@@ -69,6 +71,7 @@ para carregar um novo portfólio há duas maneiras
 em ambos caso será aberta uma tela de seleção de portfolio
 efetue a seleção e clique no botão "Abrir"
 observe a imagem abaixo
+
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/0b2b3a77-16dd-4d66-9e3f-b2a246e05f6a)
 
 Caso voce tenha carregado um portoflio com simulação será possivel ver a ultima simulação
