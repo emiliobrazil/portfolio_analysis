@@ -28,7 +28,7 @@ Ao iniciar o aplicativo a seguinte tela será apresentada
 
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/35ca9125-f8d3-44fc-a9c5-9b7aa83b48ba)
 
-caso essa tela tenha sido apresentada o programa
+Caso essa tela tenha sido apresentada o programa
 provavelmente está sendo executado corretamente
 
 <h3>Criando um portifolio</h3>
@@ -64,11 +64,11 @@ observe:
 
 <h3>carregando um novo portfólio</h3>
   
-para carregar um novo portfólio há duas maneiras
+Para carregar um novo portfólio há duas maneiras
 1) Clique em "Carregar Portfólio"
 2)Clique em "Arquivo">"Abrir"
 
-em ambos caso será aberta uma tela de seleção de portfolio
+Em ambos caso será aberta uma tela de seleção de portfolio
 efetue a seleção e clique no botão "Abrir"
 observe a imagem abaixo
 
@@ -80,11 +80,11 @@ Caso voce tenha carregado um portoflio com simulação será possivel ver a ulti
 
 Após carregar ou criar seu portfolio é possivel visualizar um periodo de um ano
 
-todavia esse periodo encerra 5 dias antes do atual
+Todavia esse periodo encerra 5 dias antes do atual
 
-(esses 5 dias não sao propagados na simulação, a simulação ocorre com o ultimo dado disponivel)
+(Esses 5 dias não sao propagados na simulação, a simulação ocorre com o ultimo dado disponivel)
 
-o codigo escolhido receberá uma coloração azul, e o restante cinza
+O codigo escolhido receberá uma coloração azul, e o restante cinza
 
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/cc134cd2-5e42-4c2c-9aee-8da174578890)
 
@@ -92,10 +92,10 @@ o codigo escolhido receberá uma coloração azul, e o restante cinza
 
 Uma vez que o portfolio foi criado ou carregado corretamente
 
-é possivel simular os riscos, para isso clique em "calcular risco"
+É possivel simular os riscos, para isso clique em "calcular risco"
 
 
-será aberta uma nova janela, selecione o periodo desejado
+Será aberta uma nova janela, selecione o periodo desejado
 
 
 
@@ -111,11 +111,11 @@ Observe:
 
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/e267d2f4-0094-444a-97dd-340ee557fa7c)
 
-após isso clique em "Iniciar simulação"
+Após isso clique em "Iniciar simulação"
 
-o processo iniciará em um segundo thread/nucleo
+O processo iniciará em um segundo thread/nucleo
 
-e após terminado exbirá o grafico com as informações na parte frontal
+E após finalizado exbirá o grafico com as informações na parte frontal
 
 
 observe o exemplo:
@@ -127,18 +127,18 @@ Observe que o nome do portfólio é exibido com titulo do grafico
 
 <h3>Carregando a ultima simulação sem simular</h3>
 
-caso a simulação tenha sido concluida e você deseje observar novamente
+Caso a simulação tenha sido concluida e você deseje observar novamente
 
-ou o portfolio carregado possua uma simulação armazenada 
+Ou o portfolio carregado possua uma simulação armazenada 
 
-será possivel observa-la clicando em "Ultima simulação"
+Será possivel observa-la clicando em "Ultima simulação"
 
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/5a050f4c-d92a-42d2-b5fa-79ea7563fb24)
 
 
 <h3>Visualizando os creditos</h3>
 
-ao clicar em "Ajuda">"Creditos" será possivel observar os criadores do projeto
+Ao clicar em "Ajuda">"Creditos" será possivel observar os criadores do projeto
 
 
 ![image](https://github.com/emiliobrazil/portfolio_analysis/assets/128740531/002b1875-030d-4c9f-931c-62bc720b14f1)
@@ -146,6 +146,16 @@ ao clicar em "Ajuda">"Creditos" será possivel observar os criadores do projeto
 
 <h2>Vantagens desse programa</h2>
 
+1) Simulações rapidas e precisas: o aplicativo juntamente com o metodo de montecarlo permite simulações que duram poucos minutos e apresentam boa precisão
+
+2)Avaliação de Riscos: Ajuda a entender os riscos. Imagine um superpoder que permite simular diferentes situações para ver quais são os riscos em cada uma delas.
+
+3)Mostra o que Importa mais: Ajuda a descobrir quais informações são realmente importantes no meio de muitos dados.
+
+
+4)Facil e simples de usar: o programa possui uma interface rustica, sem complicações e modernismos, alem de prover toda sua usabilidade em poucos cliques, permitindo que qualquer usuario possa usa-lo sem complicações.
+
+5)Leve e funciona em quase todos os computadores:Com requisistos minimos praticamente universais, o proograma pode ser executado sem problemas em quase todos os computadores atualmente.
 
 
 
