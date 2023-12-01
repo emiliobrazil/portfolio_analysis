@@ -1,3 +1,17 @@
+"""
+Simulation Class Module
+
+Description:
+
+This module provides a class for running and saving simulations for a given portfolio.
+
+License: Apache License, Version 2.0
+(See https://www.apache.org/licenses/LICENSE-2.0 for details)
+
+Author: Gabriella Santana Morgado
+Date: November 21, 2023
+"""
+
 import datetime
 from time import time
 import numpy as np
