@@ -1,6 +1,6 @@
 <h1>GUIA DO USUARIO</h1>
 <h2>Requisitos e sistema operacional</h2>
-para que o app funcione adequadamente o mesmo deve operar em:
+Para que o aplicativo funcione adequadamente o mesmo deve operar em:
 
 1) um ambiente com python 3.4 (ou superior)
 
