@@ -60,23 +60,6 @@ def compute_pct_covariances_and_means (df):
     returns_means = returns.mean()
 
     return returns_covariance_matrix, returns_means
-
-def simulate_one_trial(args):
-    """
-    Simulates a single trial for the Monte Carlo simulation.
-    """
-    idx, num_periods, log_returns_covariance_matrix, log_returns_means, portfolio_value_at_last_date = args
-
-    simulated_portfolio_values = portfolio_value_at_last_date
-    simulated_prices = np.zeros(num_periods+1)
-
-    for period in range(num_periods+1):
-        log_return_variations = np.random.multivariate_normal(log_returns_means, log_returns_covariance_matrix)
-        period_log_returns = log_return_variations + np.log(simulated_portfolio_values)
-        simulated_portfolio_values = np.exp(period_log_returns)
-        simulated_prices[period] = np.sum(simulated_portfolio_values)
- 
-    return idx, simulated_prices
  
 def monte_carlo_simulation (portfolio, df, num_periods, file_path=None, num_trials=1000):
     """
